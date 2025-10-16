@@ -97,7 +97,7 @@
  - [x] Permitir editar propriedades
  - [ ] Permitir copiar, colar e duplicar
  - [ ] Permitir agrupar e desagrupar
- - [ ] Permitir excluir um elemento ao clicar com o botão direito
+ - [ ] Permitir excluir um elemento ao clicar com o botão direito através do menu de contexto
 
 ## Fios
 
@@ -105,10 +105,11 @@
  - [x] Permitir alterar cor
  - [x] Permitir alterar espessura
  - [x] Permitir fios tracejados
+ - [ ] Um fio só pode iniciar e terminar em um terminal ou em um fio (ele mesmo ou outro já existente).
  - [ ] Permitir fazer conexões no meio do fio
- - [ ] Ativar ferramenta Fio ao passar o mouse sobre um terminal ou fio
  - [ ] Habilitar e desativar snap to grid
- - [ ] Devem procurar o melhor caminho para seguir quando o modo snapto grid estiver ativado, permitindo que o usuário defina pontos intermediários
+ - [ ] Permitir adicionar nós intermediarios para posicionalos quando for necessário, assim como deve permitir excluir nós.
+ - [ ] Nós muito que estão na mesma posição devem ser unificados, ficando apenas um nó
 
 
 ## Terminais
@@ -166,3 +167,22 @@
  - [ ] Imprimir projeto
 
 
+# Projetos de referência
+
+## Circuits
+
+- https://github.com/pfalstad/circuitjs1
+- https://github.com/SimulIDE/SimulIDE
+- https://github.com/logisim-evolution/logisim-evolution
+- https://github.com/PySpice-org/PySpice
+- https://github.com/SpiceSharp/SpiceSharp
+- https://github.com/circuitsim/circuit-simulator
+- https://github.com/ra4king/CircuitSim
+- https://github.com/hneemann/Digital
+- https://github.com/kazuhikoarase/simcirjs
+- https://github.com/OpenCircuits/OpenCircuits
+- https://github.com/drahnr/oregano
+
+## Drawing
+
+- https://github.com/pfalstad/canvas2svg

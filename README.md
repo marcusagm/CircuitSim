@@ -1,10 +1,10 @@
 # CircuitSim
 
-![GitHub repo size](https://img.shields.io/github/repo-size/iuricode/README-template?style=for-the-badge)
-![GitHub language count](https://img.shields.io/github/languages/count/iuricode/README-template?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/iuricode/README-template?style=for-the-badge)
-![Bitbucket open issues](https://img.shields.io/bitbucket/issues/iuricode/README-template?style=for-the-badge)
-![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/iuricode/README-template?style=for-the-badge)
+![GitHub repo size](https://img.shields.io/github/repo-size/marcusagm/CircuitSim?style=for-the-badge)
+![GitHub language count](https://img.shields.io/github/languages/count/marcusagm/CircuitSim?style=for-the-badge)
+![GitHub forks](https://img.shields.io/github/forks/marcusagm/CircuitSim?style=for-the-badge)
+![Bitbucket open issues](https://img.shields.io/bitbucket/issues/marcusagm/CircuitSim?style=for-the-badge)
+![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/marcusagm/CircuitSim?style=for-the-badge)
 
 > [!WARNING]
 > Este projeto ainda está em desenvolvimento em uma fase muito inicial.
