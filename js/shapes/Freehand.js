@@ -1,4 +1,5 @@
 import Shape from "./Shape.js";
+import Handle from "../components/Handle.js";
 
 class Freehand extends Shape {
     constructor() {
@@ -86,41 +87,19 @@ class Freehand extends Shape {
     }
 
     drawSelectionHandles(ctx) {
-        const handleSize = 5;
-        ctx.fillStyle = "blue";
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = 1;
+        if (this.points.length === 0) return;
 
         // Desenha handles nos pontos inicial e final
-        if (this.points.length > 0) {
-            const firstPoint = this.points[0];
-            ctx.fillRect(
-                firstPoint.x - handleSize / 2,
-                firstPoint.y - handleSize / 2,
-                handleSize,
-                handleSize
-            );
-            ctx.strokeRect(
-                firstPoint.x - handleSize / 2,
-                firstPoint.y - handleSize / 2,
-                handleSize,
-                handleSize
-            );
+        const firstPoint = this.points[0];
+        new Handle(firstPoint.x, firstPoint.y, Handle.TYPES.SQUARE).draw(ctx);
 
-            const lastPoint = this.points[this.points.length - 1];
-            ctx.fillRect(
-                lastPoint.x - handleSize / 2,
-                lastPoint.y - handleSize / 2,
-                handleSize,
-                handleSize
-            );
-            ctx.strokeRect(
-                lastPoint.x - handleSize / 2,
-                lastPoint.y - handleSize / 2,
-                handleSize,
-                handleSize
-            );
-        }
+        const lastPoint = this.points[this.points.length - 1];
+        new Handle(lastPoint.x, lastPoint.y, Handle.TYPES.SQUARE).draw(ctx);
+
+        // Opcional: desenha um handle em cada ponto (pode ser poluído visualmente)
+        this.points.forEach((p) => {
+            new Handle(p.x, p.y, Handle.TYPES.DOT).draw(ctx);
+        });
     }
 }
 

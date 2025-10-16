@@ -1,4 +1,5 @@
 import Shape from "./Shape.js";
+import Handle from "../components/Handle.js";
 
 class Line extends Shape {
     constructor(x1, y1, x2, y2) {
@@ -65,38 +66,8 @@ class Line extends Shape {
     }
 
     drawSelectionHandles(ctx) {
-        const handleSize = 5;
-        ctx.fillStyle = "blue";
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = 1;
-
-        // Handle no ponto inicial
-        ctx.fillRect(
-            this.x1 - handleSize / 2,
-            this.y1 - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        ctx.strokeRect(
-            this.x1 - handleSize / 2,
-            this.y1 - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-
-        // Handle no ponto final
-        ctx.fillRect(
-            this.x2 - handleSize / 2,
-            this.y2 - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        ctx.strokeRect(
-            this.x2 - handleSize / 2,
-            this.y2 - handleSize / 2,
-            handleSize,
-            handleSize
-        );
+        new Handle(this.x1, this.y1, Handle.TYPES.DOT).draw(ctx);
+        new Handle(this.x2, this.y2, Handle.TYPES.DOT).draw(ctx);
     }
 }
 

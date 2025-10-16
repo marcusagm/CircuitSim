@@ -1,6 +1,11 @@
 import Shape from "../shapes/Shape.js";
 import Terminal from "./Terminal.js";
+import HandleBox from "./HandleBox.js";
 
+/**
+ * Classe Component - Representa um componente eletrônico com terminais, rotação, flip e SVG customizado.
+ * Extende a classe Shape para herdar propriedades básicas de posição e desenho.
+ */
 class Component extends Shape {
     constructor(x, y, width, height, svgContent = "") {
         super(x, y);
@@ -118,37 +123,7 @@ class Component extends Shape {
     }
 
     drawSelectionHandles(ctx) {
-        const handleSize = 10;
-        ctx.strokeStyle = "blue";
-        ctx.lineWidth = 1;
-        ctx.strokeRect(this.x, this.y, this.width, this.height);
-
-        // Handles nos cantos
-        ctx.fillStyle = "blue";
-        ctx.fillRect(
-            this.x - handleSize / 2,
-            this.y - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        ctx.fillRect(
-            this.x + this.width - handleSize / 2,
-            this.y - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        ctx.fillRect(
-            this.x - handleSize / 2,
-            this.y + this.height - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        ctx.fillRect(
-            this.x + this.width - handleSize / 2,
-            this.y + this.height - handleSize / 2,
-            handleSize,
-            handleSize
-        );
+        new HandleBox(this.x, this.y, this.width, this.height, this, false).draw(ctx);
     }
 }
 

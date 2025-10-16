@@ -1,4 +1,5 @@
-import Shape from './Shape.js';
+import Handle from "../components/Handle.js";
+import Shape from "./Shape.js";
 
 class Circle extends Shape {
     constructor(x, y, radius) {
@@ -24,8 +25,10 @@ class Circle extends Shape {
     }
 
     isHit(x, y) {
-        const distance = Math.sqrt(Math.pow(x - this.x, 2) + Math.pow(y - this.y, 2));
-        return distance < (this.radius + 5); // Adiciona uma margem para facilitar o clique
+        const distance = Math.sqrt(
+            Math.pow(x - this.x, 2) + Math.pow(y - this.y, 2)
+        );
+        return distance < this.radius + 5; // Adiciona uma margem para facilitar o clique
     }
 
     move(dx, dy) {
@@ -34,28 +37,19 @@ class Circle extends Shape {
 
     edit(newProps) {
         if (newProps.color !== undefined) this.color = newProps.color;
-        if (newProps.lineWidth !== undefined) this.lineWidth = newProps.lineWidth;
-        if (newProps.fillColor !== undefined) this.fillColor = newProps.fillColor;
+        if (newProps.lineWidth !== undefined)
+            this.lineWidth = newProps.lineWidth;
+        if (newProps.fillColor !== undefined)
+            this.fillColor = newProps.fillColor;
         if (newProps.x !== undefined) this.x = newProps.x;
         if (newProps.y !== undefined) this.y = newProps.y;
         if (newProps.radius !== undefined) this.radius = newProps.radius;
     }
 
     drawSelectionHandles(ctx) {
-        const handleSize = 5;
-        ctx.fillStyle = 'blue';
-        ctx.strokeStyle = 'white';
-        ctx.lineWidth = 1;
-
-        // Handle no centro
-        ctx.fillRect(this.x - handleSize / 2, this.y - handleSize / 2, handleSize, handleSize);
-        ctx.strokeRect(this.x - handleSize / 2, this.y - handleSize / 2, handleSize, handleSize);
-
-        // Handle na borda (para redimensionar)
-        ctx.fillRect(this.x + this.radius - handleSize / 2, this.y - handleSize / 2, handleSize, handleSize);
-        ctx.strokeRect(this.x + this.radius - handleSize / 2, this.y - handleSize / 2, handleSize, handleSize);
+        new Handle(this.x, this.y, Handle.TYPES.CROSS).draw(ctx);
+        new Handle(this.x + this.radius, this.y, Handle.TYPES.DOT).draw(ctx);
     }
 }
 
 export default Circle;
-

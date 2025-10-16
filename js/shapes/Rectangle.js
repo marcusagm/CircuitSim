@@ -1,4 +1,5 @@
 import Shape from "./Shape.js";
+import Handle from "../components/Handle.js";
 
 class Rectangle extends Shape {
     constructor(x, y, width, height) {
@@ -50,63 +51,15 @@ class Rectangle extends Shape {
     }
 
     drawSelectionHandles(ctx) {
-        const handleSize = 5;
-        ctx.fillStyle = "blue";
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = 1;
-
-        // Top-left
-        ctx.fillRect(
-            this.x - handleSize / 2,
-            this.y - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        ctx.strokeRect(
-            this.x - handleSize / 2,
-            this.y - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        // Top-right
-        ctx.fillRect(
-            this.x + this.width - handleSize / 2,
-            this.y - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        ctx.strokeRect(
-            this.x + this.width - handleSize / 2,
-            this.y - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        // Bottom-left
-        ctx.fillRect(
-            this.x - handleSize / 2,
-            this.y + this.height - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        ctx.strokeRect(
-            this.x - handleSize / 2,
-            this.y + this.height - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        // Bottom-right
-        ctx.fillRect(
-            this.x + this.width - handleSize / 2,
-            this.y + this.height - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        ctx.strokeRect(
-            this.x + this.width - handleSize / 2,
-            this.y + this.height - handleSize / 2,
-            handleSize,
-            handleSize
-        );
+        new Handle(this.x, this.y, Handle.TYPES.SQUARE).draw(ctx);  // Top-left
+        new Handle(this.x + this.width, this.y, Handle.TYPES.SQUARE).draw(ctx); // Top-right
+        new Handle(this.x, this.y + this.height, Handle.TYPES.SQUARE).draw(ctx); // Bottom-left
+        new Handle(this.x + this.width, this.y + this.height, Handle.TYPES.SQUARE).draw(ctx); // Bottom-right
+        new Handle(this.x + this.width / 2, this.y, Handle.TYPES.DOT).draw(ctx); // Top-center
+        new Handle(this.x + this.width / 2, this.y + this.height, Handle.TYPES.DOT).draw(ctx); // Bottom-center
+        new Handle(this.x, this.y + this.height / 2, Handle.TYPES.DOT).draw(ctx); // Middle-left
+        new Handle(this.x + this.width, this.y + this.height / 2, Handle.TYPES.DOT).draw(ctx); // Middle-right
+        new Handle(this.x + this.width / 2, this.y + this.height / 2, Handle.TYPES.CROSS).draw(ctx); // Center
     }
 }
 

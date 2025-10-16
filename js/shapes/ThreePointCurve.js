@@ -1,4 +1,6 @@
 import Shape from "./Shape.js";
+import Handle from "../components/Handle.js";
+import HandleAnchor from "../components/HandleAnchor.js";
 
 class ThreePointCurve extends Shape {
     constructor(x1, y1, cx, cy, x2, y2) {
@@ -11,16 +13,16 @@ class ThreePointCurve extends Shape {
         this.y2 = y2;
     }
 
-    draw(ctx) {
-        ctx.beginPath();
-        ctx.strokeStyle = this.color;
-        ctx.lineWidth = this.lineWidth;
-        ctx.moveTo(this.x1, this.y1);
-        ctx.quadraticCurveTo(this.cx, this.cy, this.x2, this.y2);
-        ctx.stroke();
+    draw(context) {
+        context.beginPath();
+        context.strokeStyle = this.color;
+        context.lineWidth = this.lineWidth;
+        context.moveTo(this.x1, this.y1);
+        context.quadraticCurveTo(this.cx, this.cy, this.x2, this.y2);
+        context.stroke();
 
         if (this.isSelected) {
-            this.drawSelectionHandles(ctx);
+            this.drawSelectionHandles(context);
         }
     }
 
@@ -58,50 +60,56 @@ class ThreePointCurve extends Shape {
         if (newProps.y2 !== undefined) this.y2 = newProps.y2;
     }
 
-    drawSelectionHandles(ctx) {
-        const handleSize = 5;
-        ctx.fillStyle = "blue";
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = 1;
+    // Desenha Ancoras de edição da curva (3 pontos: início, controle, fim)
+    // Cada âncora é um ponto com linhas de direção para controle da curva
+    // Semelhante às âncoras do Illustrator
+    drawSelectionHandles(context) {
+        const handleSize = 8;
+        const handleColor = "#00ccff66";
+        const handleBorderColor = "#00ccffff";
+        const handleBorderSize = 2;
 
-        ctx.fillRect(
-            this.x1 - handleSize / 2,
-            this.y1 - handleSize / 2,
+        // Ponto inicial
+        const startHandle = new Handle(
+            this.x1,
+            this.y1,
+            Handle.TYPES.SQUARE,
+            this,
             handleSize,
-            handleSize
+            handleColor,
+            handleBorderSize,
+            handleBorderColor
         );
-        ctx.strokeRect(
-            this.x1 - handleSize / 2,
-            this.y1 - handleSize / 2,
-            handleSize,
-            handleSize
-        );
+        startHandle.draw(context);
 
-        ctx.fillRect(
-            this.cx - handleSize / 2,
-            this.cy - handleSize / 2,
+        // Ponto de controle
+        const controlHandle = new HandleAnchor(
+            this.cx,
+            this.cy,
+            (this.x1 - this.cx) / 2,
+            (this.y1 - this.cy) / 2,
+            (this.x2 - this.cx) / 2,
+            (this.y2 - this.cy) / 2,
+            this,
             handleSize,
-            handleSize
+            handleColor,
+            handleBorderSize,
+            handleBorderColor
         );
-        ctx.strokeRect(
-            this.cx - handleSize / 2,
-            this.cy - handleSize / 2,
-            handleSize,
-            handleSize
-        );
+        controlHandle.draw(context);
 
-        ctx.fillRect(
-            this.x2 - handleSize / 2,
-            this.y2 - handleSize / 2,
+        // Ponto final
+        const endHandle = new Handle(
+            this.x2,
+            this.y2,
+            Handle.TYPES.SQUARE,
+            this,
             handleSize,
-            handleSize
+            handleColor,
+            handleBorderSize,
+            handleBorderColor
         );
-        ctx.strokeRect(
-            this.x2 - handleSize / 2,
-            this.y2 - handleSize / 2,
-            handleSize,
-            handleSize
-        );
+        endHandle.draw(context);
     }
 }
 

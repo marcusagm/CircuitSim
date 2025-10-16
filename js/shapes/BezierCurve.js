@@ -1,4 +1,6 @@
 import Shape from "./Shape.js";
+import Handle from "../components/Handle.js";
+import HandleAnchor from "../components/HandleAnchor.js";
 
 class BezierCurve extends Shape {
     constructor(x1, y1, cx1, cy1, cx2, cy2, x2, y2) {
@@ -13,12 +15,12 @@ class BezierCurve extends Shape {
         this.y2 = y2;
     }
 
-    draw(ctx) {
-        ctx.beginPath();
-        ctx.strokeStyle = this.color;
-        ctx.lineWidth = this.lineWidth;
-        ctx.moveTo(this.x1, this.y1);
-        ctx.bezierCurveTo(
+    draw(context) {
+        context.beginPath();
+        context.strokeStyle = this.color;
+        context.lineWidth = this.lineWidth;
+        context.moveTo(this.x1, this.y1);
+        context.bezierCurveTo(
             this.cx1,
             this.cy1,
             this.cx2,
@@ -26,10 +28,10 @@ class BezierCurve extends Shape {
             this.x2,
             this.y2
         );
-        ctx.stroke();
+        context.stroke();
 
         if (this.isSelected) {
-            this.drawSelectionHandles(ctx);
+            this.drawSelectionHandles(context);
         }
     }
 
@@ -71,63 +73,14 @@ class BezierCurve extends Shape {
         if (newProps.y2 !== undefined) this.y2 = newProps.y2;
     }
 
-    drawSelectionHandles(ctx) {
-        const handleSize = 5;
-        ctx.fillStyle = "blue";
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = 1;
-
-        ctx.fillRect(
-            this.x1 - handleSize / 2,
-            this.y1 - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        ctx.strokeRect(
-            this.x1 - handleSize / 2,
-            this.y1 - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-
-        ctx.fillRect(
-            this.cx1 - handleSize / 2,
-            this.cy1 - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        ctx.strokeRect(
-            this.cx1 - handleSize / 2,
-            this.cy1 - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-
-        ctx.fillRect(
-            this.cx2 - handleSize / 2,
-            this.cy2 - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        ctx.strokeRect(
-            this.cx2 - handleSize / 2,
-            this.cy2 - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-
-        ctx.fillRect(
-            this.x2 - handleSize / 2,
-            this.y2 - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        ctx.strokeRect(
-            this.x2 - handleSize / 2,
-            this.y2 - handleSize / 2,
-            handleSize,
-            handleSize
-        );
+    // Desenha Ancoras de edição da curva (4 pontos: início, controle 1, controle 2, fim)
+    // Os pontos de controle são pontos com linhas de direção para controle da curva
+    // O funcionamento é semelhante a ferramenta pen do Illustrator
+    drawSelectionHandles(context) {
+        const handle1 = new HandleAnchor(this.x1, this.y1, this.cx1, this.cy1, this.cx2, this.cy2, context);
+        const handle2 = new HandleAnchor(this.x2, this.y2, this.cx1, this.cy1, this.cx2, this.cy2, context);
+        handle1.draw(context);
+        handle2.draw(context);
     }
 }
 

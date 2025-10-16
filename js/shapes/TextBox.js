@@ -1,4 +1,5 @@
 import Shape from "./Shape.js";
+import HandleBox from "../components/HandleBox.js";
 
 class TextBox extends Shape {
     constructor(
@@ -18,18 +19,18 @@ class TextBox extends Shape {
         this.height = fontSize; // Altura inicial baseada no tamanho da fonte
     }
 
-    draw(ctx) {
-        ctx.font = `${this.fontSize}px ${this.fontFamily}`;
-        ctx.fillStyle = this.color;
-        ctx.textBaseline = "top"; // Alinha o texto ao topo da caixa
-        ctx.fillText(this.text, this.x, this.y);
+    draw(context) {
+        context.font = `${this.fontSize}px ${this.fontFamily}`;
+        context.fillStyle = this.color;
+        context.textBaseline = "top"; // Alinha o texto ao topo da caixa
+        context.fillText(this.text, this.x, this.y);
 
         // Calcula a largura do texto para a caixa delimitadora
-        const metrics = ctx.measureText(this.text);
+        const metrics = context.measureText(this.text);
         this.width = metrics.width;
 
         if (this.isSelected) {
-            this.drawSelectionHandles(ctx);
+            this.drawSelectionHandles(context);
         }
     }
 
@@ -57,38 +58,16 @@ class TextBox extends Shape {
         if (newProps.y !== undefined) this.y = newProps.y;
     }
 
-    drawSelectionHandles(ctx) {
-        const handleSize = 5;
-        ctx.strokeStyle = "blue";
-        ctx.lineWidth = 1;
-        ctx.strokeRect(this.x, this.y, this.width, this.height);
-
-        // Handles nos cantos
-        ctx.fillStyle = "blue";
-        ctx.fillRect(
-            this.x - handleSize / 2,
-            this.y - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        ctx.fillRect(
-            this.x + this.width - handleSize / 2,
-            this.y - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        ctx.fillRect(
-            this.x - handleSize / 2,
-            this.y + this.height - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        ctx.fillRect(
-            this.x + this.width - handleSize / 2,
-            this.y + this.height - handleSize / 2,
-            handleSize,
-            handleSize
-        );
+    drawSelectionHandles(context) {
+        // Desenha a borda da caixa de seleção
+        new HandleBox(
+            this.x,
+            this.y,
+            this.width,
+            this.height,
+            this,
+            false
+        ).draw(context);
     }
 }
 

@@ -1,4 +1,5 @@
 import Shape from "./Shape.js";
+import HandleBox from "../components/HandleBox.js";
 
 class ImageShape extends Shape {
     constructor(x, y, imageUrl, width = 0, height = 0) {
@@ -24,13 +25,19 @@ class ImageShape extends Shape {
         };
     }
 
-    draw(ctx) {
+    draw(context) {
         if (this.loaded) {
-            ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+            context.drawImage(
+                this.image,
+                this.x,
+                this.y,
+                this.width,
+                this.height
+            );
         }
 
         if (this.isSelected) {
-            this.drawSelectionHandles(ctx);
+            this.drawSelectionHandles(context);
         }
     }
 
@@ -60,38 +67,11 @@ class ImageShape extends Shape {
         if (newProps.height !== undefined) this.height = newProps.height;
     }
 
-    drawSelectionHandles(ctx) {
+    drawSelectionHandles(context) {
         if (!this.loaded) return;
-        const handleSize = 5;
-        ctx.strokeStyle = "blue";
-        ctx.lineWidth = 1;
-        ctx.strokeRect(this.x, this.y, this.width, this.height);
-
-        // Handles nos cantos
-        ctx.fillStyle = "blue";
-        ctx.fillRect(
-            this.x - handleSize / 2,
-            this.y - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        ctx.fillRect(
-            this.x + this.width - handleSize / 2,
-            this.y - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        ctx.fillRect(
-            this.x - handleSize / 2,
-            this.y + this.height - handleSize / 2,
-            handleSize,
-            handleSize
-        );
-        ctx.fillRect(
-            this.x + this.width - handleSize / 2,
-            this.y + this.height - handleSize / 2,
-            handleSize,
-            handleSize
+        // Desenha a borda da caixa de seleção
+        new HandleBox(this.x, this.y, this.width, this.height, this, true).draw(
+            context
         );
     }
 }

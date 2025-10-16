@@ -15,6 +15,8 @@
  * drawingManager.addElement(wire);
  */
 import Shape from "../shapes/Shape.js";
+import Terminal from "./Terminal.js";
+import Handle from "./Handle.js";
 
 class Wire extends Shape {
     /**
@@ -217,50 +219,17 @@ class Wire extends Shape {
 
         // Draw handles only for intermediate path points (editable nodes)
         this.path.forEach((pathPoint) => {
-            canvasContext.fillRect(
-                pathPoint.x - handleSize / 2,
-                pathPoint.y - handleSize / 2,
-                handleSize,
-                handleSize
-            );
-            canvasContext.strokeRect(
-                pathPoint.x - handleSize / 2,
-                pathPoint.y - handleSize / 2,
-                handleSize,
-                handleSize
-            );
+            new Handle(pathPoint.x, pathPoint.y, Handle.TYPES.DOT, this).draw(canvasContext);
         });
 
         // Highlight terminal connection points (not editable nodes for this tool)
         if (this.startTerminal) {
             const terminalPosition = this.startTerminal.getAbsolutePosition();
-            canvasContext.fillRect(
-                terminalPosition.x - handleSize / 2,
-                terminalPosition.y - handleSize / 2,
-                handleSize,
-                handleSize
-            );
-            canvasContext.strokeRect(
-                terminalPosition.x - handleSize / 2,
-                terminalPosition.y - handleSize / 2,
-                handleSize,
-                handleSize
-            );
+            new Handle(terminalPosition.x, terminalPosition.y, Handle.TYPES.SQUARE, this).draw(canvasContext);
         }
         if (this.endTerminal) {
             const terminalPosition = this.endTerminal.getAbsolutePosition();
-            canvasContext.fillRect(
-                terminalPosition.x - handleSize / 2,
-                terminalPosition.y - handleSize / 2,
-                handleSize,
-                handleSize
-            );
-            canvasContext.strokeRect(
-                terminalPosition.x - handleSize / 2,
-                terminalPosition.y - handleSize / 2,
-                handleSize,
-                handleSize
-            );
+            new Handle(terminalPosition.x, terminalPosition.y, Handle.TYPES.SQUARE, this).draw(canvasContext);
         }
     }
 }
