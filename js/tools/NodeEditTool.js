@@ -55,7 +55,7 @@ class NodeEditTool extends Tool {
     activate() {
         this.selectedWire = null;
         this.draggingNodePathIndex = -1;
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     /**
@@ -68,7 +68,7 @@ class NodeEditTool extends Tool {
         }
         this.selectedWire = null;
         this.draggingNodePathIndex = -1;
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     /**
@@ -126,7 +126,7 @@ class NodeEditTool extends Tool {
                 this.selectedWire = null;
             }
         }
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     /**
@@ -164,7 +164,7 @@ class NodeEditTool extends Tool {
             this.selectedWire.path[this.draggingNodePathIndex].y = snappedY;
         }
 
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     /**
@@ -175,7 +175,7 @@ class NodeEditTool extends Tool {
     onMouseUp(event) {
         this.draggingNodePathIndex = -1;
         // Do not deselect the wire, to allow multiple edits
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 }
 

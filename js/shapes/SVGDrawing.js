@@ -25,7 +25,7 @@ class SVGDrawing extends Shape {
             if (this.width === 0) this.width = this.image.naturalWidth;
             if (this.height === 0) this.height = this.image.naturalHeight;
             if (this.drawingManager && this.drawingManager.canvas) {
-                this.drawingManager.canvas.draw();
+                this.drawingManager.canvas.requestRender();
             }
             URL.revokeObjectURL(url);
         };

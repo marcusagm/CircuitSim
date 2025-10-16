@@ -73,7 +73,7 @@ class WireTool extends Tool {
         this.startTerminal = null;
         this.lastPoint = null;
         this.isDrawingWire = false;
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     /**
@@ -142,7 +142,7 @@ class WireTool extends Tool {
                 this.lastPoint = snappedPoint;
             }
         }
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     /**
@@ -204,7 +204,7 @@ class WireTool extends Tool {
             };
         }
 
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     /**

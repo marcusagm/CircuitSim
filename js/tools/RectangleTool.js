@@ -21,7 +21,7 @@ class RectangleTool extends Tool {
         const { x, y } = this.getMouseCoords(event);
         this.currentRectangle.width = x - this.startX;
         this.currentRectangle.height = y - this.startY;
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     onMouseUp(event) {
@@ -45,7 +45,7 @@ class RectangleTool extends Tool {
             this.drawingManager.removeElement(this.currentRectangle);
         }
         this.currentRectangle = null;
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 }
 

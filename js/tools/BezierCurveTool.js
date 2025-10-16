@@ -31,7 +31,7 @@ class BezierCurveTool extends Tool {
         this.points = [];
         this.clickCount = 0;
         this.isDrawing = false;
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     onKeyDown(event) {
@@ -67,7 +67,7 @@ class BezierCurveTool extends Tool {
                 this.isDrawing = false;
             }
         }
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     onMouseMove(event) {
@@ -95,7 +95,7 @@ class BezierCurveTool extends Tool {
             this.currentCurve.x2 = x;
             this.currentCurve.y2 = y;
         }
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     onMouseUp(event) {

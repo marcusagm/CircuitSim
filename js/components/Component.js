@@ -33,7 +33,7 @@ class Component extends Shape {
                 if (this.height === 0) this.height = this.image.naturalHeight;
                 // Redesenhar o canvas após o SVG carregar
                 if (this.drawingManager && this.drawingManager.canvas) {
-                    this.drawingManager.canvas.draw();
+                    this.drawingManager.canvas.requestRender();
                 }
                 URL.revokeObjectURL(url); // Libera a URL de dados
             };

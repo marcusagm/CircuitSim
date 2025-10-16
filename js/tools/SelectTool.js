@@ -17,7 +17,7 @@ class SelectTool extends Tool {
     // Este método agora deseleciona todos os elementos no drawingManager
     deselectAll() {
         this.drawingManager.drawableElements.forEach((el) => el.deselect());
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     onMouseDown(event) {
@@ -45,7 +45,7 @@ class SelectTool extends Tool {
                 this.deselectAll(); // Clicou no vazio, deseleciona tudo
             }
         }
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     onMouseMove(event) {

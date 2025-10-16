@@ -53,7 +53,7 @@ class MoveTool extends Tool {
             this.dragStartX = x;
             this.dragStartY = y;
         }
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     onMouseMove(event) {
@@ -69,13 +69,13 @@ class MoveTool extends Tool {
 
         this.dragStartX = x;
         this.dragStartY = y;
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     onMouseUp(event) {
         this.isDragging = false;
         // A seleção deve persistir, então não limpamos elementsToMove aqui.
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 }
 

@@ -158,6 +158,8 @@
 
 ## Aplicação
 
+ - [x] Utilizar sistema de Handle componentizado
+ - [x] Utilizar renderização incrmental no canvas usando requestAnimationFrame
  - [ ] Utilizar electron
  - [ ] Sistema de atualização
 

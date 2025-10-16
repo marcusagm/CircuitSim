@@ -19,7 +19,7 @@ class FreehandTool extends Tool {
         if (!this.isDrawing) return;
         const { x, y } = this.getMouseCoords(event);
         this.currentFreehand.addPoint(x, y);
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     onMouseUp(event) {
@@ -29,7 +29,7 @@ class FreehandTool extends Tool {
             this.drawingManager.removeElement(this.currentFreehand);
         }
         this.currentFreehand = null;
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 }
 

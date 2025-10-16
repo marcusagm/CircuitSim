@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const resizeCanvas = () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        canvas.draw(); // Redesenha o canvas e a grid
+        canvas.requestRender(); // Redesenha o canvas e a grid
     };
 
     window.addEventListener("resize", resizeCanvas);
@@ -233,5 +233,5 @@ document.addEventListener("DOMContentLoaded", () => {
     toolManager.setActiveTool("select");
     toolbar.querySelector("button").classList.add("active");
 
-    canvas.draw();
+    canvas.requestRender();
 });

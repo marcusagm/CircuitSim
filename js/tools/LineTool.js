@@ -26,14 +26,14 @@ class LineTool extends Tool {
         const { x, y } = this.getMouseCoords(event);
         this.currentLine.x2 = x;
         this.currentLine.y2 = y;
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     onMouseUp(event) {
         if (!this.isDrawing) return;
         this.isDrawing = false;
         this.currentLine = null;
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 }
 

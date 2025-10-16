@@ -40,7 +40,7 @@ class ThreePointCurveTool extends Tool {
             this.isDrawing = false;
             this.currentCurve = null;
             this.clickCount = 0;
-            this.canvas.draw();
+            this.canvas.requestRender();
         }
     }
 
@@ -60,7 +60,7 @@ class ThreePointCurveTool extends Tool {
             this.currentCurve.cx = x;
             this.currentCurve.cy = y;
         }
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     onMouseUp(event) {

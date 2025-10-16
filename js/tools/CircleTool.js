@@ -23,7 +23,7 @@ class CircleTool extends Tool {
             Math.pow(x - this.startX, 2) + Math.pow(y - this.startY, 2)
         );
         this.currentCircle.radius = radius;
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     onMouseUp(event) {
@@ -33,7 +33,7 @@ class CircleTool extends Tool {
             this.drawingManager.removeElement(this.currentCircle);
         }
         this.currentCircle = null;
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 }
 

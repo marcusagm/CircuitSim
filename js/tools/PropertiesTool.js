@@ -176,7 +176,7 @@ class PropertiesTool extends Tool {
                 // Para edição de nós, seria necessário uma ferramenta mais interativa
                 // ou um prompt para cada nó, o que não é prático aqui.
             }
-            this.canvas.draw();
+            this.canvas.requestRender();
         }
     }
 

@@ -1,4 +1,5 @@
 class Canvas {
+
     constructor(canvasElement, ctx) {
         this.canvasElement = canvasElement;
         this.ctx = ctx;
@@ -6,6 +7,10 @@ class Canvas {
         this.height = canvasElement.height;
         this.drawingManager = null; // Será inicializado posteriormente
         this.grid = null; // Será inicializado posteriormente
+
+        this.needsRender = false;
+        this.isRendering = false;
+        this.render = this.render.bind(this);
     }
 
     set width(value) {
@@ -22,6 +27,22 @@ class Canvas {
 
     get height() {
         return this.canvasElement.height;
+    }
+
+    requestRender() {
+        this.needsRender = true;
+        if (!this.isRendering) {
+            this.isRendering = true;
+            requestAnimationFrame(this.render);
+        }
+    }
+
+    render() {
+        if (this.needsRender) {
+            this.needsRender = false;
+            this.draw();
+        }
+        this.isRendering = false;
     }
 
     draw() {

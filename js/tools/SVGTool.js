@@ -13,7 +13,7 @@ class SVGTool extends Tool {
             const newSVG = new SVGDrawing(x, y, svgContent);
             newSVG.drawingManager = this.drawingManager; // Atribui o drawingManager para que o SVG possa forçar um redraw
             this.drawingManager.addElement(newSVG);
-            this.canvas.draw(); // Desenha imediatamente, o SVG aparecerá quando carregar
+            this.canvas.requestRender(); // Desenha imediatamente, o SVG aparecerá quando carregar
         }
     }
 

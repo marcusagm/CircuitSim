@@ -13,7 +13,7 @@ class ComponentTool extends Tool {
         const newComponent = new this.componentClass(x, y);
         newComponent.drawingManager = this.drawingManager; // Permite que o componente force um redraw ao carregar SVG
         this.drawingManager.addElement(newComponent);
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     onMouseMove(event) {

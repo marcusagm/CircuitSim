@@ -20,7 +20,7 @@ class DeleteTool extends Tool {
                 }
             }
             this.drawingManager.removeElement(clickedElement);
-            this.canvas.draw();
+            this.canvas.requestRender();
         }
     }
 

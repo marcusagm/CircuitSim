@@ -43,7 +43,7 @@ class RotateFlipTool extends Tool {
             this.drawingManager.drawableElements.forEach((el) => el.deselect());
             this.selectedElements = [];
         }
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     onMouseMove(event) {
@@ -63,7 +63,7 @@ class RotateFlipTool extends Tool {
                     el.rotate(angle);
                 }
             });
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     flipSelectedHorizontal() {
@@ -74,7 +74,7 @@ class RotateFlipTool extends Tool {
                     el.flipHorizontal();
                 }
             });
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     flipSelectedVertical() {
@@ -85,7 +85,7 @@ class RotateFlipTool extends Tool {
                     el.flipVertical();
                 }
             });
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 }
 

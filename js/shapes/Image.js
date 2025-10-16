@@ -17,7 +17,7 @@ class ImageShape extends Shape {
             if (this.height === 0) this.height = this.image.naturalHeight;
             // Redesenhar o canvas após a imagem carregar
             if (this.drawingManager && this.drawingManager.canvas) {
-                this.drawingManager.canvas.draw();
+                this.drawingManager.canvas.requestRender();
             }
         };
         this.image.onerror = () => {

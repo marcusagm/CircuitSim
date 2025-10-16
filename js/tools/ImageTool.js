@@ -14,7 +14,7 @@ class ImageTool extends Tool {
             const newImage = new ImageShape(x, y, imageUrl);
             newImage.drawingManager = this.drawingManager; // Atribui o drawingManager para que a imagem possa forçar um redraw
             this.drawingManager.addElement(newImage);
-            this.canvas.draw(); // Desenha imediatamente, a imagem aparecerá quando carregar
+            this.canvas.requestRender(); // Desenha imediatamente, a imagem aparecerá quando carregar
         }
     }
 

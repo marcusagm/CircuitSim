@@ -12,7 +12,7 @@ class TextBoxTool extends Tool {
         if (textContent !== null && textContent.trim() !== "") {
             const newTextBox = new TextBox(x, y, textContent);
             this.drawingManager.addElement(newTextBox);
-            this.canvas.draw();
+            this.canvas.requestRender();
         }
     }
 

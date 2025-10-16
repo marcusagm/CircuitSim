@@ -10,7 +10,7 @@ class PointTool extends Tool {
         const { x, y } = this.getMouseCoords(event);
         const newPoint = new Point(x, y);
         this.drawingManager.addElement(newPoint);
-        this.canvas.draw();
+        this.canvas.requestRender();
     }
 
     onMouseMove(event) {
