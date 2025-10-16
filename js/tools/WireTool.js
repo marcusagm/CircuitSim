@@ -1,24 +1,71 @@
+/**
+ * WireTool allows users to draw electrical wires on the canvas.
+ * It supports connecting wires between component terminals or drawing free-floating wires with intermediate bend points.
+ * Wires can be drawn with orthogonal or 45-degree segments.
+ *
+ * @example
+ * // Example usage:
+ * import WireTool from './tools/WireTool.js';
+ * const wireTool = new WireTool(canvas, drawingManager);
+ * toolManager.addTool('wire', wireTool);
+ */
 import Tool from './Tool.js';
 import Wire from '../components/Wire.js';
+import Terminal from '../components/Terminal.js';
 
 class WireTool extends Tool {
+    /**
+     * Creates an instance of WireTool.
+     * @param {Canvas} canvas - The canvas instance.
+     * @param {DrawingManager} drawingManager - The drawing manager instance.
+     */
     constructor(canvas, drawingManager) {
         super(canvas, drawingManager);
+        /**
+         * The wire currently being drawn.
+         * @type {Wire|null}
+         */
         this.currentWire = null;
+        /**
+         * The starting terminal if the wire begins from one.
+         * @type {Terminal|null}
+         */
         this.startTerminal = null;
+        /**
+         * The last point added to the wire's path during drawing.
+         * @type {{x: number, y: number}|null}
+         */
         this.lastPoint = null;
+        /**
+         * Indicates if a wire drawing operation is currently active.
+         * @type {boolean}
+         */
         this.isDrawingWire = false;
     }
 
+    /**
+     * Activates the WireTool, preparing it for drawing.
+     * @returns {void}
+     */
     activate() {
-        this.reset();
+        this.resetToolState();
+        document.addEventListener('keydown', this.onKeyDown.bind(this));
     }
 
+    /**
+     * Deactivates the WireTool, cleaning up any active drawing state.
+     * @returns {void}
+     */
     deactivate() {
-        this.reset();
+        this.resetToolState();
+        document.removeEventListener('keydown', this.onKeyDown.bind(this));
     }
 
-    reset() {
+    /**
+     * Resets the internal state of the tool, clearing any temporary wires or drawing flags.
+     * @returns {void}
+     */
+    resetToolState() {
         if (this.currentWire && this.currentWire.isTemporary) {
             this.drawingManager.removeElement(this.currentWire);
         }
@@ -29,23 +76,25 @@ class WireTool extends Tool {
         this.canvas.draw();
     }
 
+    /**
+     * Handles the mouse down event, initiating or continuing wire drawing.
+     * @param {MouseEvent} event - The mouse event.
+     * @returns {void}
+     */
     onMouseDown(event) {
-        const { x, y } = this.getMouseCoords(event);
-        const snappedX = Math.round(x / this.canvas.grid.gridCellSize) * this.canvas.grid.gridCellSize;
-        const snappedY = Math.round(y / this.canvas.grid.gridCellSize) * this.canvas.grid.gridCellSize;
+        const { x: coordinateX, y: coordinateY } = this.getMouseCoords(event);
+        const snappedX = Math.round(coordinateX / this.canvas.grid.gridCellSize) * this.canvas.grid.gridCellSize;
+        const snappedY = Math.round(coordinateY / this.canvas.grid.gridCellSize) * this.canvas.grid.gridCellSize;
         const snappedPoint = { x: snappedX, y: snappedY };
 
         let clickedTerminal = null;
-        let clickedComponent = null;
 
-        // Procura por um terminal clicado em qualquer componente
+        // Search for a clicked terminal on any component
         for (const element of this.drawingManager.drawableElements) {
             if (element.terminals) {
                 for (const terminal of element.terminals) {
-                    const absPos = terminal.getAbsolutePosition();
-                    if (terminal.isHit(x, y)) {
+                    if (terminal.isHit(coordinateX, coordinateY)) {
                         clickedTerminal = terminal;
-                        clickedComponent = element;
                         break;
                     }
                 }
@@ -54,7 +103,7 @@ class WireTool extends Tool {
         }
 
         if (!this.isDrawingWire) {
-            // Tentando iniciar um novo fio
+            // Attempting to start a new wire
             if (clickedTerminal) {
                 this.startTerminal = clickedTerminal;
                 this.currentWire = new Wire(this.startTerminal);
@@ -64,7 +113,7 @@ class WireTool extends Tool {
                 this.lastPoint = this.startTerminal.getAbsolutePosition();
                 this.isDrawingWire = true;
             } else {
-                // Clicou em um ponto vazio, iniciar fio a partir de um ponto livre
+                // Clicked on an empty spot, start a free-floating wire
                 this.currentWire = new Wire();
                 this.currentWire.isTemporary = true;
                 this.currentWire.addPoint(snappedPoint.x, snappedPoint.y);
@@ -73,9 +122,9 @@ class WireTool extends Tool {
                 this.isDrawingWire = true;
             }
         } else {
-            // Continuar desenhando o fio ou conectar a um terminal
+            // Continue drawing the wire or connect to a terminal
             if (clickedTerminal && clickedTerminal !== this.startTerminal) {
-                // Conectar a outro terminal
+                // Connect to another terminal
                 this.currentWire.endTerminal = clickedTerminal;
                 clickedTerminal.addWire(this.currentWire);
                 this.currentWire.isTemporary = false;
@@ -84,7 +133,7 @@ class WireTool extends Tool {
                 this.lastPoint = null;
                 this.isDrawingWire = false;
             } else {
-                // Adicionar um ponto de dobra ao fio
+                // Add a bend point to the wire
                 this.currentWire.addPoint(snappedPoint.x, snappedPoint.y);
                 this.lastPoint = snappedPoint;
             }
@@ -92,15 +141,20 @@ class WireTool extends Tool {
         this.canvas.draw();
     }
 
+    /**
+     * Handles the mouse move event, updating the temporary wire segment.
+     * @param {MouseEvent} event - The mouse event.
+     * @returns {void}
+     */
     onMouseMove(event) {
         if (!this.isDrawingWire || !this.currentWire) return;
 
-        const { x, y } = this.getMouseCoords(event);
-        const snappedX = Math.round(x / this.canvas.grid.gridCellSize) * this.canvas.grid.gridCellSize;
-        const snappedY = Math.round(y / this.canvas.grid.gridCellSize) * this.canvas.grid.gridCellSize;
+        const { x: coordinateX, y: coordinateY } = this.getMouseCoords(event);
+        const snappedX = Math.round(coordinateX / this.canvas.grid.gridCellSize) * this.canvas.grid.gridCellSize;
+        const snappedY = Math.round(coordinateY / this.canvas.grid.gridCellSize) * this.canvas.grid.gridCellSize;
         const currentSnappedPoint = { x: snappedX, y: snappedY };
 
-        // Se não há pontos no path, o ponto inicial é o startTerminal ou o primeiro clique
+        // If there are no points in the path, the initial point is the startTerminal or the first click
         const referencePoint = this.currentWire.path.length > 0 ?
                                this.currentWire.path[this.currentWire.path.length - 1] :
                                (this.startTerminal ? this.startTerminal.getAbsolutePosition() : this.lastPoint);
@@ -108,15 +162,15 @@ class WireTool extends Tool {
         let finalX = currentSnappedPoint.x;
         let finalY = currentSnappedPoint.y;
 
-        const dx = Math.abs(currentSnappedPoint.x - referencePoint.x);
-        const dy = Math.abs(currentSnappedPoint.y - referencePoint.y);
+        const deltaX = Math.abs(currentSnappedPoint.x - referencePoint.x);
+        const deltaY = Math.abs(currentSnappedPoint.y - referencePoint.y);
 
-        // Lógica para forçar ortogonal ou 45 graus
-        if (dx === dy) {
-            // 45 graus
+        // Logic to force orthogonal or 45 degrees
+        if (deltaX === deltaY) {
+            // 45 degrees
             finalX = currentSnappedPoint.x;
             finalY = currentSnappedPoint.y;
-        } else if (dx > dy) {
+        } else if (deltaX > deltaY) {
             // Horizontal
             finalY = referencePoint.y;
         } else {
@@ -124,24 +178,43 @@ class WireTool extends Tool {
             finalX = referencePoint.x;
         }
 
-        // Adiciona ou atualiza o último ponto do path
+        // Add or update the last point of the path
         if (this.currentWire.path.length === 0 && !this.startTerminal) {
-            // Se o fio começou de um ponto livre e este é o primeiro movimento
+            // If the wire started from a free point and this is the first movement
             this.currentWire.path.push({ x: finalX, y: finalY });
         } else if (this.currentWire.path.length === 0 && this.startTerminal) {
-            // Se o fio começou de um terminal, o primeiro ponto do path é o mouse
+            // If the wire started from a terminal, the first point of the path is the mouse
             this.currentWire.path.push({ x: finalX, y: finalY });
         } else {
-            // Atualiza o último ponto do path
+            // Update the last point of the path
             this.currentWire.path[this.currentWire.path.length - 1] = { x: finalX, y: finalY };
         }
 
         this.canvas.draw();
     }
 
+    /**
+     * Handles the mouse up event. For WireTool, finalization is typically handled in onMouseDown or onKeyDown (ESC).
+     * @param {MouseEvent} event - The mouse event.
+     * @returns {void}
+     */
     onMouseUp(event) {
-        // A lógica de finalização do fio é tratada no onMouseDown (ao clicar em outro terminal ou em um ponto livre)
-        // Não há necessidade de lógica aqui para esta ferramenta específica
+        // The wire finalization logic is handled in onMouseDown (when clicking another terminal or a free point)
+        // No specific logic needed here for this tool.
+    }
+
+    /**
+     * Handles key down events, specifically for 'Escape' to cancel wire drawing.
+     * @param {KeyboardEvent} event - The keyboard event.
+     * @returns {void}
+     */
+    onKeyDown(event) {
+        if (event.key === 'Escape' && this.isDrawingWire) {
+            if (this.currentWire) {
+                this.drawingManager.removeElement(this.currentWire);
+            }
+            this.resetToolState();
+        }
     }
 }
 
