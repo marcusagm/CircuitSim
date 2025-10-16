@@ -9,9 +9,9 @@
  * const wireTool = new WireTool(canvas, drawingManager);
  * toolManager.addTool('wire', wireTool);
  */
-import Tool from './Tool.js';
-import Wire from '../components/Wire.js';
-import Terminal from '../components/Terminal.js';
+import Tool from "./Tool.js";
+import Wire from "../components/Wire.js";
+import Terminal from "../components/Terminal.js";
 
 class WireTool extends Tool {
     /**
@@ -49,7 +49,7 @@ class WireTool extends Tool {
      */
     activate() {
         this.resetToolState();
-        document.addEventListener('keydown', this.onKeyDown.bind(this));
+        document.addEventListener("keydown", this.onKeyDown.bind(this));
     }
 
     /**
@@ -58,7 +58,7 @@ class WireTool extends Tool {
      */
     deactivate() {
         this.resetToolState();
-        document.removeEventListener('keydown', this.onKeyDown.bind(this));
+        document.removeEventListener("keydown", this.onKeyDown.bind(this));
     }
 
     /**
@@ -83,8 +83,12 @@ class WireTool extends Tool {
      */
     onMouseDown(event) {
         const { x: coordinateX, y: coordinateY } = this.getMouseCoords(event);
-        const snappedX = Math.round(coordinateX / this.canvas.grid.gridCellSize) * this.canvas.grid.gridCellSize;
-        const snappedY = Math.round(coordinateY / this.canvas.grid.gridCellSize) * this.canvas.grid.gridCellSize;
+        const snappedX =
+            Math.round(coordinateX / this.canvas.grid.gridCellSize) *
+            this.canvas.grid.gridCellSize;
+        const snappedY =
+            Math.round(coordinateY / this.canvas.grid.gridCellSize) *
+            this.canvas.grid.gridCellSize;
         const snappedPoint = { x: snappedX, y: snappedY };
 
         let clickedTerminal = null;
@@ -150,14 +154,21 @@ class WireTool extends Tool {
         if (!this.isDrawingWire || !this.currentWire) return;
 
         const { x: coordinateX, y: coordinateY } = this.getMouseCoords(event);
-        const snappedX = Math.round(coordinateX / this.canvas.grid.gridCellSize) * this.canvas.grid.gridCellSize;
-        const snappedY = Math.round(coordinateY / this.canvas.grid.gridCellSize) * this.canvas.grid.gridCellSize;
+        const snappedX =
+            Math.round(coordinateX / this.canvas.grid.gridCellSize) *
+            this.canvas.grid.gridCellSize;
+        const snappedY =
+            Math.round(coordinateY / this.canvas.grid.gridCellSize) *
+            this.canvas.grid.gridCellSize;
         const currentSnappedPoint = { x: snappedX, y: snappedY };
 
         // If there are no points in the path, the initial point is the startTerminal or the first click
-        const referencePoint = this.currentWire.path.length > 0 ?
-                               this.currentWire.path[this.currentWire.path.length - 1] :
-                               (this.startTerminal ? this.startTerminal.getAbsolutePosition() : this.lastPoint);
+        const referencePoint =
+            this.currentWire.path.length > 0
+                ? this.currentWire.path[this.currentWire.path.length - 1]
+                : this.startTerminal
+                ? this.startTerminal.getAbsolutePosition()
+                : this.lastPoint;
 
         let finalX = currentSnappedPoint.x;
         let finalY = currentSnappedPoint.y;
@@ -187,7 +198,10 @@ class WireTool extends Tool {
             this.currentWire.path.push({ x: finalX, y: finalY });
         } else {
             // Update the last point of the path
-            this.currentWire.path[this.currentWire.path.length - 1] = { x: finalX, y: finalY };
+            this.currentWire.path[this.currentWire.path.length - 1] = {
+                x: finalX,
+                y: finalY,
+            };
         }
 
         this.canvas.draw();
@@ -209,7 +223,7 @@ class WireTool extends Tool {
      * @returns {void}
      */
     onKeyDown(event) {
-        if (event.key === 'Escape' && this.isDrawingWire) {
+        if (event.key === "Escape" && this.isDrawingWire) {
             if (this.currentWire) {
                 this.drawingManager.removeElement(this.currentWire);
             }
@@ -219,4 +233,3 @@ class WireTool extends Tool {
 }
 
 export default WireTool;
-

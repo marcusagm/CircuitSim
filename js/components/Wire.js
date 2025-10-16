@@ -44,7 +44,7 @@ class Wire extends Shape {
          * The color of the wire.
          * @type {string}
          */
-        this.color = '#000000';
+        this.color = "#000000";
         /**
          * The line width of the wire.
          * @type {number}
@@ -105,7 +105,10 @@ class Wire extends Shape {
 
         canvasContext.moveTo(allPoints[0].x, allPoints[0].y);
         for (let pointIndex = 1; pointIndex < allPoints.length; pointIndex++) {
-            canvasContext.lineTo(allPoints[pointIndex].x, allPoints[pointIndex].y);
+            canvasContext.lineTo(
+                allPoints[pointIndex].x,
+                allPoints[pointIndex].y
+            );
         }
         canvasContext.stroke();
         canvasContext.setLineDash([]); // Reset to prevent other drawings from being dashed
@@ -125,28 +128,46 @@ class Wire extends Shape {
         const allPoints = this.getAllPoints();
         if (allPoints.length < 2) return false;
 
-        for (let pointIndex = 0; pointIndex < allPoints.length - 1; pointIndex++) {
+        for (
+            let pointIndex = 0;
+            pointIndex < allPoints.length - 1;
+            pointIndex++
+        ) {
             const point1 = allPoints[pointIndex];
             const point2 = allPoints[pointIndex + 1];
 
-            const lineSegmentSquaredLength = Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2);
+            const lineSegmentSquaredLength =
+                Math.pow(point2.x - point1.x, 2) +
+                Math.pow(point2.y - point1.y, 2);
             if (lineSegmentSquaredLength === 0) continue; // It's a point
 
-            const t = ((coordinateX - point1.x) * (point2.x - point1.x) + (coordinateY - point1.y) * (point2.y - point1.y)) / lineSegmentSquaredLength;
+            const t =
+                ((coordinateX - point1.x) * (point2.x - point1.x) +
+                    (coordinateY - point1.y) * (point2.y - point1.y)) /
+                lineSegmentSquaredLength;
             const projectionX = point1.x + t * (point2.x - point1.x);
             const projectionY = point1.y + t * (point2.y - point1.y);
 
             let distance;
             if (t < 0) {
-                distance = Math.sqrt(Math.pow(coordinateX - point1.x, 2) + Math.pow(coordinateY - point1.y, 2));
+                distance = Math.sqrt(
+                    Math.pow(coordinateX - point1.x, 2) +
+                        Math.pow(coordinateY - point1.y, 2)
+                );
             } else if (t > 1) {
-                distance = Math.sqrt(Math.pow(coordinateX - point2.x, 2) + Math.pow(coordinateY - point2.y, 2));
-            }
-            else {
-                distance = Math.sqrt(Math.pow(coordinateX - projectionX, 2) + Math.pow(coordinateY - projectionY, 2));
+                distance = Math.sqrt(
+                    Math.pow(coordinateX - point2.x, 2) +
+                        Math.pow(coordinateY - point2.y, 2)
+                );
+            } else {
+                distance = Math.sqrt(
+                    Math.pow(coordinateX - projectionX, 2) +
+                        Math.pow(coordinateY - projectionY, 2)
+                );
             }
 
-            if (distance < (this.lineWidth + 5)) { // Add a small buffer for easier clicking
+            if (distance < this.lineWidth + 5) {
+                // Add a small buffer for easier clicking
                 return true;
             }
         }
@@ -163,7 +184,7 @@ class Wire extends Shape {
         // Wires connected to terminals do not move directly, but with their components
         // Free wires (without terminals) or wires under construction move
         if (!this.startTerminal && !this.endTerminal) {
-            this.path.forEach(pathPoint => {
+            this.path.forEach((pathPoint) => {
                 pathPoint.x += deltaX;
                 pathPoint.y += deltaY;
             });
@@ -177,8 +198,10 @@ class Wire extends Shape {
      */
     edit(newProperties) {
         if (newProperties.color !== undefined) this.color = newProperties.color;
-        if (newProperties.lineWidth !== undefined) this.lineWidth = newProperties.lineWidth;
-        if (newProperties.lineDash !== undefined) this.lineDash = newProperties.lineDash;
+        if (newProperties.lineWidth !== undefined)
+            this.lineWidth = newProperties.lineWidth;
+        if (newProperties.lineDash !== undefined)
+            this.lineDash = newProperties.lineDash;
     }
 
     /**
@@ -188,29 +211,58 @@ class Wire extends Shape {
      */
     drawSelectionHandles(canvasContext) {
         const handleSize = 5;
-        canvasContext.fillStyle = 'blue';
-        canvasContext.strokeStyle = 'white';
+        canvasContext.fillStyle = "blue";
+        canvasContext.strokeStyle = "white";
         canvasContext.lineWidth = 1;
 
         // Draw handles only for intermediate path points (editable nodes)
-        this.path.forEach(pathPoint => {
-            canvasContext.fillRect(pathPoint.x - handleSize / 2, pathPoint.y - handleSize / 2, handleSize, handleSize);
-            canvasContext.strokeRect(pathPoint.x - handleSize / 2, pathPoint.y - handleSize / 2, handleSize, handleSize);
+        this.path.forEach((pathPoint) => {
+            canvasContext.fillRect(
+                pathPoint.x - handleSize / 2,
+                pathPoint.y - handleSize / 2,
+                handleSize,
+                handleSize
+            );
+            canvasContext.strokeRect(
+                pathPoint.x - handleSize / 2,
+                pathPoint.y - handleSize / 2,
+                handleSize,
+                handleSize
+            );
         });
 
         // Highlight terminal connection points (not editable nodes for this tool)
         if (this.startTerminal) {
             const terminalPosition = this.startTerminal.getAbsolutePosition();
-            canvasContext.fillRect(terminalPosition.x - handleSize / 2, terminalPosition.y - handleSize / 2, handleSize, handleSize);
-            canvasContext.strokeRect(terminalPosition.x - handleSize / 2, terminalPosition.y - handleSize / 2, handleSize, handleSize);
+            canvasContext.fillRect(
+                terminalPosition.x - handleSize / 2,
+                terminalPosition.y - handleSize / 2,
+                handleSize,
+                handleSize
+            );
+            canvasContext.strokeRect(
+                terminalPosition.x - handleSize / 2,
+                terminalPosition.y - handleSize / 2,
+                handleSize,
+                handleSize
+            );
         }
         if (this.endTerminal) {
             const terminalPosition = this.endTerminal.getAbsolutePosition();
-            canvasContext.fillRect(terminalPosition.x - handleSize / 2, terminalPosition.y - handleSize / 2, handleSize, handleSize);
-            canvasContext.strokeRect(terminalPosition.x - handleSize / 2, terminalPosition.y - handleSize / 2, handleSize, handleSize);
+            canvasContext.fillRect(
+                terminalPosition.x - handleSize / 2,
+                terminalPosition.y - handleSize / 2,
+                handleSize,
+                handleSize
+            );
+            canvasContext.strokeRect(
+                terminalPosition.x - handleSize / 2,
+                terminalPosition.y - handleSize / 2,
+                handleSize,
+                handleSize
+            );
         }
     }
 }
 
 export default Wire;
-

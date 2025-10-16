@@ -9,8 +9,8 @@
  * const nodeEditTool = new NodeEditTool(canvas, drawingManager);
  * toolManager.addTool('nodeEdit', nodeEditTool);
  */
-import Tool from './Tool.js';
-import Wire from '../components/Wire.js';
+import Tool from "./Tool.js";
+import Wire from "../components/Wire.js";
 
 class NodeEditTool extends Tool {
     /**
@@ -82,11 +82,19 @@ class NodeEditTool extends Tool {
         // First, check if an intermediate node of an already selected wire was clicked
         if (this.selectedWire) {
             // Only points in this.selectedWire.path are draggable by this tool
-            for (let nodeIndex = 0; nodeIndex < this.selectedWire.path.length; nodeIndex++) {
+            for (
+                let nodeIndex = 0;
+                nodeIndex < this.selectedWire.path.length;
+                nodeIndex++
+            ) {
                 const pathNode = this.selectedWire.path[nodeIndex];
-                const distance = Math.sqrt(Math.pow(coordinateX - pathNode.x, 2) + Math.pow(coordinateY - pathNode.y, 2));
+                const distance = Math.sqrt(
+                    Math.pow(coordinateX - pathNode.x, 2) +
+                        Math.pow(coordinateY - pathNode.y, 2)
+                );
 
-                if (distance < 10) { // 10px buffer for clicking on a node
+                if (distance < 10) {
+                    // 10px buffer for clicking on a node
                     this.draggingNodePathIndex = nodeIndex; // Direct index in the wire's path array
                     this.dragStartX = coordinateX;
                     this.dragStartY = coordinateY;
@@ -98,7 +106,10 @@ class NodeEditTool extends Tool {
 
         // If no intermediate node was dragged, check if a new wire should be selected
         this.draggingNodePathIndex = -1; // Ensure no dragging is active
-        const clickedElement = this.drawingManager.findElementAt(coordinateX, coordinateY);
+        const clickedElement = this.drawingManager.findElementAt(
+            coordinateX,
+            coordinateY
+        );
 
         if (clickedElement instanceof Wire) {
             if (this.selectedWire !== clickedElement) {
@@ -137,11 +148,18 @@ class NodeEditTool extends Tool {
         let newY = this.initialNodePosition.y + deltaY;
 
         // Apply snapping to the new position
-        const snappedX = Math.round(newX / this.canvas.grid.gridCellSize) * this.canvas.grid.gridCellSize;
-        const snappedY = Math.round(newY / this.canvas.grid.gridCellSize) * this.canvas.grid.gridCellSize;
+        const snappedX =
+            Math.round(newX / this.canvas.grid.gridCellSize) *
+            this.canvas.grid.gridCellSize;
+        const snappedY =
+            Math.round(newY / this.canvas.grid.gridCellSize) *
+            this.canvas.grid.gridCellSize;
 
         // Update the node in the wire's path array
-        if (this.draggingNodePathIndex >= 0 && this.draggingNodePathIndex < this.selectedWire.path.length) {
+        if (
+            this.draggingNodePathIndex >= 0 &&
+            this.draggingNodePathIndex < this.selectedWire.path.length
+        ) {
             this.selectedWire.path[this.draggingNodePathIndex].x = snappedX;
             this.selectedWire.path[this.draggingNodePathIndex].y = snappedY;
         }
@@ -162,4 +180,3 @@ class NodeEditTool extends Tool {
 }
 
 export default NodeEditTool;
-

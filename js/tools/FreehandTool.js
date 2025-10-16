@@ -1,5 +1,5 @@
-import Tool from './Tool.js';
-import Freehand from '../shapes/Freehand.js';
+import Tool from "./Tool.js";
+import Freehand from "../shapes/Freehand.js";
 
 class FreehandTool extends Tool {
     constructor(canvas, drawingManager) {
@@ -34,4 +34,3 @@ class FreehandTool extends Tool {
 }
 
 export default FreehandTool;
-

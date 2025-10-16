@@ -1,4 +1,4 @@
-import Shape from './Shape.js';
+import Shape from "./Shape.js";
 
 class Line extends Shape {
     constructor(x1, y1, x2, y2) {
@@ -25,18 +25,25 @@ class Line extends Shape {
     isHit(x, y) {
         // Implementação simplificada para verificação de clique na linha
         // Calcula a distância do ponto (x,y) à linha
-        const L2 = (this.x2 - this.x1) * (this.x2 - this.x1) + (this.y2 - this.y1) * (this.y2 - this.y1);
+        const L2 =
+            (this.x2 - this.x1) * (this.x2 - this.x1) +
+            (this.y2 - this.y1) * (this.y2 - this.y1);
         if (L2 === 0) return false; // É um ponto, não uma linha
 
-        const t = ((x - this.x1) * (this.x2 - this.x1) + (y - this.y1) * (this.y2 - this.y1)) / L2;
+        const t =
+            ((x - this.x1) * (this.x2 - this.x1) +
+                (y - this.y1) * (this.y2 - this.y1)) /
+            L2;
         const projectionX = this.x1 + t * (this.x2 - this.x1);
         const projectionY = this.y1 + t * (this.y2 - this.y1);
 
         // Verifica se a projeção está dentro dos limites da linha
         if (t < 0 || t > 1) return false;
 
-        const distance = Math.sqrt(Math.pow(x - projectionX, 2) + Math.pow(y - projectionY, 2));
-        return distance < (this.lineWidth + 5); // Adiciona uma margem para facilitar o clique
+        const distance = Math.sqrt(
+            Math.pow(x - projectionX, 2) + Math.pow(y - projectionY, 2)
+        );
+        return distance < this.lineWidth + 5; // Adiciona uma margem para facilitar o clique
     }
 
     move(dx, dy) {
@@ -49,7 +56,8 @@ class Line extends Shape {
 
     edit(newProps) {
         if (newProps.color !== undefined) this.color = newProps.color;
-        if (newProps.lineWidth !== undefined) this.lineWidth = newProps.lineWidth;
+        if (newProps.lineWidth !== undefined)
+            this.lineWidth = newProps.lineWidth;
         if (newProps.x1 !== undefined) this.x1 = newProps.x1;
         if (newProps.y1 !== undefined) this.y1 = newProps.y1;
         if (newProps.x2 !== undefined) this.x2 = newProps.x2;
@@ -58,19 +66,38 @@ class Line extends Shape {
 
     drawSelectionHandles(ctx) {
         const handleSize = 5;
-        ctx.fillStyle = 'blue';
-        ctx.strokeStyle = 'white';
+        ctx.fillStyle = "blue";
+        ctx.strokeStyle = "white";
         ctx.lineWidth = 1;
 
         // Handle no ponto inicial
-        ctx.fillRect(this.x1 - handleSize / 2, this.y1 - handleSize / 2, handleSize, handleSize);
-        ctx.strokeRect(this.x1 - handleSize / 2, this.y1 - handleSize / 2, handleSize, handleSize);
+        ctx.fillRect(
+            this.x1 - handleSize / 2,
+            this.y1 - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.strokeRect(
+            this.x1 - handleSize / 2,
+            this.y1 - handleSize / 2,
+            handleSize,
+            handleSize
+        );
 
         // Handle no ponto final
-        ctx.fillRect(this.x2 - handleSize / 2, this.y2 - handleSize / 2, handleSize, handleSize);
-        ctx.strokeRect(this.x2 - handleSize / 2, this.y2 - handleSize / 2, handleSize, handleSize);
+        ctx.fillRect(
+            this.x2 - handleSize / 2,
+            this.y2 - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.strokeRect(
+            this.x2 - handleSize / 2,
+            this.y2 - handleSize / 2,
+            handleSize,
+            handleSize
+        );
     }
 }
 
 export default Line;
-

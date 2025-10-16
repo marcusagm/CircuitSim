@@ -1,4 +1,4 @@
-import Shape from './Shape.js';
+import Shape from "./Shape.js";
 
 class SVGDrawing extends Shape {
     constructor(x, y, svgContent, width = 0, height = 0) {
@@ -13,7 +13,9 @@ class SVGDrawing extends Shape {
     }
 
     loadSVG() {
-        const svgBlob = new Blob([this.svgContent], { type: 'image/svg+xml;charset=utf-8' });
+        const svgBlob = new Blob([this.svgContent], {
+            type: "image/svg+xml;charset=utf-8",
+        });
         const url = URL.createObjectURL(svgBlob);
         this.image.src = url;
 
@@ -27,7 +29,9 @@ class SVGDrawing extends Shape {
             URL.revokeObjectURL(url);
         };
         this.image.onerror = () => {
-            console.error(`Erro ao carregar SVG: ${this.svgContent.substring(0, 50)}...`);
+            console.error(
+                `Erro ao carregar SVG: ${this.svgContent.substring(0, 50)}...`
+            );
             URL.revokeObjectURL(url);
         };
     }
@@ -44,8 +48,12 @@ class SVGDrawing extends Shape {
 
     isHit(x, y) {
         if (!this.loaded) return false;
-        return x >= this.x && x <= this.x + this.width &&
-               y >= this.y && y <= this.y + this.height;
+        return (
+            x >= this.x &&
+            x <= this.x + this.width &&
+            y >= this.y &&
+            y <= this.y + this.height
+        );
     }
 
     move(dx, dy) {
@@ -67,17 +75,36 @@ class SVGDrawing extends Shape {
     drawSelectionHandles(ctx) {
         if (!this.loaded) return;
         const handleSize = 5;
-        ctx.strokeStyle = 'blue';
+        ctx.strokeStyle = "blue";
         ctx.lineWidth = 1;
         ctx.strokeRect(this.x, this.y, this.width, this.height);
 
-        ctx.fillStyle = 'blue';
-        ctx.fillRect(this.x - handleSize / 2, this.y - handleSize / 2, handleSize, handleSize);
-        ctx.fillRect(this.x + this.width - handleSize / 2, this.y - handleSize / 2, handleSize, handleSize);
-        ctx.fillRect(this.x - handleSize / 2, this.y + this.height - handleSize / 2, handleSize, handleSize);
-        ctx.fillRect(this.x + this.width - handleSize / 2, this.y + this.height - handleSize / 2, handleSize, handleSize);
+        ctx.fillStyle = "blue";
+        ctx.fillRect(
+            this.x - handleSize / 2,
+            this.y - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.fillRect(
+            this.x + this.width - handleSize / 2,
+            this.y - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.fillRect(
+            this.x - handleSize / 2,
+            this.y + this.height - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.fillRect(
+            this.x + this.width - handleSize / 2,
+            this.y + this.height - handleSize / 2,
+            handleSize,
+            handleSize
+        );
     }
 }
 
 export default SVGDrawing;
-

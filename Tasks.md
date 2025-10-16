@@ -146,6 +146,7 @@
  - [ ] Barra de descrição e auxilio com componentes
  - [ ] Temas
 
+
 ## Simulação
 
  - [ ] Animação da simulação
@@ -154,10 +155,28 @@
  - [ ] Painel de console
  - [ ] Painel com estatísticas de simulação ( Tempo de simulação, Velocidade configurada vs real, Uso de processamento, FPS)
 
+
 ## Aplicação
 
  - [ ] Utilizar electron
  - [ ] Sistema de atualização
+
+### Atalhos
+
+- [ ] Adicionar escopo para grupos de atalhos (ex: quando um modal estiver aberto, usar um conjunto diferente de atalhos)
+- [ ] Adicionar suporte para atalhos sequenciais (ex: 'g' seguido de 'h' para ir para a home)
+- [ ] Adicionar suporte para atalhos contextuais (ex: diferentes atalhos dependendo do foco do elemento)
+- [ ] Adicionar suporte para atalhos que envolvem o clique do mouse (ex: Ctrl + clique)
+- [ ] Adicionar suporte para atalhos que envolvem o scroll do mouse (ex: Ctrl + scroll)
+- [ ] Adicionar suporte para atalhos que envolvem gestos de toque (ex: deslizar com três dedos)
+- [ ] Adicionar suporte para atalhos que envolvem dispositivos de entrada alternativos (ex: caneta stylus, controladores de jogos)
+- [ ] Adicionar suporte para atalhos que envolvem o estado da aplicação (ex: diferentes atalhos quando a aplicação está em modo de edição)
+
+#### References
+
+ - https://github.com/RobertWHurst/KeyboardJS
+ - https://github.com/dmauro/Keypress/
+ - https://github.com/madrobby/keymaster
 
 
 ## Outros

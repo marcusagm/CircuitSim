@@ -2,7 +2,7 @@ class Shape {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.color = '#000000';
+        this.color = "#000000";
         this.lineWidth = 1;
         this.isSelected = false;
     }
@@ -39,4 +39,3 @@ class Shape {
 }
 
 export default Shape;
-

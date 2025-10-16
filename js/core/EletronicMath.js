@@ -117,8 +117,12 @@ class ElectronicMath {
      * @returns {number} Equivalent resistance in ohms.
      */
     static calculateSeriesResistance(resistanceListOhms) {
-        if (!Array.isArray(resistanceListOhms)) throw new TypeError('resistanceListOhms must be an array');
-        return resistanceListOhms.reduce((total, resistance) => total + Number(resistance), 0);
+        if (!Array.isArray(resistanceListOhms))
+            throw new TypeError("resistanceListOhms must be an array");
+        return resistanceListOhms.reduce(
+            (total, resistance) => total + Number(resistance),
+            0
+        );
     }
 
     /**
@@ -127,8 +131,12 @@ class ElectronicMath {
      * @returns {number} Equivalent resistance in ohms.
      */
     static calculateParallelResistance(resistanceListOhms) {
-        if (!Array.isArray(resistanceListOhms)) throw new TypeError('resistanceListOhms must be an array');
-        const sumOfInverses = resistanceListOhms.reduce((total, resistance) => total + 1 / Number(resistance), 0);
+        if (!Array.isArray(resistanceListOhms))
+            throw new TypeError("resistanceListOhms must be an array");
+        const sumOfInverses = resistanceListOhms.reduce(
+            (total, resistance) => total + 1 / Number(resistance),
+            0
+        );
         return sumOfInverses === 0 ? Infinity : 1 / sumOfInverses;
     }
 
@@ -139,8 +147,12 @@ class ElectronicMath {
      * @returns {number} Equivalent capacitance in farads.
      */
     static calculateSeriesCapacitance(capacitanceListFarads) {
-        if (!Array.isArray(capacitanceListFarads)) throw new TypeError('capacitanceListFarads must be an array');
-        const sumOfInverses = capacitanceListFarads.reduce((total, capacitance) => total + 1 / Number(capacitance), 0);
+        if (!Array.isArray(capacitanceListFarads))
+            throw new TypeError("capacitanceListFarads must be an array");
+        const sumOfInverses = capacitanceListFarads.reduce(
+            (total, capacitance) => total + 1 / Number(capacitance),
+            0
+        );
         return sumOfInverses === 0 ? 0 : 1 / sumOfInverses;
     }
 
@@ -150,8 +162,12 @@ class ElectronicMath {
      * @returns {number} Equivalent capacitance in farads.
      */
     static calculateParallelCapacitance(capacitanceListFarads) {
-        if (!Array.isArray(capacitanceListFarads)) throw new TypeError('capacitanceListFarads must be an array');
-        return capacitanceListFarads.reduce((total, capacitance) => total + Number(capacitance), 0);
+        if (!Array.isArray(capacitanceListFarads))
+            throw new TypeError("capacitanceListFarads must be an array");
+        return capacitanceListFarads.reduce(
+            (total, capacitance) => total + Number(capacitance),
+            0
+        );
     }
 
     // Inductors
@@ -161,8 +177,12 @@ class ElectronicMath {
      * @returns {number} Equivalent inductance in henries.
      */
     static calculateSeriesInductance(inductanceListHenries) {
-        if (!Array.isArray(inductanceListHenries)) throw new TypeError('inductanceListHenries must be an array');
-        return inductanceListHenries.reduce((total, inductance) => total + Number(inductance), 0);
+        if (!Array.isArray(inductanceListHenries))
+            throw new TypeError("inductanceListHenries must be an array");
+        return inductanceListHenries.reduce(
+            (total, inductance) => total + Number(inductance),
+            0
+        );
     }
 
     /**
@@ -171,8 +191,12 @@ class ElectronicMath {
      * @returns {number} Equivalent inductance in henries.
      */
     static calculateParallelInductance(inductanceListHenries) {
-        if (!Array.isArray(inductanceListHenries)) throw new TypeError('inductanceListHenries must be an array');
-        const sumOfInverses = inductanceListHenries.reduce((total, inductance) => total + 1 / Number(inductance), 0);
+        if (!Array.isArray(inductanceListHenries))
+            throw new TypeError("inductanceListHenries must be an array");
+        const sumOfInverses = inductanceListHenries.reduce(
+            (total, inductance) => total + 1 / Number(inductance),
+            0
+        );
         return sumOfInverses === 0 ? 0 : 1 / sumOfInverses;
     }
 
@@ -234,8 +258,14 @@ class ElectronicMath {
      * @param {number} frequencyHertz - Frequency in hertz.
      * @returns {number} Impedance in ohms.
      */
-    static calculateRCImpedance(resistanceOhms, capacitanceFarads, frequencyHertz) {
-        const capacitiveReactance = 1 / (2 * Math.PI * Number(frequencyHertz) * Number(capacitanceFarads));
+    static calculateRCImpedance(
+        resistanceOhms,
+        capacitanceFarads,
+        frequencyHertz
+    ) {
+        const capacitiveReactance =
+            1 /
+            (2 * Math.PI * Number(frequencyHertz) * Number(capacitanceFarads));
         return Math.hypot(Number(resistanceOhms), capacitiveReactance);
     }
 
@@ -246,8 +276,13 @@ class ElectronicMath {
      * @param {number} frequencyHertz - Frequency in hertz.
      * @returns {number} Impedance in ohms.
      */
-    static calculateRLImpedance(resistanceOhms, inductanceHenries, frequencyHertz) {
-        const inductiveReactance = 2 * Math.PI * Number(frequencyHertz) * Number(inductanceHenries);
+    static calculateRLImpedance(
+        resistanceOhms,
+        inductanceHenries,
+        frequencyHertz
+    ) {
+        const inductiveReactance =
+            2 * Math.PI * Number(frequencyHertz) * Number(inductanceHenries);
         return Math.hypot(Number(resistanceOhms), inductiveReactance);
     }
 
@@ -259,10 +294,21 @@ class ElectronicMath {
      * @param {number} frequencyHertz - Frequency in hertz.
      * @returns {number} Impedance in ohms.
      */
-    static calculateRLCImpedance(resistanceOhms, inductanceHenries, capacitanceFarads, frequencyHertz) {
-        const inductiveReactance = 2 * Math.PI * Number(frequencyHertz) * Number(inductanceHenries);
-        const capacitiveReactance = 1 / (2 * Math.PI * Number(frequencyHertz) * Number(capacitanceFarads));
-        return Math.hypot(Number(resistanceOhms), inductiveReactance - capacitiveReactance);
+    static calculateRLCImpedance(
+        resistanceOhms,
+        inductanceHenries,
+        capacitanceFarads,
+        frequencyHertz
+    ) {
+        const inductiveReactance =
+            2 * Math.PI * Number(frequencyHertz) * Number(inductanceHenries);
+        const capacitiveReactance =
+            1 /
+            (2 * Math.PI * Number(frequencyHertz) * Number(capacitanceFarads));
+        return Math.hypot(
+            Number(resistanceOhms),
+            inductiveReactance - capacitiveReactance
+        );
     }
 
     // Reactance
@@ -273,7 +319,10 @@ class ElectronicMath {
      * @returns {number} Capacitive reactance in ohms.
      */
     static calculateCapacitiveReactance(capacitanceFarads, frequencyHertz) {
-        return 1 / (2 * Math.PI * Number(frequencyHertz) * Number(capacitanceFarads));
+        return (
+            1 /
+            (2 * Math.PI * Number(frequencyHertz) * Number(capacitanceFarads))
+        );
     }
 
     /**
@@ -294,7 +343,9 @@ class ElectronicMath {
      * @returns {number} Energy in joules.
      */
     static calculateCapacitorEnergy(capacitanceFarads, voltageVolts) {
-        return 0.5 * Number(capacitanceFarads) * Math.pow(Number(voltageVolts), 2);
+        return (
+            0.5 * Number(capacitanceFarads) * Math.pow(Number(voltageVolts), 2)
+        );
     }
 
     /**
@@ -304,7 +355,11 @@ class ElectronicMath {
      * @returns {number} Energy in joules.
      */
     static calculateInductorEnergy(inductanceHenries, currentAmperes) {
-        return 0.5 * Number(inductanceHenries) * Math.pow(Number(currentAmperes), 2);
+        return (
+            0.5 *
+            Number(inductanceHenries) *
+            Math.pow(Number(currentAmperes), 2)
+        );
     }
 
     // Voltage divider
@@ -315,8 +370,16 @@ class ElectronicMath {
      * @param {number} resistance2Ohms - Resistance R2 in ohms.
      * @returns {number} Output voltage in volts.
      */
-    static calculateVoltageDivider(inputVoltageVolts, resistance1Ohms, resistance2Ohms) {
-        return Number(inputVoltageVolts) * (Number(resistance2Ohms) / (Number(resistance1Ohms) + Number(resistance2Ohms)));
+    static calculateVoltageDivider(
+        inputVoltageVolts,
+        resistance1Ohms,
+        resistance2Ohms
+    ) {
+        return (
+            Number(inputVoltageVolts) *
+            (Number(resistance2Ohms) /
+                (Number(resistance1Ohms) + Number(resistance2Ohms)))
+        );
     }
 
     // Current divider
@@ -327,9 +390,18 @@ class ElectronicMath {
      * @param {number[]} branchResistancesOhms - Array of all branch resistances in ohms.
      * @returns {number} Current in the desired branch in amperes.
      */
-    static calculateCurrentDivider(totalCurrentAmperes, branchResistanceOhms, branchResistancesOhms) {
-        const equivalentResistance = ElectronicMath.calculateParallelResistance(branchResistancesOhms);
-        return Number(totalCurrentAmperes) * (equivalentResistance / Number(branchResistanceOhms));
+    static calculateCurrentDivider(
+        totalCurrentAmperes,
+        branchResistanceOhms,
+        branchResistancesOhms
+    ) {
+        const equivalentResistance = ElectronicMath.calculateParallelResistance(
+            branchResistancesOhms
+        );
+        return (
+            Number(totalCurrentAmperes) *
+            (equivalentResistance / Number(branchResistanceOhms))
+        );
     }
 
     // RC filter
@@ -340,7 +412,10 @@ class ElectronicMath {
      * @returns {number} Cutoff frequency in hertz.
      */
     static calculateRCCutoffFrequency(resistanceOhms, capacitanceFarads) {
-        return 1 / (2 * Math.PI * Number(resistanceOhms) * Number(capacitanceFarads));
+        return (
+            1 /
+            (2 * Math.PI * Number(resistanceOhms) * Number(capacitanceFarads))
+        );
     }
 
     // RL filter
@@ -351,7 +426,9 @@ class ElectronicMath {
      * @returns {number} Cutoff frequency in hertz.
      */
     static calculateRLCutoffFrequency(resistanceOhms, inductanceHenries) {
-        return Number(resistanceOhms) / (2 * Math.PI * Number(inductanceHenries));
+        return (
+            Number(resistanceOhms) / (2 * Math.PI * Number(inductanceHenries))
+        );
     }
 
     // RLC filter
@@ -361,8 +438,18 @@ class ElectronicMath {
      * @param {number} capacitanceFarads - Capacitance in farads.
      * @returns {number} Resonance frequency in hertz.
      */
-    static calculateRLCResonanceFrequency(inductanceHenries, capacitanceFarads) {
-        return 1 / (2 * Math.PI * Math.sqrt(Number(inductanceHenries) * Number(capacitanceFarads)));
+    static calculateRLCResonanceFrequency(
+        inductanceHenries,
+        capacitanceFarads
+    ) {
+        return (
+            1 /
+            (2 *
+                Math.PI *
+                Math.sqrt(
+                    Number(inductanceHenries) * Number(capacitanceFarads)
+                ))
+        );
     }
 
     // Electric charge
@@ -395,8 +482,15 @@ class ElectronicMath {
      * @param {number} crossSectionAreaSquareMeters - Cross-sectional area in square meters.
      * @returns {number} Resistance in ohms.
      */
-    static calculateWireResistance(resistivityOhmMeter, lengthMeters, crossSectionAreaSquareMeters) {
-        return Number(resistivityOhmMeter) * Number(lengthMeters) / Number(crossSectionAreaSquareMeters);
+    static calculateWireResistance(
+        resistivityOhmMeter,
+        lengthMeters,
+        crossSectionAreaSquareMeters
+    ) {
+        return (
+            (Number(resistivityOhmMeter) * Number(lengthMeters)) /
+            Number(crossSectionAreaSquareMeters)
+        );
     }
 }
 

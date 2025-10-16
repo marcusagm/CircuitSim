@@ -1,5 +1,5 @@
-import Tool from './Tool.js';
-import Point from '../shapes/Point.js';
+import Tool from "./Tool.js";
+import Point from "../shapes/Point.js";
 
 class PointTool extends Tool {
     constructor(canvas, drawingManager) {
@@ -23,4 +23,3 @@ class PointTool extends Tool {
 }
 
 export default PointTool;
-

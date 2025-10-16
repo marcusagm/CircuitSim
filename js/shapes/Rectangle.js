@@ -1,4 +1,4 @@
-import Shape from './Shape.js';
+import Shape from "./Shape.js";
 
 class Rectangle extends Shape {
     constructor(x, y, width, height) {
@@ -25,8 +25,12 @@ class Rectangle extends Shape {
     }
 
     isHit(x, y) {
-        return x >= this.x && x <= this.x + this.width &&
-               y >= this.y && y <= this.y + this.height;
+        return (
+            x >= this.x &&
+            x <= this.x + this.width &&
+            y >= this.y &&
+            y <= this.y + this.height
+        );
     }
 
     move(dx, dy) {
@@ -35,8 +39,10 @@ class Rectangle extends Shape {
 
     edit(newProps) {
         if (newProps.color !== undefined) this.color = newProps.color;
-        if (newProps.lineWidth !== undefined) this.lineWidth = newProps.lineWidth;
-        if (newProps.fillColor !== undefined) this.fillColor = newProps.fillColor;
+        if (newProps.lineWidth !== undefined)
+            this.lineWidth = newProps.lineWidth;
+        if (newProps.fillColor !== undefined)
+            this.fillColor = newProps.fillColor;
         if (newProps.x !== undefined) this.x = newProps.x;
         if (newProps.y !== undefined) this.y = newProps.y;
         if (newProps.width !== undefined) this.width = newProps.width;
@@ -45,24 +51,63 @@ class Rectangle extends Shape {
 
     drawSelectionHandles(ctx) {
         const handleSize = 5;
-        ctx.fillStyle = 'blue';
-        ctx.strokeStyle = 'white';
+        ctx.fillStyle = "blue";
+        ctx.strokeStyle = "white";
         ctx.lineWidth = 1;
 
         // Top-left
-        ctx.fillRect(this.x - handleSize / 2, this.y - handleSize / 2, handleSize, handleSize);
-        ctx.strokeRect(this.x - handleSize / 2, this.y - handleSize / 2, handleSize, handleSize);
+        ctx.fillRect(
+            this.x - handleSize / 2,
+            this.y - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.strokeRect(
+            this.x - handleSize / 2,
+            this.y - handleSize / 2,
+            handleSize,
+            handleSize
+        );
         // Top-right
-        ctx.fillRect(this.x + this.width - handleSize / 2, this.y - handleSize / 2, handleSize, handleSize);
-        ctx.strokeRect(this.x + this.width - handleSize / 2, this.y - handleSize / 2, handleSize, handleSize);
+        ctx.fillRect(
+            this.x + this.width - handleSize / 2,
+            this.y - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.strokeRect(
+            this.x + this.width - handleSize / 2,
+            this.y - handleSize / 2,
+            handleSize,
+            handleSize
+        );
         // Bottom-left
-        ctx.fillRect(this.x - handleSize / 2, this.y + this.height - handleSize / 2, handleSize, handleSize);
-        ctx.strokeRect(this.x - handleSize / 2, this.y + this.height - handleSize / 2, handleSize, handleSize);
+        ctx.fillRect(
+            this.x - handleSize / 2,
+            this.y + this.height - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.strokeRect(
+            this.x - handleSize / 2,
+            this.y + this.height - handleSize / 2,
+            handleSize,
+            handleSize
+        );
         // Bottom-right
-        ctx.fillRect(this.x + this.width - handleSize / 2, this.y + this.height - handleSize / 2, handleSize, handleSize);
-        ctx.strokeRect(this.x + this.width - handleSize / 2, this.y + this.height - handleSize / 2, handleSize, handleSize);
+        ctx.fillRect(
+            this.x + this.width - handleSize / 2,
+            this.y + this.height - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.strokeRect(
+            this.x + this.width - handleSize / 2,
+            this.y + this.height - handleSize / 2,
+            handleSize,
+            handleSize
+        );
     }
 }
 
 export default Rectangle;
-

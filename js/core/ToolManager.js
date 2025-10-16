@@ -22,7 +22,6 @@
  * @classdesc Manages drawing tools, delegates mouse events, and coordinates canvas redraws.
  */
 class ToolManager {
-
     /**
      * Creates an instance of ToolManager.
      *
@@ -62,10 +61,22 @@ class ToolManager {
         this.toolInstances = {};
 
         // Bind mouse event handlers to the canvas element
-        this.canvasWrapper.canvasElement.addEventListener("mousedown", this.handleMouseDownEvent.bind(this));
-        this.canvasWrapper.canvasElement.addEventListener("mousemove", this.handleMouseMoveEvent.bind(this));
-        this.canvasWrapper.canvasElement.addEventListener("mouseup", this.handleMouseUpEvent.bind(this));
-        this.canvasWrapper.canvasElement.addEventListener("mouseout", this.handleMouseUpEvent.bind(this)); // Handles mouse leaving the canvas
+        this.canvasWrapper.canvasElement.addEventListener(
+            "mousedown",
+            this.handleMouseDownEvent.bind(this)
+        );
+        this.canvasWrapper.canvasElement.addEventListener(
+            "mousemove",
+            this.handleMouseMoveEvent.bind(this)
+        );
+        this.canvasWrapper.canvasElement.addEventListener(
+            "mouseup",
+            this.handleMouseUpEvent.bind(this)
+        );
+        this.canvasWrapper.canvasElement.addEventListener(
+            "mouseout",
+            this.handleMouseUpEvent.bind(this)
+        ); // Handles mouse leaving the canvas
     }
 
     /**
@@ -89,11 +100,17 @@ class ToolManager {
      * @returns {void}
      */
     setActiveTool(toolName) {
-        if (this.activeToolInstance && typeof this.activeToolInstance.deactivate === 'function') {
+        if (
+            this.activeToolInstance &&
+            typeof this.activeToolInstance.deactivate === "function"
+        ) {
             this.activeToolInstance.deactivate();
         }
         this.activeToolInstance = this.toolInstances[toolName];
-        if (this.activeToolInstance && typeof this.activeToolInstance.activate === 'function') {
+        if (
+            this.activeToolInstance &&
+            typeof this.activeToolInstance.activate === "function"
+        ) {
             this.activeToolInstance.activate();
         }
         console.log(`Active tool: ${toolName}`);
@@ -108,7 +125,10 @@ class ToolManager {
      * @returns {void}
      */
     handleMouseDownEvent(mouseEvent) {
-        if (this.activeToolInstance && typeof this.activeToolInstance.onMouseDown === 'function') {
+        if (
+            this.activeToolInstance &&
+            typeof this.activeToolInstance.onMouseDown === "function"
+        ) {
             this.activeToolInstance.onMouseDown(mouseEvent);
             this.canvasWrapper.draw();
         }
@@ -123,7 +143,10 @@ class ToolManager {
      * @returns {void}
      */
     handleMouseMoveEvent(mouseEvent) {
-        if (this.activeToolInstance && typeof this.activeToolInstance.onMouseMove === 'function') {
+        if (
+            this.activeToolInstance &&
+            typeof this.activeToolInstance.onMouseMove === "function"
+        ) {
             this.activeToolInstance.onMouseMove(mouseEvent);
             this.canvasWrapper.draw();
         }
@@ -138,7 +161,10 @@ class ToolManager {
      * @returns {void}
      */
     handleMouseUpEvent(mouseEvent) {
-        if (this.activeToolInstance && typeof this.activeToolInstance.onMouseUp === 'function') {
+        if (
+            this.activeToolInstance &&
+            typeof this.activeToolInstance.onMouseUp === "function"
+        ) {
             this.activeToolInstance.onMouseUp(mouseEvent);
             this.canvasWrapper.draw();
         }

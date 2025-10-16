@@ -1,4 +1,4 @@
-import Component from '../Component.js';
+import Component from "../Component.js";
 
 class Microcontroller extends Component {
     constructor(x, y, width = 80, height = 60) {
@@ -32,4 +32,3 @@ class Microcontroller extends Component {
 }
 
 export default Microcontroller;
-

@@ -1,4 +1,4 @@
-import Shape from './Shape.js';
+import Shape from "./Shape.js";
 
 class ThreePointCurve extends Shape {
     constructor(x1, y1, cx, cy, x2, y2) {
@@ -48,7 +48,8 @@ class ThreePointCurve extends Shape {
 
     edit(newProps) {
         if (newProps.color !== undefined) this.color = newProps.color;
-        if (newProps.lineWidth !== undefined) this.lineWidth = newProps.lineWidth;
+        if (newProps.lineWidth !== undefined)
+            this.lineWidth = newProps.lineWidth;
         if (newProps.x1 !== undefined) this.x1 = newProps.x1;
         if (newProps.y1 !== undefined) this.y1 = newProps.y1;
         if (newProps.cx !== undefined) this.cx = newProps.cx;
@@ -59,20 +60,49 @@ class ThreePointCurve extends Shape {
 
     drawSelectionHandles(ctx) {
         const handleSize = 5;
-        ctx.fillStyle = 'blue';
-        ctx.strokeStyle = 'white';
+        ctx.fillStyle = "blue";
+        ctx.strokeStyle = "white";
         ctx.lineWidth = 1;
 
-        ctx.fillRect(this.x1 - handleSize / 2, this.y1 - handleSize / 2, handleSize, handleSize);
-        ctx.strokeRect(this.x1 - handleSize / 2, this.y1 - handleSize / 2, handleSize, handleSize);
+        ctx.fillRect(
+            this.x1 - handleSize / 2,
+            this.y1 - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.strokeRect(
+            this.x1 - handleSize / 2,
+            this.y1 - handleSize / 2,
+            handleSize,
+            handleSize
+        );
 
-        ctx.fillRect(this.cx - handleSize / 2, this.cy - handleSize / 2, handleSize, handleSize);
-        ctx.strokeRect(this.cx - handleSize / 2, this.cy - handleSize / 2, handleSize, handleSize);
+        ctx.fillRect(
+            this.cx - handleSize / 2,
+            this.cy - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.strokeRect(
+            this.cx - handleSize / 2,
+            this.cy - handleSize / 2,
+            handleSize,
+            handleSize
+        );
 
-        ctx.fillRect(this.x2 - handleSize / 2, this.y2 - handleSize / 2, handleSize, handleSize);
-        ctx.strokeRect(this.x2 - handleSize / 2, this.y2 - handleSize / 2, handleSize, handleSize);
+        ctx.fillRect(
+            this.x2 - handleSize / 2,
+            this.y2 - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.strokeRect(
+            this.x2 - handleSize / 2,
+            this.y2 - handleSize / 2,
+            handleSize,
+            handleSize
+        );
     }
 }
 
 export default ThreePointCurve;
-

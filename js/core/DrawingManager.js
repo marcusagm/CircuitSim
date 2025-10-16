@@ -48,7 +48,7 @@ class DrawingManager {
      */
     removeElement(drawableElement) {
         this.drawableElements = this.drawableElements.filter(
-            existingElement => existingElement !== drawableElement
+            (existingElement) => existingElement !== drawableElement
         );
         this.canvasInstance.draw();
     }
@@ -59,7 +59,7 @@ class DrawingManager {
      * @returns {void}
      */
     drawAll(canvasContext) {
-        this.drawableElements.forEach(drawableElement => {
+        this.drawableElements.forEach((drawableElement) => {
             drawableElement.draw(canvasContext);
         });
     }
@@ -72,9 +72,16 @@ class DrawingManager {
      * @returns {Object|null} The found element, or null if none is found.
      */
     findElementAt(coordinateX, coordinateY) {
-        for (let elementIndex = this.drawableElements.length - 1; elementIndex >= 0; elementIndex--) {
+        for (
+            let elementIndex = this.drawableElements.length - 1;
+            elementIndex >= 0;
+            elementIndex--
+        ) {
             const drawableElement = this.drawableElements[elementIndex];
-            if (drawableElement.isHit && drawableElement.isHit(coordinateX, coordinateY)) {
+            if (
+                drawableElement.isHit &&
+                drawableElement.isHit(coordinateX, coordinateY)
+            ) {
                 return drawableElement;
             }
         }

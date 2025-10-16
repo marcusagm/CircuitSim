@@ -1,4 +1,4 @@
-import Component from '../Component.js';
+import Component from "../Component.js";
 
 class LogicGate extends Component {
     constructor(x, y, width = 60, height = 40) {
@@ -22,4 +22,3 @@ class LogicGate extends Component {
 }
 
 export default LogicGate;
-

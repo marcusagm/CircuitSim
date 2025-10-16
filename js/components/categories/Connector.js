@@ -1,4 +1,4 @@
-import Component from '../Component.js';
+import Component from "../Component.js";
 
 class Connector extends Component {
     constructor(x, y, width = 30, height = 30) {
@@ -21,4 +21,3 @@ class Connector extends Component {
 }
 
 export default Connector;
-

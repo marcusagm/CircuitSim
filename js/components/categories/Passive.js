@@ -1,4 +1,4 @@
-import Component from '../Component.js';
+import Component from "../Component.js";
 
 class Passive extends Component {
     constructor(x, y, width = 50, height = 20) {
@@ -18,4 +18,3 @@ class Passive extends Component {
 }
 
 export default Passive;
-

@@ -63,7 +63,10 @@ class Grid {
             currentXPosition += this.gridCellSize
         ) {
             this.canvasContext.moveTo(currentXPosition, 0);
-            this.canvasContext.lineTo(currentXPosition, this.canvasElement.height);
+            this.canvasContext.lineTo(
+                currentXPosition,
+                this.canvasElement.height
+            );
         }
 
         // Draw horizontal grid lines
@@ -73,7 +76,10 @@ class Grid {
             currentYPosition += this.gridCellSize
         ) {
             this.canvasContext.moveTo(0, currentYPosition);
-            this.canvasContext.lineTo(this.canvasElement.width, currentYPosition);
+            this.canvasContext.lineTo(
+                this.canvasElement.width,
+                currentYPosition
+            );
         }
 
         this.canvasContext.stroke();

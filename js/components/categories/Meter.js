@@ -1,4 +1,4 @@
-import Component from '../Component.js';
+import Component from "../Component.js";
 
 class Meter extends Component {
     constructor(x, y, width = 50, height = 50) {
@@ -20,4 +20,3 @@ class Meter extends Component {
 }
 
 export default Meter;
-

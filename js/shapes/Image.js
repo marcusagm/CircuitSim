@@ -1,4 +1,4 @@
-import Shape from './Shape.js';
+import Shape from "./Shape.js";
 
 class ImageShape extends Shape {
     constructor(x, y, imageUrl, width = 0, height = 0) {
@@ -36,8 +36,12 @@ class ImageShape extends Shape {
 
     isHit(x, y) {
         if (!this.loaded) return false;
-        return x >= this.x && x <= this.x + this.width &&
-               y >= this.y && y <= this.y + this.height;
+        return (
+            x >= this.x &&
+            x <= this.x + this.width &&
+            y >= this.y &&
+            y <= this.y + this.height
+        );
     }
 
     move(dx, dy) {
@@ -59,18 +63,37 @@ class ImageShape extends Shape {
     drawSelectionHandles(ctx) {
         if (!this.loaded) return;
         const handleSize = 5;
-        ctx.strokeStyle = 'blue';
+        ctx.strokeStyle = "blue";
         ctx.lineWidth = 1;
         ctx.strokeRect(this.x, this.y, this.width, this.height);
 
         // Handles nos cantos
-        ctx.fillStyle = 'blue';
-        ctx.fillRect(this.x - handleSize / 2, this.y - handleSize / 2, handleSize, handleSize);
-        ctx.fillRect(this.x + this.width - handleSize / 2, this.y - handleSize / 2, handleSize, handleSize);
-        ctx.fillRect(this.x - handleSize / 2, this.y + this.height - handleSize / 2, handleSize, handleSize);
-        ctx.fillRect(this.x + this.width - handleSize / 2, this.y + this.height - handleSize / 2, handleSize, handleSize);
+        ctx.fillStyle = "blue";
+        ctx.fillRect(
+            this.x - handleSize / 2,
+            this.y - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.fillRect(
+            this.x + this.width - handleSize / 2,
+            this.y - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.fillRect(
+            this.x - handleSize / 2,
+            this.y + this.height - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.fillRect(
+            this.x + this.width - handleSize / 2,
+            this.y + this.height - handleSize / 2,
+            handleSize,
+            handleSize
+        );
     }
 }
 
 export default ImageShape;
-

@@ -1,4 +1,4 @@
-import Component from '../Component.js';
+import Component from "../Component.js";
 
 class Output extends Component {
     constructor(x, y, width = 40, height = 40) {
@@ -21,4 +21,3 @@ class Output extends Component {
 }
 
 export default Output;
-

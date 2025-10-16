@@ -1,4 +1,4 @@
-import Tool from './Tool.js';
+import Tool from "./Tool.js";
 
 class RotateFlipTool extends Tool {
     constructor(canvas, drawingManager) {
@@ -26,17 +26,21 @@ class RotateFlipTool extends Tool {
         if (clickedElement) {
             if (!clickedElement.isSelected) {
                 // Desseleciona outros se não for Ctrl/Cmd
-                this.drawingManager.drawableElements.forEach(el => el.deselect());
+                this.drawingManager.drawableElements.forEach((el) =>
+                    el.deselect()
+                );
                 this.selectedElements = [];
                 clickedElement.select();
                 this.selectedElements.push(clickedElement);
             } else if (event.ctrlKey || event.metaKey) {
                 // Permite deselecionar com Ctrl/Cmd
                 clickedElement.deselect();
-                this.selectedElements = this.selectedElements.filter(el => el !== clickedElement);
+                this.selectedElements = this.selectedElements.filter(
+                    (el) => el !== clickedElement
+                );
             }
         } else {
-            this.drawingManager.drawableElements.forEach(el => el.deselect());
+            this.drawingManager.drawableElements.forEach((el) => el.deselect());
             this.selectedElements = [];
         }
         this.canvas.draw();
@@ -52,32 +56,37 @@ class RotateFlipTool extends Tool {
 
     // Métodos para serem chamados por botões da UI
     rotateSelected(angle) {
-        this.drawingManager.drawableElements.filter(el => el.isSelected).forEach(el => {
-            if (el.rotate) {
-                el.rotate(angle);
-            }
-        });
+        this.drawingManager.drawableElements
+            .filter((el) => el.isSelected)
+            .forEach((el) => {
+                if (el.rotate) {
+                    el.rotate(angle);
+                }
+            });
         this.canvas.draw();
     }
 
     flipSelectedHorizontal() {
-        this.drawingManager.drawableElements.filter(el => el.isSelected).forEach(el => {
-            if (el.flipHorizontal) {
-                el.flipHorizontal();
-            }
-        });
+        this.drawingManager.drawableElements
+            .filter((el) => el.isSelected)
+            .forEach((el) => {
+                if (el.flipHorizontal) {
+                    el.flipHorizontal();
+                }
+            });
         this.canvas.draw();
     }
 
     flipSelectedVertical() {
-        this.drawingManager.drawableElements.filter(el => el.isSelected).forEach(el => {
-            if (el.flipVertical) {
-                el.flipVertical();
-            }
-        });
+        this.drawingManager.drawableElements
+            .filter((el) => el.isSelected)
+            .forEach((el) => {
+                if (el.flipVertical) {
+                    el.flipVertical();
+                }
+            });
         this.canvas.draw();
     }
 }
 
 export default RotateFlipTool;
-

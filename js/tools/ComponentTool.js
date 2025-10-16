@@ -1,4 +1,4 @@
-import Tool from './Tool.js';
+import Tool from "./Tool.js";
 
 class ComponentTool extends Tool {
     constructor(canvas, drawingManager, componentClass, componentName) {
@@ -26,4 +26,3 @@ class ComponentTool extends Tool {
 }
 
 export default ComponentTool;
-

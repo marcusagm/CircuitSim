@@ -1,5 +1,5 @@
-import Shape from '../shapes/Shape.js';
-import Terminal from './Terminal.js';
+import Shape from "../shapes/Shape.js";
+import Terminal from "./Terminal.js";
 
 class Component extends Shape {
     constructor(x, y, width, height, svgContent = "") {
@@ -15,7 +15,9 @@ class Component extends Shape {
         this.loaded = false;
 
         if (svgContent) {
-            const svgBlob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+            const svgBlob = new Blob([svgContent], {
+                type: "image/svg+xml;charset=utf-8",
+            });
             const url = URL.createObjectURL(svgBlob);
             this.image.src = url;
 
@@ -31,7 +33,12 @@ class Component extends Shape {
                 URL.revokeObjectURL(url); // Libera a URL de dados
             };
             this.image.onerror = () => {
-                console.error(`Erro ao carregar SVG para componente: ${svgContent.substring(0, 50)}...`);
+                console.error(
+                    `Erro ao carregar SVG para componente: ${svgContent.substring(
+                        0,
+                        50
+                    )}...`
+                );
                 URL.revokeObjectURL(url); // Libera a URL de dados mesmo em caso de erro
             };
         }
@@ -47,7 +54,7 @@ class Component extends Shape {
         ctx.save();
         ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
         if (this.rotation !== 0) {
-            ctx.rotate(this.rotation * Math.PI / 180);
+            ctx.rotate((this.rotation * Math.PI) / 180);
         }
         if (this.flipH) {
             ctx.scale(-1, 1);
@@ -73,7 +80,7 @@ class Component extends Shape {
         ctx.restore();
 
         // Desenha os terminais (sem transformações de rotação/flip do componente)
-        this.terminals.forEach(terminal => {
+        this.terminals.forEach((terminal) => {
             terminal.draw(ctx);
         });
 
@@ -85,8 +92,12 @@ class Component extends Shape {
     isHit(x, y) {
         // Verifica se o ponto está dentro da caixa delimitadora do componente
         // TODO: Considerar rotação e flip para isHit mais preciso
-        return x >= this.x && x <= this.x + this.width &&
-               y >= this.y && y <= this.y + this.height;
+        return (
+            x >= this.x &&
+            x <= this.x + this.width &&
+            y >= this.y &&
+            y <= this.y + this.height
+        );
     }
 
     move(dx, dy) {
@@ -108,18 +119,37 @@ class Component extends Shape {
 
     drawSelectionHandles(ctx) {
         const handleSize = 10;
-        ctx.strokeStyle = 'blue';
+        ctx.strokeStyle = "blue";
         ctx.lineWidth = 1;
         ctx.strokeRect(this.x, this.y, this.width, this.height);
 
         // Handles nos cantos
-        ctx.fillStyle = 'blue';
-        ctx.fillRect(this.x - handleSize / 2, this.y - handleSize / 2, handleSize, handleSize);
-        ctx.fillRect(this.x + this.width - handleSize / 2, this.y - handleSize / 2, handleSize, handleSize);
-        ctx.fillRect(this.x - handleSize / 2, this.y + this.height - handleSize / 2, handleSize, handleSize);
-        ctx.fillRect(this.x + this.width - handleSize / 2, this.y + this.height - handleSize / 2, handleSize, handleSize);
+        ctx.fillStyle = "blue";
+        ctx.fillRect(
+            this.x - handleSize / 2,
+            this.y - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.fillRect(
+            this.x + this.width - handleSize / 2,
+            this.y - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.fillRect(
+            this.x - handleSize / 2,
+            this.y + this.height - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.fillRect(
+            this.x + this.width - handleSize / 2,
+            this.y + this.height - handleSize / 2,
+            handleSize,
+            handleSize
+        );
     }
 }
 
 export default Component;
-

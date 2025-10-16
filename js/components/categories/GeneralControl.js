@@ -1,4 +1,4 @@
-import Component from '../Component.js';
+import Component from "../Component.js";
 
 class GeneralControl extends Component {
     constructor(x, y, width = 70, height = 70) {
@@ -19,21 +19,27 @@ class GeneralControl extends Component {
     addComponentToGroup(component) {
         if (!this.groupedComponents.includes(component)) {
             this.groupedComponents.push(component);
-            console.log(`Componente ${component.name} adicionado ao grupo de ${this.name}`);
+            console.log(
+                `Componente ${component.name} adicionado ao grupo de ${this.name}`
+            );
         }
     }
 
     // Método para remover um componente do grupo
     removeComponentFromGroup(component) {
-        this.groupedComponents = this.groupedComponents.filter(c => c !== component);
-        console.log(`Componente ${component.name} removido do grupo de ${this.name}`);
+        this.groupedComponents = this.groupedComponents.filter(
+            (c) => c !== component
+        );
+        console.log(
+            `Componente ${component.name} removido do grupo de ${this.name}`
+        );
     }
 
     // Exemplo de método para controlar os componentes agrupados
     // Em uma simulação real, isso afetaria as propriedades dos componentes agrupados
     controlGroup(value) {
         console.log(`Controlando grupo com valor: ${value}`);
-        this.groupedComponents.forEach(component => {
+        this.groupedComponents.forEach((component) => {
             // Lógica para aplicar o controle aos componentes agrupados
             // Ex: se for um potenciômetro, mudar seu valor de resistência
             // component.setValue(value);
@@ -42,4 +48,3 @@ class GeneralControl extends Component {
 }
 
 export default GeneralControl;
-

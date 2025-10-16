@@ -1,5 +1,5 @@
-import Tool from './Tool.js';
-import ThreePointCurve from '../shapes/ThreePointCurve.js';
+import Tool from "./Tool.js";
+import ThreePointCurve from "../shapes/ThreePointCurve.js";
 
 class ThreePointCurveTool extends Tool {
     constructor(canvas, drawingManager) {
@@ -70,4 +70,3 @@ class ThreePointCurveTool extends Tool {
 }
 
 export default ThreePointCurveTool;
-

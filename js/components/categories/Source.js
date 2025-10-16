@@ -1,4 +1,4 @@
-import Component from '../Component.js';
+import Component from "../Component.js";
 
 class Source extends Component {
     constructor(x, y, width = 50, height = 50) {
@@ -18,4 +18,3 @@ class Source extends Component {
 }
 
 export default Source;
-

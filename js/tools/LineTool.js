@@ -1,5 +1,5 @@
-import Tool from './Tool.js';
-import Line from '../shapes/Line.js';
+import Tool from "./Tool.js";
+import Line from "../shapes/Line.js";
 
 class LineTool extends Tool {
     constructor(canvas, drawingManager) {
@@ -12,7 +12,12 @@ class LineTool extends Tool {
         const { x, y } = this.getMouseCoords(event);
         this.startX = x;
         this.startY = y;
-        this.currentLine = new Line(this.startX, this.startY, this.startX, this.startY);
+        this.currentLine = new Line(
+            this.startX,
+            this.startY,
+            this.startX,
+            this.startY
+        );
         this.drawingManager.addElement(this.currentLine);
     }
 
@@ -33,4 +38,3 @@ class LineTool extends Tool {
 }
 
 export default LineTool;
-

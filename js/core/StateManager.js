@@ -12,7 +12,6 @@
  * manager.redoObjectState('obj1'); // Returns { value: 2 }
  */
 class StateManager {
-
     /**
      * Constructs a new StateManager instance.
      * Initializes the internal Map to store object states.
@@ -39,7 +38,10 @@ class StateManager {
      */
     initializeObjectState(objectId, initialState) {
         if (!this.objectStates.has(objectId)) {
-            this.objectStates.set(objectId, { states: [initialState], currentIndex: 0 });
+            this.objectStates.set(objectId, {
+                states: [initialState],
+                currentIndex: 0,
+            });
         }
     }
 
@@ -61,7 +63,10 @@ class StateManager {
         }
         // Remove states ahead if not at the end
         if (objectData.currentIndex < objectData.states.length - 1) {
-            objectData.states = objectData.states.slice(0, objectData.currentIndex + 1);
+            objectData.states = objectData.states.slice(
+                0,
+                objectData.currentIndex + 1
+            );
         }
         objectData.states.push(newState);
         objectData.currentIndex = objectData.states.length - 1;

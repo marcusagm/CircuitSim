@@ -32,10 +32,9 @@ class Tool {
         const rect = this.canvas.canvasElement.getBoundingClientRect();
         return {
             x: event.clientX - rect.left,
-            y: event.clientY - rect.top
+            y: event.clientY - rect.top,
         };
     }
 }
 
 export default Tool;
-

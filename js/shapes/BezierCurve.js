@@ -1,4 +1,4 @@
-import Shape from './Shape.js';
+import Shape from "./Shape.js";
 
 class BezierCurve extends Shape {
     constructor(x1, y1, cx1, cy1, cx2, cy2, x2, y2) {
@@ -18,7 +18,14 @@ class BezierCurve extends Shape {
         ctx.strokeStyle = this.color;
         ctx.lineWidth = this.lineWidth;
         ctx.moveTo(this.x1, this.y1);
-        ctx.bezierCurveTo(this.cx1, this.cy1, this.cx2, this.cy2, this.x2, this.y2);
+        ctx.bezierCurveTo(
+            this.cx1,
+            this.cy1,
+            this.cx2,
+            this.cy2,
+            this.x2,
+            this.y2
+        );
         ctx.stroke();
 
         if (this.isSelected) {
@@ -52,7 +59,8 @@ class BezierCurve extends Shape {
 
     edit(newProps) {
         if (newProps.color !== undefined) this.color = newProps.color;
-        if (newProps.lineWidth !== undefined) this.lineWidth = newProps.lineWidth;
+        if (newProps.lineWidth !== undefined)
+            this.lineWidth = newProps.lineWidth;
         if (newProps.x1 !== undefined) this.x1 = newProps.x1;
         if (newProps.y1 !== undefined) this.y1 = newProps.y1;
         if (newProps.cx1 !== undefined) this.cx1 = newProps.cx1;
@@ -65,23 +73,62 @@ class BezierCurve extends Shape {
 
     drawSelectionHandles(ctx) {
         const handleSize = 5;
-        ctx.fillStyle = 'blue';
-        ctx.strokeStyle = 'white';
+        ctx.fillStyle = "blue";
+        ctx.strokeStyle = "white";
         ctx.lineWidth = 1;
 
-        ctx.fillRect(this.x1 - handleSize / 2, this.y1 - handleSize / 2, handleSize, handleSize);
-        ctx.strokeRect(this.x1 - handleSize / 2, this.y1 - handleSize / 2, handleSize, handleSize);
+        ctx.fillRect(
+            this.x1 - handleSize / 2,
+            this.y1 - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.strokeRect(
+            this.x1 - handleSize / 2,
+            this.y1 - handleSize / 2,
+            handleSize,
+            handleSize
+        );
 
-        ctx.fillRect(this.cx1 - handleSize / 2, this.cy1 - handleSize / 2, handleSize, handleSize);
-        ctx.strokeRect(this.cx1 - handleSize / 2, this.cy1 - handleSize / 2, handleSize, handleSize);
+        ctx.fillRect(
+            this.cx1 - handleSize / 2,
+            this.cy1 - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.strokeRect(
+            this.cx1 - handleSize / 2,
+            this.cy1 - handleSize / 2,
+            handleSize,
+            handleSize
+        );
 
-        ctx.fillRect(this.cx2 - handleSize / 2, this.cy2 - handleSize / 2, handleSize, handleSize);
-        ctx.strokeRect(this.cx2 - handleSize / 2, this.cy2 - handleSize / 2, handleSize, handleSize);
+        ctx.fillRect(
+            this.cx2 - handleSize / 2,
+            this.cy2 - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.strokeRect(
+            this.cx2 - handleSize / 2,
+            this.cy2 - handleSize / 2,
+            handleSize,
+            handleSize
+        );
 
-        ctx.fillRect(this.x2 - handleSize / 2, this.y2 - handleSize / 2, handleSize, handleSize);
-        ctx.strokeRect(this.x2 - handleSize / 2, this.y2 - handleSize / 2, handleSize, handleSize);
+        ctx.fillRect(
+            this.x2 - handleSize / 2,
+            this.y2 - handleSize / 2,
+            handleSize,
+            handleSize
+        );
+        ctx.strokeRect(
+            this.x2 - handleSize / 2,
+            this.y2 - handleSize / 2,
+            handleSize,
+            handleSize
+        );
     }
 }
 
 export default BezierCurve;
-

@@ -1,4 +1,4 @@
-import Tool from './Tool.js';
+import Tool from "./Tool.js";
 
 class SelectTool extends Tool {
     constructor(canvas, drawingManager) {
@@ -16,7 +16,7 @@ class SelectTool extends Tool {
 
     // Este método agora deseleciona todos os elementos no drawingManager
     deselectAll() {
-        this.drawingManager.drawableElements.forEach(el => el.deselect());
+        this.drawingManager.drawableElements.forEach((el) => el.deselect());
         this.canvas.draw();
     }
 
@@ -24,7 +24,8 @@ class SelectTool extends Tool {
         const { x, y } = this.getMouseCoords(event);
         const clickedElement = this.drawingManager.findElementAt(x, y);
 
-        if (event.ctrlKey || event.metaKey) { // Ctrl/Cmd para seleção múltipla
+        if (event.ctrlKey || event.metaKey) {
+            // Ctrl/Cmd para seleção múltipla
             if (clickedElement) {
                 if (clickedElement.isSelected) {
                     clickedElement.deselect();
@@ -57,4 +58,3 @@ class SelectTool extends Tool {
 }
 
 export default SelectTool;
-

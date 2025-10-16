@@ -1,5 +1,5 @@
-import Tool from './Tool.js';
-import BezierCurve from '../shapes/BezierCurve.js';
+import Tool from "./Tool.js";
+import BezierCurve from "../shapes/BezierCurve.js";
 
 class BezierCurveTool extends Tool {
     constructor(canvas, drawingManager) {
@@ -15,12 +15,12 @@ class BezierCurveTool extends Tool {
 
     activate() {
         this.reset();
-        document.addEventListener('keydown', this.boundKeyDown);
+        document.addEventListener("keydown", this.boundKeyDown);
     }
 
     deactivate() {
         this.reset();
-        document.removeEventListener('keydown', this.boundKeyDown);
+        document.removeEventListener("keydown", this.boundKeyDown);
     }
 
     reset() {
@@ -35,7 +35,7 @@ class BezierCurveTool extends Tool {
     }
 
     onKeyDown(event) {
-        if (event.key === 'Escape' && this.isDrawing) {
+        if (event.key === "Escape" && this.isDrawing) {
             this.reset();
         }
     }
@@ -138,4 +138,3 @@ class BezierCurveTool extends Tool {
 }
 
 export default BezierCurveTool;
-
