@@ -149,11 +149,11 @@ class NodeEditTool extends Tool {
 
         // Apply snapping to the new position
         const snappedX =
-            Math.round(newX / this.canvas.grid.gridCellSize) *
-            this.canvas.grid.gridCellSize;
+            Math.round(newX / this.drawingManager.grid.gridCellSize) *
+            this.drawingManager.grid.gridCellSize;
         const snappedY =
-            Math.round(newY / this.canvas.grid.gridCellSize) *
-            this.canvas.grid.gridCellSize;
+            Math.round(newY / this.drawingManager.grid.gridCellSize) *
+            this.drawingManager.grid.gridCellSize;
 
         // Update the node in the wire's path array
         if (

@@ -21,32 +21,20 @@
  * @class ToolManager
  * @classdesc Manages drawing tools, delegates mouse events, and coordinates canvas redraws.
  */
+import Canvas from './Canvas.js';
+import DrawingManager from './DrawingManager.js';
+
 class ToolManager {
     /**
      * Creates an instance of ToolManager.
      *
-     * @param {Object} canvasWrapper - An object containing the canvas DOM element, its drawing context, and a draw method.
-     * @param {Object} drawingManagerInstance - The manager responsible for drawing operations and state.
+     * @param {Canvas} canvas - An object containing the canvas DOM element, its drawing context, and a draw method.
+     * @param {DrawingManager} drawingManagerInstance - The manager responsible for drawing operations and state.
      * @returns {ToolManager} A new instance of ToolManager.
      */
-    constructor(canvasWrapper, drawingManagerInstance) {
-        /**
-         * The wrapper object for the canvas, containing the DOM element, drawing context, and draw method.
-         * @type {Object}
-         */
-        this.canvasWrapper = canvasWrapper;
-
-        /**
-         * The 2D drawing context for the canvas.
-         * @type {CanvasRenderingContext2D}
-         */
-        this.drawingContext = canvasWrapper.drawingContext;
-
-        /**
-         * The drawing manager responsible for handling drawing operations and state.
-         * @type {Object}
-         */
-        this.drawingManagerInstance = drawingManagerInstance;
+    constructor(canvas, drawingManager) {
+        this.canvas = canvas;
+        this.drawingManager = drawingManager;
 
         /**
          * The currently active tool instance.
@@ -61,19 +49,19 @@ class ToolManager {
         this.toolInstances = {};
 
         // Bind mouse event handlers to the canvas element
-        this.canvasWrapper.canvasElement.addEventListener(
+        this.canvas.element.addEventListener(
             "mousedown",
             this.handleMouseDownEvent.bind(this)
         );
-        this.canvasWrapper.canvasElement.addEventListener(
+        this.canvas.element.addEventListener(
             "mousemove",
             this.handleMouseMoveEvent.bind(this)
         );
-        this.canvasWrapper.canvasElement.addEventListener(
+        this.canvas.element.addEventListener(
             "mouseup",
             this.handleMouseUpEvent.bind(this)
         );
-        this.canvasWrapper.canvasElement.addEventListener(
+        this.canvas.element.addEventListener(
             "mouseout",
             this.handleMouseUpEvent.bind(this)
         ); // Handles mouse leaving the canvas
@@ -130,7 +118,7 @@ class ToolManager {
             typeof this.activeToolInstance.onMouseDown === "function"
         ) {
             this.activeToolInstance.onMouseDown(mouseEvent);
-            this.canvasWrapper.draw();
+            this.canvas.requestRender();
         }
     }
 
@@ -148,7 +136,7 @@ class ToolManager {
             typeof this.activeToolInstance.onMouseMove === "function"
         ) {
             this.activeToolInstance.onMouseMove(mouseEvent);
-            this.canvasWrapper.draw();
+            this.canvas.requestRender;
         }
     }
 
@@ -166,7 +154,7 @@ class ToolManager {
             typeof this.activeToolInstance.onMouseUp === "function"
         ) {
             this.activeToolInstance.onMouseUp(mouseEvent);
-            this.canvasWrapper.draw();
+            this.canvas.requestRender();
         }
     }
 }

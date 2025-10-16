@@ -84,11 +84,11 @@ class WireTool extends Tool {
     onMouseDown(event) {
         const { x: coordinateX, y: coordinateY } = this.getMouseCoords(event);
         const snappedX =
-            Math.round(coordinateX / this.canvas.grid.gridCellSize) *
-            this.canvas.grid.gridCellSize;
+            Math.round(coordinateX / this.drawingManager.grid.gridCellSize) *
+            this.drawingManager.grid.gridCellSize;
         const snappedY =
-            Math.round(coordinateY / this.canvas.grid.gridCellSize) *
-            this.canvas.grid.gridCellSize;
+            Math.round(coordinateY / this.drawingManager.grid.gridCellSize) *
+            this.drawingManager.grid.gridCellSize;
         const snappedPoint = { x: snappedX, y: snappedY };
 
         let clickedTerminal = null;
@@ -155,11 +155,11 @@ class WireTool extends Tool {
 
         const { x: coordinateX, y: coordinateY } = this.getMouseCoords(event);
         const snappedX =
-            Math.round(coordinateX / this.canvas.grid.gridCellSize) *
-            this.canvas.grid.gridCellSize;
+            Math.round(coordinateX / this.drawingManager.grid.gridCellSize) *
+            this.drawingManager.grid.gridCellSize;
         const snappedY =
-            Math.round(coordinateY / this.canvas.grid.gridCellSize) *
-            this.canvas.grid.gridCellSize;
+            Math.round(coordinateY / this.drawingManager.grid.gridCellSize) *
+            this.drawingManager.grid.gridCellSize;
         const currentSnappedPoint = { x: snappedX, y: snappedY };
 
         // If there are no points in the path, the initial point is the startTerminal or the first click

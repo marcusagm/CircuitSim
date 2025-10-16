@@ -11,17 +11,26 @@
  * drawingManager.drawAll(canvasContext);
  *
  */
+import Canvas from "../core/Canvas.js";
+import Grid from "../core/Grid.js";
+
 class DrawingManager {
     /**
      * Creates an instance of DrawingManager.
-     * @param {Object} canvasInstance - The canvas object where elements will be drawn. Must implement a draw() method.
+     * @param {Canvas} canvas - The canvas object where elements will be drawn. Must implement a draw() method.
+     * @param {Grid} grid - The grid object for reference (optional).
      */
-    constructor(canvasInstance) {
+    constructor(canvas, grid) {
         /**
          * The canvas object where elements are managed and drawn.
-         * @type {Object}
+         * @type {Canvas}
          */
-        this.canvasInstance = canvasInstance;
+        this.canvas = canvas;
+        /**
+         * The grid object for reference (optional).
+         * @type {Grid}
+         */
+        this.grid = grid;
 
         /**
          * Array containing all drawable elements managed by this instance.
@@ -38,7 +47,7 @@ class DrawingManager {
      */
     addElement(drawableElement) {
         this.drawableElements.push(drawableElement);
-        this.canvasInstance.draw();
+        this.canvas.requestRender();
     }
 
     /**
@@ -50,17 +59,16 @@ class DrawingManager {
         this.drawableElements = this.drawableElements.filter(
             (existingElement) => existingElement !== drawableElement
         );
-        this.canvasInstance.draw();
+        this.canvas.requestRender();
     }
 
     /**
      * Draws all managed elements onto the provided canvas context.
-     * @param {CanvasRenderingContext2D} canvasContext - The context to draw elements on.
      * @returns {void}
      */
-    drawAll(canvasContext) {
+    drawAll() {
         this.drawableElements.forEach((drawableElement) => {
-            drawableElement.draw(canvasContext);
+            drawableElement.draw(this.canvas.context);
         });
     }
 

@@ -29,7 +29,7 @@ class Tool {
     }
 
     getMouseCoords(event) {
-        const rect = this.canvas.canvasElement.getBoundingClientRect();
+        const rect = this.canvas.element.getBoundingClientRect();
         return {
             x: event.clientX - rect.left,
             y: event.clientY - rect.top,

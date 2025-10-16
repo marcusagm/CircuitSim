@@ -11,25 +11,17 @@
  * const gridOverlay = new Grid(canvasElement, gridCellSize);
  * gridOverlay.draw();
  */
+import Canvas from './Canvas.js';
+
 class Grid {
     /**
      * Creates an instance of Grid.
      *
-     * @param {HTMLCanvasElement} canvasElement - The canvas element on which the grid will be drawn. Must have a 'ctx' property referencing its 2D context.
+     * @param {Canvas} canvas - The canvas element on which the grid will be drawn. Must have a 'ctx' property referencing its 2D context.
      * @param {number} gridCellSize - The size (in pixels) of each grid cell.
      */
-    constructor(canvasElement, gridCellSize) {
-        /**
-         * The canvas element on which the grid is drawn.
-         * @type {HTMLCanvasElement}
-         */
-        this.canvasElement = canvasElement;
-
-        /**
-         * The 2D rendering context of the canvas.
-         * @type {CanvasRenderingContext2D}
-         */
-        this.canvasContext = canvasElement.ctx;
+    constructor(canvas, gridCellSize) {
+        this.canvas = canvas;
 
         /**
          * The size of each grid cell in pixels.
@@ -41,7 +33,7 @@ class Grid {
          * The color used to draw the grid lines.
          * @type {string}
          */
-        this.gridLineColor = "#28656fff";
+        this.gridLineColor = "#bbeeeeff";
     }
 
     /**
@@ -52,37 +44,42 @@ class Grid {
      * @returns {void}
      */
     draw() {
-        this.canvasContext.beginPath();
-        this.canvasContext.strokeStyle = this.gridLineColor;
-        this.canvasContext.lineWidth = 0.5;
+        this.canvas.context.beginPath();
+        this.canvas.context.strokeStyle = this.gridLineColor;
+        this.canvas.context.lineWidth = 0.5;
+        this.canvas.context.lineCap = "round";
+        this.canvas.context.setLineDash([0.25, this.gridCellSize / 2]);
 
         // Draw vertical grid lines
         for (
             let currentXPosition = 0;
-            currentXPosition <= this.canvasElement.width;
+            currentXPosition <= this.canvas.width;
             currentXPosition += this.gridCellSize
         ) {
-            this.canvasContext.moveTo(currentXPosition, 0);
-            this.canvasContext.lineTo(
+            this.canvas.context.moveTo(currentXPosition, 0);
+            this.canvas.context.lineTo(
                 currentXPosition,
-                this.canvasElement.height
+                this.canvas.height
             );
         }
 
         // Draw horizontal grid lines
         for (
             let currentYPosition = 0;
-            currentYPosition <= this.canvasElement.height;
+            currentYPosition <= this.canvas.height;
             currentYPosition += this.gridCellSize
         ) {
-            this.canvasContext.moveTo(0, currentYPosition);
-            this.canvasContext.lineTo(
-                this.canvasElement.width,
+            this.canvas.context.moveTo(0, currentYPosition);
+            this.canvas.context.lineTo(
+                this.canvas.width,
                 currentYPosition
             );
         }
 
-        this.canvasContext.stroke();
+        this.canvas.context.stroke();
+        this.canvas.context.closePath();
+        this.canvas.context.setLineDash([]);
+        this.canvas.requestRender
     }
 }
 

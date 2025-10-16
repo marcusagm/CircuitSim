@@ -39,34 +39,31 @@ import PropertiesTool from "./js/tools/PropertiesTool.js";
 import NodeEditTool from "./js/tools/NodeEditTool.js"; // Importar a nova ferramenta
 
 document.addEventListener("DOMContentLoaded", () => {
-    const canvasElement = document.getElementById("circuitCanvas");
-    const ctx = canvasElement.getContext("2d");
+    const canvasContainer = document.getElementById("circuitCanvas");
     const toolbar = document.getElementById("toolbar");
 
-    const canvas = new Canvas(canvasElement, ctx);
-    const grid = new Grid(canvas, 10); // 5x5px grid
-    const drawingManager = new DrawingManager(canvas);
-    const toolManager = new ToolManager(canvas, drawingManager);
+    const canvas = new Canvas(window.innerWidth, window.innerHeight, window.devicePixelRatio || 1, true);
+    const ctx = canvas.context
+    canvasContainer.appendChild(canvas.element);
 
-    canvas.drawingManager = drawingManager; // Atribui o drawingManager ao canvas
-    canvas.grid = grid; // Atribui a grid ao canvas
+    const grid = new Grid(canvas, 15); // 5x5px grid
+    const drawingManager = new DrawingManager(canvas, grid);
+    const toolManager = new ToolManager(canvas, drawingManager);
 
     // Ajusta o tamanho do canvas para preencher a janela
     const resizeCanvas = () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        canvas.requestRender(); // Redesenha o canvas e a grid
+        canvas.requestRender();
     };
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas(); // Chama no carregamento inicial
 
-    // Sobrescreve o método draw do canvas para incluir a grid e os elementos do DrawingManager
-    canvas.draw = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.afterClearCallbacks.push(() => {
         grid.draw();
-        drawingManager.drawAll(ctx); // Desenha todos os elementos gerenciados
-    };
+        drawingManager.drawAll(); // Desenha todos os elementos gerenciados
+    });
 
     // Adicionar ferramentas ao ToolManager
     const selectTool = new SelectTool(canvas, drawingManager);
