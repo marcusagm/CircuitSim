@@ -160,7 +160,7 @@
 ## Aplicação
 
  - [x] Utilizar sistema de Handle componentizado
- - [x] Utilizar renderização incrmental no canvas usando requestAnimationFrame
+ - [x] Utilizar renderização incremental no canvas usando requestAnimationFrame
  - [x] Separar as responsábilidades do canvas
  - [x] Utilizar apenas os métodos de desenho do canvas.
  - [ ] Completar a classe canvas e verificar arquitetura e documentação
