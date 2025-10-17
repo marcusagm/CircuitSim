@@ -142,6 +142,7 @@ class Canvas {
 
     restore() {
         let me = this;
+        me.context.setLineDash([]);
         me.context.restore();
         return me;
     }
