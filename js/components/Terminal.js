@@ -1,3 +1,5 @@
+import Canvas from "../core/Canvas.js";
+
 class Terminal {
     constructor(id, x, y, parentComponent) {
         this.id = id;
@@ -19,15 +21,21 @@ class Terminal {
         };
     }
 
-    draw(ctx) {
+    /**
+     *
+     * @param {Canvas} canvas
+     */
+    draw(canvas) {
         const absPos = this.getAbsolutePosition();
-        ctx.beginPath();
-        ctx.arc(absPos.x, absPos.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.fill();
-        ctx.strokeStyle = "#000000";
-        ctx.lineWidth = 1;
-        ctx.stroke();
+
+        canvas
+            .setFillColor(this.color)
+            .setStrokeColor("#000000")
+            .setStrokeWidth(1)
+            .circle(absPos.x, absPos.y, this.radius)
+            .fill()
+            .stroke()
+            .restore();
     }
 
     isHit(x, y) {

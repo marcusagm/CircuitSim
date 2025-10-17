@@ -1,26 +1,39 @@
 import Handle from "../components/Handle.js";
 import Shape from "./Shape.js";
+import Canvas from "../core/Canvas.js";
 
 class Circle extends Shape {
     constructor(x, y, radius) {
         super(x, y);
         this.radius = radius;
-        this.fillColor = null; // Pode ser preenchido ou não
+
+        this.isSelected = false; // Indica se a linha está selecionada para edição
+
+        this.fillColor = "transparent"; // Cor de preenchimento
+        this.color = "#000000"; // Cor do contorno
+        this.lineWidth = 1; // Espessura do contorno
+        this.lineDash = []; // Padrão de tracejado
+        this.lineDashOffset = 0; // Deslocamento do tracejado
     }
 
-    draw(ctx) {
-        ctx.beginPath();
-        ctx.strokeStyle = this.color;
-        ctx.lineWidth = this.lineWidth;
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        if (this.fillColor) {
-            ctx.fillStyle = this.fillColor;
-            ctx.fill();
-        }
-        ctx.stroke();
+    /**
+     *
+     * @param {Canvas} canvas
+     */
+    draw(canvas) {
+        canvas
+            .setStrokeColor(this.color)
+            .setStrokeWidth(this.lineWidth)
+            .setStrokeDash(this.lineDash)
+            .setStrokeDashOffset(this.lineDashOffset)
+            .setFillColor(this.fillColor)
+            .circle(this.x, this.y, this.radius)
+            .stroke()
+            .fill()
+            .restore();
 
         if (this.isSelected) {
-            this.drawSelectionHandles(ctx);
+            this.drawSelectionHandles(canvas);
         }
     }
 
@@ -39,6 +52,9 @@ class Circle extends Shape {
         if (newProps.color !== undefined) this.color = newProps.color;
         if (newProps.lineWidth !== undefined)
             this.lineWidth = newProps.lineWidth;
+        if (newProps.lineDash !== undefined) this.lineDash = newProps.lineDash;
+        if (newProps.lineDashOffset !== undefined)
+            this.lineDashOffset = newProps.lineDashOffset;
         if (newProps.fillColor !== undefined)
             this.fillColor = newProps.fillColor;
         if (newProps.x !== undefined) this.x = newProps.x;
@@ -46,9 +62,13 @@ class Circle extends Shape {
         if (newProps.radius !== undefined) this.radius = newProps.radius;
     }
 
-    drawSelectionHandles(ctx) {
-        new Handle(this.x, this.y, Handle.TYPES.CROSS).draw(ctx);
-        new Handle(this.x + this.radius, this.y, Handle.TYPES.DOT).draw(ctx);
+    /**
+     *
+     * @param {Canvas} canvas
+     */
+    drawSelectionHandles(canvas) {
+        new Handle(this.x, this.y, Handle.TYPES.CROSS).draw(canvas);
+        new Handle(this.x + this.radius, this.y, Handle.TYPES.DOT).draw(canvas);
     }
 }
 

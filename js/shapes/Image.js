@@ -1,5 +1,6 @@
 import Shape from "./Shape.js";
 import HandleBox from "../components/HandleBox.js";
+import Canvas from "../core/Canvas.js";
 
 class ImageShape extends Shape {
     constructor(x, y, imageUrl, width = 0, height = 0) {
@@ -10,6 +11,8 @@ class ImageShape extends Shape {
         this.width = width;
         this.height = height;
         this.loaded = false;
+
+        this.isSelected = false; // Indica se a linha está selecionada para edição
 
         this.image.onload = () => {
             this.loaded = true;
@@ -25,9 +28,13 @@ class ImageShape extends Shape {
         };
     }
 
-    draw(context) {
+    /**
+     *
+     * @param {Canvas} canvas
+     */
+    draw(canvas) {
         if (this.loaded) {
-            context.drawImage(
+            canvas.drawImage(
                 this.image,
                 this.x,
                 this.y,
@@ -37,7 +44,7 @@ class ImageShape extends Shape {
         }
 
         if (this.isSelected) {
-            this.drawSelectionHandles(context);
+            this.drawSelectionHandles(canvas);
         }
     }
 
@@ -67,11 +74,15 @@ class ImageShape extends Shape {
         if (newProps.height !== undefined) this.height = newProps.height;
     }
 
-    drawSelectionHandles(context) {
+    /**
+     *
+     * @param {Canvas} canvas
+     */
+    drawSelectionHandles(canvas) {
         if (!this.loaded) return;
         // Desenha a borda da caixa de seleção
         new HandleBox(this.x, this.y, this.width, this.height, this, true).draw(
-            context
+            canvas
         );
     }
 }

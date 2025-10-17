@@ -42,8 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const canvasContainer = document.getElementById("circuitCanvas");
     const toolbar = document.getElementById("toolbar");
 
-    const canvas = new Canvas(window.innerWidth, window.innerHeight, window.devicePixelRatio || 1, true);
-    const ctx = canvas.context
+    const canvas = new Canvas(
+        window.innerWidth,
+        window.innerHeight,
+        window.devicePixelRatio || 1,
+        true
+    );
+    const ctx = canvas.context;
     canvasContainer.appendChild(canvas.element);
 
     const grid = new Grid(canvas, 15); // 5x5px grid

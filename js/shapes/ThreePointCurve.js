@@ -1,6 +1,7 @@
 import Shape from "./Shape.js";
 import Handle from "../components/Handle.js";
 import HandleAnchor from "../components/HandleAnchor.js";
+import Canvas from "../core/Canvas.js";
 
 class ThreePointCurve extends Shape {
     constructor(x1, y1, cx, cy, x2, y2) {
@@ -11,18 +12,43 @@ class ThreePointCurve extends Shape {
         this.cy = cy;
         this.x2 = x2;
         this.y2 = y2;
+
+        this.isSelected = false; // Indica se a linha está selecionada para edição
+
+        this.color = "#000000"; // Cor da linha
+        this.lineWidth = 1; // Espessura da linha
+        this.lineDash = []; // Padrão de tracejado
+        this.lineDashOffset = 0; // Deslocamento do tracejado
+        this.lineCap = "butt"; // Estilo da extremidade da linha: 'butt', 'round', 'square'
+        this.lineJoin = "miter"; // Estilo da junção da linha: 'bevel', 'round', 'miter'
     }
 
-    draw(context) {
-        context.beginPath();
-        context.strokeStyle = this.color;
-        context.lineWidth = this.lineWidth;
-        context.moveTo(this.x1, this.y1);
-        context.quadraticCurveTo(this.cx, this.cy, this.x2, this.y2);
-        context.stroke();
+    /**
+     *
+     * @param {Canvas} canvas
+     */
+    draw(canvas) {
+        canvas
+            .setStrokeColor(this.color)
+            .setStrokeWidth(this.lineWidth)
+            .setStrokeDash(this.lineDash)
+            .setStrokeDashOffset(this.lineDashOffset)
+            .setStrokeCap(this.lineCap)
+            .setStrokeJoin(this.lineJoin)
+            .beginPath()
+            .quadraticCurveTo(
+                this.x1,
+                this.y1,
+                this.cx,
+                this.cy,
+                this.x2,
+                this.y2
+            )
+            .stroke()
+            .restore();
 
         if (this.isSelected) {
-            this.drawSelectionHandles(context);
+            this.drawSelectionHandles(canvas);
         }
     }
 
@@ -52,6 +78,11 @@ class ThreePointCurve extends Shape {
         if (newProps.color !== undefined) this.color = newProps.color;
         if (newProps.lineWidth !== undefined)
             this.lineWidth = newProps.lineWidth;
+        if (newProps.lineDash !== undefined) this.lineDash = newProps.lineDash;
+        if (newProps.lineDashOffset !== undefined)
+            this.lineDashOffset = newProps.lineDashOffset;
+        if (newProps.lineCap !== undefined) this.lineCap = newProps.lineCap;
+        if (newProps.lineJoin !== undefined) this.lineJoin = newProps.lineJoin;
         if (newProps.x1 !== undefined) this.x1 = newProps.x1;
         if (newProps.y1 !== undefined) this.y1 = newProps.y1;
         if (newProps.cx !== undefined) this.cx = newProps.cx;
@@ -63,7 +94,11 @@ class ThreePointCurve extends Shape {
     // Desenha Ancoras de edição da curva (3 pontos: início, controle, fim)
     // Cada âncora é um ponto com linhas de direção para controle da curva
     // Semelhante às âncoras do Illustrator
-    drawSelectionHandles(context) {
+    /**
+     *
+     * @param {Canvas} canvas
+     */
+    drawSelectionHandles(canvas) {
         const handleSize = 8;
         const handleColor = "#00ccff66";
         const handleBorderColor = "#00ccffff";
@@ -80,7 +115,7 @@ class ThreePointCurve extends Shape {
             handleBorderSize,
             handleBorderColor
         );
-        startHandle.draw(context);
+        startHandle.draw(canvas);
 
         // Ponto de controle
         const controlHandle = new HandleAnchor(
@@ -96,7 +131,7 @@ class ThreePointCurve extends Shape {
             handleBorderSize,
             handleBorderColor
         );
-        controlHandle.draw(context);
+        controlHandle.draw(canvas);
 
         // Ponto final
         const endHandle = new Handle(
@@ -109,7 +144,7 @@ class ThreePointCurve extends Shape {
             handleBorderSize,
             handleBorderColor
         );
-        endHandle.draw(context);
+        endHandle.draw(canvas);
     }
 }
 

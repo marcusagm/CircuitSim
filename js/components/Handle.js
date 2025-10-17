@@ -1,12 +1,27 @@
+/**
+ * Represents a handle for user interaction on components.
+ * Handles can be of various types, such as square, dot, directional, or cross.
+ */
+import Canvas from "../core/Canvas.js";
+
 class Handle {
     static TYPES = {
         SQUARE: "square", // Quadrado
         DOT: "dot", // Ponto simples
         DIRECTIONAL: "directional", // Para indicar direção de fluxo, como em diodos
-        CROSS: "cross" // Cruz para indicar pontos de interseção
+        CROSS: "cross", // Cruz para indicar pontos de interseção
     };
 
-    constructor(x, y, type, parentComponent, size = 10, fillColor = "#00ccff66", borderSize = 2, borderColor = "#00ccffff") {
+    constructor(
+        x,
+        y,
+        type,
+        parentComponent,
+        size = 10,
+        fillColor = "#00ccff66",
+        borderSize = 2,
+        borderColor = "#00ccffff"
+    ) {
         // 1177ddcc é um azul semi-transparente
         // 0055aacc é um azul mais escuro semi-transparente
         this.x = x;
@@ -26,93 +41,129 @@ class Handle {
         };
     }
 
-    draw(context) {
+    draw(canvas) {
         switch (this.type) {
             case Handle.TYPES.SQUARE:
-                this.drawSquareHandle(context);
+                this.drawSquareHandle(canvas);
                 break;
             case Handle.TYPES.DOT:
-                this.drawDotHandle(context);
+                this.drawDotHandle(canvas);
                 break;
             case Handle.TYPES.DIRECTIONAL:
-                this.drawDirectionalHandle(context);
+                this.drawDirectionalHandle(canvas);
                 break;
             case Handle.TYPES.CROSS:
-                this.drawCrossHandle(context);
+                this.drawCrossHandle(canvas);
                 break;
             default:
-                this.drawSquareHandle(context);
+                this.drawSquareHandle(canvas);
         }
     }
 
-    drawSquareHandle(context) {
+    /**
+     * Draws a square handle on the provided canvas context.
+     * @param {Canvas} canvas - The canvas object where the handle will be drawn.
+     * @returns {void}
+     */
+    drawSquareHandle(canvas) {
         const absPos = this.getAbsolutePosition();
-        context.fillStyle = this.fillColor;
-        context.strokeStyle = this.borderColor;
-        context.lineWidth = this.borderSize;
 
-        context.fillRect(
-            absPos.x,
-            absPos.y,
-            this.size - this.borderSize,
-            this.size - this.borderSize
-        );
-        context.strokeRect(
-            absPos.x,
-            absPos.y,
-            this.size,
-            this.size
-        );
+        canvas
+            .setStrokeColor(this.borderColor)
+            .setFillColor(this.fillColor)
+            .setStrokeWidth(this.borderSize)
+            .rectangle(
+                absPos.x,
+                absPos.y,
+                this.size - this.borderSize,
+                this.size - this.borderSize
+            )
+            .fill()
+            .rectangle(absPos.x, absPos.y, this.size, this.size)
+            .stroke()
+            .restore();
     }
 
-    drawDotHandle(context) {
+    /**
+     * Draws a dot handle on the provided canvas context.
+     * @param {Canvas} canvas - The canvas object where the handle will be drawn.
+     * @returns {void}
+     */
+    drawDotHandle(canvas) {
         const absPos = this.getAbsolutePosition();
-        context.beginPath();
-        context.arc(
-            absPos.x + this.size / 2,
-            absPos.y + this.size / 2,
-            (this.size - this.borderSize) / 2,
-            0,
-            Math.PI * 2
-        );
-        context.fillStyle = this.fillColor;
-        context.fill();
 
-        context.strokeStyle = this.borderColor;
-        context.lineWidth = this.borderSize;
-        context.stroke();
+        canvas
+            .setStrokeColor(this.borderColor)
+            .setFillColor(this.fillColor)
+            .setStrokeWidth(this.borderSize)
+            .circle(
+                absPos.x + this.size / 2,
+                absPos.y + this.size / 2,
+                (this.size - this.borderSize) / 2
+            )
+            .fill()
+            .stroke()
+            .restore();
     }
 
-    drawDirectionalHandle(context) {
+    /**
+     * Draws a directional handle (triangle) on the provided canvas context.
+     * @param {Canvas} canvas - The canvas object where the handle will be drawn.
+     * @returns {void}
+     */
+    drawDirectionalHandle(canvas) {
         const absPos = this.getAbsolutePosition();
         const centerX = absPos.x + this.size / 2;
         const centerY = absPos.y + this.size / 2;
         const halfSize = (this.size - this.borderSize) / 2;
 
-        context.fillStyle = this.fillColor;
-        context.strokeStyle = this.borderColor;
-        context.lineWidth = this.borderSize;
-
-        context.beginPath();
-        context.moveTo(centerX + halfSize, centerY);
-        context.lineTo(centerX - halfSize, centerY - halfSize);
-        context.lineTo(centerX - halfSize, centerY + halfSize);
-        context.closePath();
-        context.fill();
-        context.stroke();
+        canvas
+            .setStrokeColor(this.borderColor)
+            .setFillColor(this.fillColor)
+            .setStrokeWidth(this.borderSize)
+            .line(
+                centerX,
+                centerY - halfSize,
+                centerX - halfSize,
+                centerY + halfSize
+            )
+            .line(
+                centerX,
+                centerY + halfSize,
+                centerX + halfSize,
+                centerY + halfSize
+            )
+            .fill()
+            .stroke()
+            .restore();
     }
 
-    drawCrossHandle(context) {
+    /**
+     * Draws a cross handle on the provided canvas context.
+     * @param {Canvas} canvas - The canvas object where the handle will be drawn.
+     * @returns {void}
+     */
+    drawCrossHandle(canvas) {
         const absPos = this.getAbsolutePosition();
-        context.strokeStyle = this.borderColor;
-        context.lineWidth = this.borderSize;
 
-        context.beginPath();
-        context.moveTo(absPos.x, absPos.y);
-        context.lineTo(absPos.x + this.size, absPos.y + this.size);
-        context.moveTo(absPos.x + this.size, absPos.y);
-        context.lineTo(absPos.x, absPos.y + this.size);
-        context.stroke();
+        canvas
+            .setStrokeColor(this.borderColor)
+            .setStrokeWidth(this.borderSize)
+            .line(
+                absPos.x,
+                absPos.y,
+                absPos.x + this.size,
+                absPos.y + this.size
+            )
+            .stroke()
+            .line(
+                absPos.x + this.size,
+                absPos.y,
+                absPos.x,
+                absPos.y + this.size
+            )
+            .stroke()
+            .restore();
     }
 }
 

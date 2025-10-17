@@ -17,6 +17,7 @@
 import Shape from "../shapes/Shape.js";
 import Terminal from "./Terminal.js";
 import Handle from "./Handle.js";
+import Canvas from "../core/Canvas.js";
 
 class Wire extends Shape {
     /**
@@ -93,30 +94,30 @@ class Wire extends Shape {
 
     /**
      * Draws the wire on the canvas context.
-     * @param {CanvasRenderingContext2D} canvasContext - The 2D rendering context of the canvas.
+     * @param {Canvas} canvas - The 2D rendering context of the canvas.
      * @returns {void}
      */
-    draw(canvasContext) {
+    draw(canvas) {
         const allPoints = this.getAllPoints();
         if (allPoints.length < 2) return; // Needs at least two points to draw a line
 
-        canvasContext.beginPath();
-        canvasContext.strokeStyle = this.color;
-        canvasContext.lineWidth = this.lineWidth;
-        canvasContext.setLineDash(this.lineDash);
+        canvas
+            .setStrokeColor(this.color)
+            .setStrokeWidth(this.lineWidth)
+            .setStrokeDash(this.lineDash)
+            .setStrokeCap("round")
+            .setStrokeJoin("round")
+            .beginPath()
+            .moveTo(allPoints[0].x, allPoints[0].y);
 
-        canvasContext.moveTo(allPoints[0].x, allPoints[0].y);
         for (let pointIndex = 1; pointIndex < allPoints.length; pointIndex++) {
-            canvasContext.lineTo(
-                allPoints[pointIndex].x,
-                allPoints[pointIndex].y
-            );
+            canvas.lineTo(allPoints[pointIndex].x, allPoints[pointIndex].y);
         }
-        canvasContext.stroke();
-        canvasContext.setLineDash([]); // Reset to prevent other drawings from being dashed
+
+        canvas.stroke().restore();
 
         if (this.isSelected) {
-            this.drawSelectionHandles(canvasContext);
+            this.drawSelectionHandles(canvas);
         }
     }
 
@@ -208,28 +209,35 @@ class Wire extends Shape {
 
     /**
      * Draws selection handles for the wire's editable nodes and highlights terminal connections.
-     * @param {CanvasRenderingContext2D} canvasContext - The 2D rendering context of the canvas.
+     * @param {Canvas} canvas - The 2D rendering context of the canvas.
      * @returns {void}
      */
-    drawSelectionHandles(canvasContext) {
-        const handleSize = 5;
-        canvasContext.fillStyle = "blue";
-        canvasContext.strokeStyle = "white";
-        canvasContext.lineWidth = 1;
-
+    drawSelectionHandles(canvas) {
         // Draw handles only for intermediate path points (editable nodes)
         this.path.forEach((pathPoint) => {
-            new Handle(pathPoint.x, pathPoint.y, Handle.TYPES.DOT, this).draw(canvasContext);
+            new Handle(pathPoint.x, pathPoint.y, Handle.TYPES.DOT, this).draw(
+                canvas
+            );
         });
 
         // Highlight terminal connection points (not editable nodes for this tool)
         if (this.startTerminal) {
             const terminalPosition = this.startTerminal.getAbsolutePosition();
-            new Handle(terminalPosition.x, terminalPosition.y, Handle.TYPES.SQUARE, this).draw(canvasContext);
+            new Handle(
+                terminalPosition.x,
+                terminalPosition.y,
+                Handle.TYPES.SQUARE,
+                this
+            ).draw(canvas);
         }
         if (this.endTerminal) {
             const terminalPosition = this.endTerminal.getAbsolutePosition();
-            new Handle(terminalPosition.x, terminalPosition.y, Handle.TYPES.SQUARE, this).draw(canvasContext);
+            new Handle(
+                terminalPosition.x,
+                terminalPosition.y,
+                Handle.TYPES.SQUARE,
+                this
+            ).draw(canvas);
         }
     }
 }

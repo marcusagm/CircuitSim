@@ -1,6 +1,6 @@
 import Shape from "./Shape.js";
-import Handle from "../components/Handle.js";
 import HandleAnchor from "../components/HandleAnchor.js";
+import Canvas from "../core/Canvas.js";
 
 class BezierCurve extends Shape {
     constructor(x1, y1, cx1, cy1, cx2, cy2, x2, y2) {
@@ -13,25 +13,45 @@ class BezierCurve extends Shape {
         this.cy2 = cy2;
         this.x2 = x2;
         this.y2 = y2;
+
+        this.isSelected = false; // Indica se a linha está selecionada para edição
+
+        this.color = "#000000"; // Cor da linha
+        this.lineWidth = 1; // Espessura da linha
+        this.lineDash = []; // Padrão de tracejado
+        this.lineDashOffset = 0; // Deslocamento do tracejado
+        this.lineCap = "butt"; // Estilo da extremidade da linha: 'butt', 'round', 'square'
+        this.lineJoin = "miter"; // Estilo da junção da linha: 'bevel', 'round', 'miter'
     }
 
-    draw(context) {
-        context.beginPath();
-        context.strokeStyle = this.color;
-        context.lineWidth = this.lineWidth;
-        context.moveTo(this.x1, this.y1);
-        context.bezierCurveTo(
-            this.cx1,
-            this.cy1,
-            this.cx2,
-            this.cy2,
-            this.x2,
-            this.y2
-        );
-        context.stroke();
+    /**
+     *
+     * @param {Canvas} canvas
+     */
+    draw(canvas) {
+        canvas
+            .setStrokeColor(this.color)
+            .setStrokeWidth(this.lineWidth)
+            .setStrokeDash(this.lineDash)
+            .setStrokeDashOffset(this.lineDashOffset)
+            .setStrokeCap(this.lineCap)
+            .setStrokeJoin(this.lineJoin)
+            .beginPath()
+            .bezierCurveTo(
+                this.x1,
+                this.y1,
+                this.cx1,
+                this.cy1,
+                this.cx2,
+                this.cy2,
+                this.x2,
+                this.y2
+            )
+            .stroke()
+            .restore();
 
         if (this.isSelected) {
-            this.drawSelectionHandles(context);
+            this.drawSelectionHandles(canvas);
         }
     }
 
@@ -63,6 +83,11 @@ class BezierCurve extends Shape {
         if (newProps.color !== undefined) this.color = newProps.color;
         if (newProps.lineWidth !== undefined)
             this.lineWidth = newProps.lineWidth;
+        if (newProps.lineDash !== undefined) this.lineDash = newProps.lineDash;
+        if (newProps.lineDashOffset !== undefined)
+            this.lineDashOffset = newProps.lineDashOffset;
+        if (newProps.lineCap !== undefined) this.lineCap = newProps.lineCap;
+        if (newProps.lineJoin !== undefined) this.lineJoin = newProps.lineJoin;
         if (newProps.x1 !== undefined) this.x1 = newProps.x1;
         if (newProps.y1 !== undefined) this.y1 = newProps.y1;
         if (newProps.cx1 !== undefined) this.cx1 = newProps.cx1;
@@ -76,11 +101,31 @@ class BezierCurve extends Shape {
     // Desenha Ancoras de edição da curva (4 pontos: início, controle 1, controle 2, fim)
     // Os pontos de controle são pontos com linhas de direção para controle da curva
     // O funcionamento é semelhante a ferramenta pen do Illustrator
-    drawSelectionHandles(context) {
-        const handle1 = new HandleAnchor(this.x1, this.y1, this.cx1, this.cy1, this.cx2, this.cy2, context);
-        const handle2 = new HandleAnchor(this.x2, this.y2, this.cx1, this.cy1, this.cx2, this.cy2, context);
-        handle1.draw(context);
-        handle2.draw(context);
+    /**
+     *
+     * @param {Canvas} canvas
+     */
+    drawSelectionHandles(canvas) {
+        const handle1 = new HandleAnchor(
+            this.x1,
+            this.y1,
+            this.cx1,
+            this.cy1,
+            this.cx2,
+            this.cy2,
+            canvas
+        );
+        const handle2 = new HandleAnchor(
+            this.x2,
+            this.y2,
+            this.cx1,
+            this.cy1,
+            this.cx2,
+            this.cy2,
+            canvas
+        );
+        handle1.draw(canvas);
+        handle2.draw(canvas);
     }
 }
 

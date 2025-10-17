@@ -11,7 +11,7 @@
  * const gridOverlay = new Grid(canvasElement, gridCellSize);
  * gridOverlay.draw();
  */
-import Canvas from './Canvas.js';
+import Canvas from "./Canvas.js";
 
 class Grid {
     /**
@@ -57,10 +57,7 @@ class Grid {
             currentXPosition += this.gridCellSize
         ) {
             this.canvas.context.moveTo(currentXPosition, 0);
-            this.canvas.context.lineTo(
-                currentXPosition,
-                this.canvas.height
-            );
+            this.canvas.context.lineTo(currentXPosition, this.canvas.height);
         }
 
         // Draw horizontal grid lines
@@ -70,16 +67,13 @@ class Grid {
             currentYPosition += this.gridCellSize
         ) {
             this.canvas.context.moveTo(0, currentYPosition);
-            this.canvas.context.lineTo(
-                this.canvas.width,
-                currentYPosition
-            );
+            this.canvas.context.lineTo(this.canvas.width, currentYPosition);
         }
 
         this.canvas.context.stroke();
         this.canvas.context.closePath();
         this.canvas.context.setLineDash([]);
-        this.canvas.requestRender
+        this.canvas.requestRender();
     }
 }
 

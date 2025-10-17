@@ -1,5 +1,6 @@
 import Shape from "./Shape.js";
 import HandleBox from "../components/HandleBox.js";
+import Canvas from "../core/Canvas.js";
 
 class SVGDrawing extends Shape {
     constructor(x, y, svgContent, width = 0, height = 0) {
@@ -9,6 +10,8 @@ class SVGDrawing extends Shape {
         this.height = height;
         this.image = new Image();
         this.loaded = false;
+
+        this.isSelected = false; // Indica se a linha está selecionada para edição
 
         this.loadSVG();
     }
@@ -37,9 +40,13 @@ class SVGDrawing extends Shape {
         };
     }
 
-    draw(context) {
+    /**
+     *
+     * @param {Canvas} canvas
+     */
+    draw(canvas) {
         if (this.loaded) {
-            context.drawImage(
+            canvas.drawImage(
                 this.image,
                 this.x,
                 this.y,
@@ -49,7 +56,7 @@ class SVGDrawing extends Shape {
         }
 
         if (this.isSelected) {
-            this.drawSelectionHandles(context);
+            this.drawSelectionHandles(canvas);
         }
     }
 
@@ -79,12 +86,15 @@ class SVGDrawing extends Shape {
         if (newProps.height !== undefined) this.height = newProps.height;
     }
 
-    drawSelectionHandles(context) {
+    /**
+     *
+     * @param {Canvas} canvas
+     */
+    drawSelectionHandles(canvas) {
         if (!this.loaded) return;
-
         // Desenha a borda da caixa de seleção
         new HandleBox(this.x, this.y, this.width, this.height, this, true).draw(
-            context
+            canvas
         );
     }
 }

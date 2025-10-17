@@ -1,4 +1,18 @@
+/**
+ * HandleBox class represents a bounding box with interactive handles for resizing and manipulating components.
+ * It provides various types of handles for different purposes, such as resizing, anchoring, and directional indicators.
+ *
+ * Each handle is represented by an instance of the Handle class, which defines its appearance and behavior.
+ *
+ * Example usage:
+ * import HandleBox from './HandleBox';
+ *
+ * const handleBox = new HandleBox(x, y, width, height, parentComponent);
+ * handleBox.draw(canvasContext);
+ *
+ */
 import Handle from "./Handle.js";
+import Canvas from "../core/Canvas.js";
 
 class HandleBox {
     static TYPES = {
@@ -9,7 +23,7 @@ class HandleBox {
         CROSS: "cross" // Cruz para indicar pontos de interseção
     };
 
-    constructor(x, y, width, height, parentComponent, showCenterHandles = true, borderSize = 1, borderColor = "#00ccffff", isDashed = true) {
+    constructor(x, y, width, height, parentComponent, showCenterHandles = true, isDashed = true, borderSize = 1, borderColor = "#00ccffff") {
         // 1177ddcc é um azul semi-transparente
         // 0055aacc é um azul mais escuro semi-transparente
         this.x = x;
@@ -32,32 +46,42 @@ class HandleBox {
         };
     }
 
-    draw(context) {
+    /**
+     * Draws the handle box and its handles on the provided canvas context.
+     * @param {Canvas} canvas - The canvas object where the handle box will be drawn.
+     * @returns {void}
+     */
+    draw(canvas) {
         const absPos = this.getAbsolutePosition();
 
-        context.strokeStyle = this.borderColor;
-        context.lineWidth = this.borderSize;
+        canvas
+            .setStrokeColor(this.borderColor)
+            .setStrokeWidth(this.borderSize);
+
         if (this.isDashed) {
-            context.setLineDash([5, 3]);
+            canvas.setStrokeDash([5, 3]);
         } else {
-            context.setLineDash([]);
+            canvas.setStrokeDash([]);
         }
-        context.strokeRect(absPos.x, absPos.y, this.width, this.height);
-        context.setLineDash([]); // Reseta o dash para outros desenhos
+
+        canvas
+            .rectangle(absPos.x, absPos.y, this.width, this.height)
+            .stroke()
+            .restore();
 
 
-        new Handle(this.x, this.y, Handle.TYPES.SQUARE).draw(context); // Top-left
-        new Handle(this.x + this.width, this.y, Handle.TYPES.SQUARE).draw(context); // Top-right
-        new Handle(this.x, this.y + this.height, Handle.TYPES.SQUARE).draw(context); // Bottom-left
-        new Handle(this.x + this.width, this.y + this.height, Handle.TYPES.SQUARE).draw(context); // Bottom-right
+        new Handle(this.x, this.y, Handle.TYPES.SQUARE).draw(canvas); // Top-left
+        new Handle(this.x + this.width, this.y, Handle.TYPES.SQUARE).draw(canvas); // Top-right
+        new Handle(this.x, this.y + this.height, Handle.TYPES.SQUARE).draw(canvas); // Bottom-left
+        new Handle(this.x + this.width, this.y + this.height, Handle.TYPES.SQUARE).draw(canvas); // Bottom-right
 
-        new Handle(this.x + this.width / 2, this.y, Handle.TYPES.DOT).draw(context); // Top-center
-        new Handle(this.x + this.width / 2, this.y + this.height, Handle.TYPES.DOT).draw(context); // Bottom-center
-        new Handle(this.x, this.y + this.height / 2, Handle.TYPES.DOT).draw(context); // Middle-left
-        new Handle(this.x + this.width, this.y + this.height / 2, Handle.TYPES.DOT).draw(context); // Middle-right
+        new Handle(this.x + this.width / 2, this.y, Handle.TYPES.DOT).draw(canvas); // Top-center
+        new Handle(this.x + this.width / 2, this.y + this.height, Handle.TYPES.DOT).draw(canvas); // Bottom-center
+        new Handle(this.x, this.y + this.height / 2, Handle.TYPES.DOT).draw(canvas); // Middle-left
+        new Handle(this.x + this.width, this.y + this.height / 2, Handle.TYPES.DOT).draw(canvas); // Middle-right
 
         if (this.showCenterHandles) {
-            new Handle(this.x + this.width / 2, this.y + this.height / 2, Handle.TYPES.CROSS).draw(context); // Center
+            new Handle(this.x + this.width / 2, this.y + this.height / 2, Handle.TYPES.CROSS).draw(canvas); // Center
         }
     }
 }

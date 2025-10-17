@@ -1,5 +1,21 @@
+/**
+ * Class representing a Line shape.
+ * Extends the base Shape class and includes methods for drawing, hit detection, moving, and editing.
+ *
+ * @example
+ * import Canvas from '../core/Canvas.js';
+ * import Line from './Line.js';
+ * const canvas = new Canvas(document.getElementById('myCanvas'));
+ * const line = new Line(10, 10, 100, 100);
+ * line.color = 'red';
+ * line.lineWidth = 2;
+ * canvas.addShape(line);
+ * canvas.render();
+ *
+ */
 import Shape from "./Shape.js";
 import Handle from "../components/Handle.js";
+import Canvas from "../core/Canvas.js";
 
 class Line extends Shape {
     constructor(x1, y1, x2, y2) {
@@ -8,18 +24,35 @@ class Line extends Shape {
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
+
+        this.isSelected = false; // Indica se a linha está selecionada para edição
+
+        this.color = "#000000"; // Cor da linha
+        this.lineWidth = 1; // Espessura da linha
+        this.lineDash = []; // Padrão de tracejado
+        this.lineDashOffset = 0; // Deslocamento do tracejado
+        this.lineCap = "butt"; // Estilo da extremidade da linha: 'butt', 'round', 'square'
+        this.lineJoin = "miter"; // Estilo da junção da linha: 'bevel', 'round', 'miter'
     }
 
-    draw(ctx) {
-        ctx.beginPath();
-        ctx.strokeStyle = this.color;
-        ctx.lineWidth = this.lineWidth;
-        ctx.moveTo(this.x1, this.y1);
-        ctx.lineTo(this.x2, this.y2);
-        ctx.stroke();
+    /**
+     * Draws the line on the given canvas context.
+     * @param {Canvas} canvas - The canvas object to draw on.
+     */
+    draw(canvas) {
+        canvas
+            .setStrokeColor(this.color)
+            .setStrokeWidth(this.lineWidth)
+            .setStrokeDash(this.lineDash)
+            .setStrokeDashOffset(this.lineDashOffset)
+            .setStrokeCap(this.lineCap)
+            .setStrokeJoin(this.lineJoin)
+            .line(this.x1, this.y1, this.x2, this.y2)
+            .stroke()
+            .restore();
 
         if (this.isSelected) {
-            this.drawSelectionHandles(ctx);
+            this.drawSelectionHandles(canvas);
         }
     }
 
@@ -59,15 +92,24 @@ class Line extends Shape {
         if (newProps.color !== undefined) this.color = newProps.color;
         if (newProps.lineWidth !== undefined)
             this.lineWidth = newProps.lineWidth;
+        if (newProps.lineDash !== undefined) this.lineDash = newProps.lineDash;
+        if (newProps.lineDashOffset !== undefined)
+            this.lineDashOffset = newProps.lineDashOffset;
+        if (newProps.lineCap !== undefined) this.lineCap = newProps.lineCap;
+        if (newProps.lineJoin !== undefined) this.lineJoin = newProps.lineJoin;
         if (newProps.x1 !== undefined) this.x1 = newProps.x1;
         if (newProps.y1 !== undefined) this.y1 = newProps.y1;
         if (newProps.x2 !== undefined) this.x2 = newProps.x2;
         if (newProps.y2 !== undefined) this.y2 = newProps.y2;
     }
 
-    drawSelectionHandles(ctx) {
-        new Handle(this.x1, this.y1, Handle.TYPES.DOT).draw(ctx);
-        new Handle(this.x2, this.y2, Handle.TYPES.DOT).draw(ctx);
+    /**
+     *
+     * @param {Canvas} canvas
+     */
+    drawSelectionHandles(canvas) {
+        new Handle(this.x1, this.y1, Handle.TYPES.DOT).draw(canvas);
+        new Handle(this.x2, this.y2, Handle.TYPES.DOT).draw(canvas);
     }
 }
 

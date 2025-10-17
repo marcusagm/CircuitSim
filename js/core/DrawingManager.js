@@ -68,7 +68,7 @@ class DrawingManager {
      */
     drawAll() {
         this.drawableElements.forEach((drawableElement) => {
-            drawableElement.draw(this.canvas.context);
+            drawableElement.draw(this.canvas);
         });
     }
 

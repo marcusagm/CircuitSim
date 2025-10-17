@@ -1,21 +1,32 @@
 import Shape from "./Shape.js";
 import Handle from "../components/Handle.js";
+import Canvas from "../core/Canvas.js";
 
 class Point extends Shape {
     constructor(x, y, radius = 3) {
         super(x, y);
+
+        this.isSelected = false; // Indica se a linha está selecionada para edição
+
         this.radius = radius;
         this.color = "#000000";
     }
 
-    draw(ctx) {
-        ctx.beginPath();
-        ctx.fillStyle = this.color;
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fill();
+    /**
+     *
+     * @param {Canvas} canvas
+     */
+    draw(canvas) {
+        canvas
+            .setStrokeColor("#000000")
+            .setFillColor(this.color)
+            .setStrokeWidth(1)
+            .circle(this.x, this.y, this.radius)
+            .fill()
+            .restore();
 
         if (this.isSelected) {
-            this.drawSelectionHandles(ctx);
+            this.drawSelectionHandles(canvas);
         }
     }
 
@@ -37,8 +48,12 @@ class Point extends Shape {
         if (newProps.y !== undefined) this.y = newProps.y;
     }
 
-    drawSelectionHandles(ctx) {
-        new Handle(this.x, this.y, Handle.TYPES.DOT).draw(ctx);
+    /**
+     *
+     * @param {Canvas} canvas
+     */
+    drawSelectionHandles(canvas) {
+        new Handle(this.x, this.y, Handle.TYPES.DOT).draw(canvas);
     }
 }
 

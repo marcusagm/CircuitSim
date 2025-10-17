@@ -1,4 +1,46 @@
-// Ponto de ancoragem para curvas, com linhas de direção em ambos os lados, como as âncoras do Illustrator
+/**
+ * HandleAnchor representa um ponto de ancoragem com linhas de direção para controle de curvas.
+ * Semelhante às âncoras do Adobe Illustrator, cada âncora possui linhas de direção que influenciam a curva.
+ *
+ * Propriedades:
+ * - x, y: Coordenadas da âncora.
+ * - leftDirectionX, leftDirectionY: Coordenadas da linha de direção esquerda.
+ * - rightDirectionX, rightDirectionY: Coordenadas da linha de direção direita.
+ * - parentComponent: Referência ao componente pai que utiliza esta âncora.
+ * - size: Tamanho do círculo da âncora.
+ * - fillColor: Cor de preenchimento do círculo da âncora.
+ * - borderSize: Espessura da borda do círculo da âncora.
+ * - borderColor: Cor da borda do círculo da âncora.
+ *
+ * Métodos:
+ * - draw(canvas): Desenha a âncora e suas linhas de direção no contexto do canvas fornecido.
+ * - drawDirectionLine(canvas, anchorPos, direction): Desenha uma linha de direção com um círculo na extremidade.
+ *
+ * Exemplo de uso:
+ *
+ * import Canvas from '../core/Canvas';
+ * import HandleAnchor from './HandleAnchor';
+ * const canvasInstance = new Canvas(document.getElementById('myCanvas'));
+ * const handleAnchor = new HandleAnchor(100, 100, 50, 50, 150, 50, null);
+ * handleAnchor.draw(canvasInstance);
+ *
+ * // Em um sistema de gerenciamento de desenho:
+ *
+ * import Canvas from '../core/Canvas';
+ * import DrawingManager from '../core/DrawingManager';
+ * import HandleAnchor from './HandleAnchor';
+ *
+ * const canvasInstance = new Canvas(document.getElementById('myCanvas'));
+ * const drawingManager = new DrawingManager(canvasInstance);
+ * const handleAnchor = new HandleAnchor(100, 100, 50, 50, 150, 50, null);
+ * drawingManager.addElement(handleAnchor);
+ * drawingManager.drawAll();
+ *
+ * // A classe DrawingManager gerencia múltiplos elementos desenháveis e solicita renderização incremental.
+ *
+ */
+import Canvas from "../core/Canvas.js";
+
 class HandleAnchor {
 
     constructor(x, y, leftDirectionX, leftDirectionY, rightDirectionX, rightDirectionY, parentComponent, size = 10, fillColor = "#00ccff66", borderSize = 2, borderColor = "#00ccffff") {
@@ -24,32 +66,38 @@ class HandleAnchor {
         };
     }
 
-    draw(context) {
-         const absPos = this.getAbsolutePosition();
-        context.beginPath();
-        context.arc(
-            absPos.x + this.size / 2,
-            absPos.y + this.size / 2,
-            (this.size - this.borderSize) / 2,
-            0,
-            Math.PI * 2
-        );
-        context.fillStyle = this.fillColor;
-        context.fill();
+    /**
+     * Draws the anchor handle and its direction lines on the provided canvas context.
+     * @param {Canvas} canvas - The canvas object where the handle will be drawn.
+     * @returns {void}
+     */
+    draw(canvas) {
+        const absPos = this.getAbsolutePosition();
 
-        context.strokeStyle = this.borderColor;
-        context.lineWidth = this.borderSize;
-        context.stroke();
+        canvas
+            .setStrokeColor(this.borderColor)
+            .setFillColor(this.fillColor)
+            .setStrokeWidth(this.borderSize)
+            .circle(absPos.x + this.size / 2, absPos.y + this.size / 2, (this.size - this.borderSize) / 2)
+            .fill()
+            .stroke();
 
         // Desenhar linhas de direção para controlar a curva (semelhante às âncoras do Illustrator)
         // Linhas seguindo a direçnao informada para a esquerda e direita da âncora com um pequeno círculo nas extremidades
         const leftDirection = { x: this.leftDirectionX, y: this.leftDirectionY };
         const rightDirection = { x: this.rightDirectionX, y: this.rightDirectionY };
-        this.drawDirectionLine(context, absPos, leftDirection);
-        this.drawDirectionLine(context, absPos, rightDirection);
+        this.drawDirectionLine(canvas, absPos, leftDirection);
+        this.drawDirectionLine(canvas, absPos, rightDirection);
     }
 
-    drawDirectionLine(context, anchorPos, direction) {
+    /**
+     * Draws a direction line with a handle at the end.
+     * @param {Canvas} canvas - The canvas object where the line will be drawn.
+     * @param {Object} anchorPos - The absolute position of the anchor {x, y}.
+     * @param {Object} direction - The direction vector {x, y}.
+     * @returns {void}
+     */
+    drawDirectionLine(canvas, anchorPos, direction) {
         // Normalizar o vetor de direção
         const length = Math.sqrt(direction.x * direction.x + direction.y * direction.y);
         if (length === 0) return; // Evitar divisão por zero
@@ -58,28 +106,32 @@ class HandleAnchor {
 
         // Desenhar a linha de direção
         // A linha deve ter o comprimento correto que influencia a curva
-        context.beginPath();
-        context.moveTo(anchorPos.x + this.size / 2, anchorPos.y + this.size / 2);
-        context.lineTo(anchorPos.x + this.size / 2 + direction.x * length, anchorPos.y + this.size / 2 + direction.y * length);
-        context.strokeStyle = this.borderColor; // Cor cinza para as linhas de direção
-        context.lineWidth = 1;
-        context.stroke();
+        canvas
+            .setStrokeColor(this.borderColor)
+            .setStrokeWidth(1)
+            .line(
+                anchorPos.x + this.size / 2,
+                anchorPos.y + this.size / 2,
+                anchorPos.x + this.size / 2 + direction.x * length,
+                anchorPos.y + this.size / 2 + direction.y * length
+            )
+            .stroke();
 
         // Círculo na extremidade da linha de direção
         const handleRadius = (this.size - this.borderSize) / 4;
-        context.beginPath();
-        context.arc(
-            anchorPos.x + this.size / 2 + direction.x * length,
-            anchorPos.y + this.size / 2 + direction.y * length,
-            handleRadius,
-            0,
-            Math.PI * 2
-        );
-        context.fillStyle = this.fillColor;
-        context.fill();
-        context.strokeStyle = this.borderColor;
-        context.lineWidth = 1;
-        context.stroke();
+
+        canvas
+            .setFillColor(this.fillColor)
+            .setStrokeColor(this.borderColor)
+            .setStrokeWidth(1)
+            .circle(
+                anchorPos.x + this.size / 2 + direction.x * length,
+                anchorPos.y + this.size / 2 + direction.y * length,
+                handleRadius
+            )
+            .fill()
+            .stroke()
+            .restore();
     }
 }
 

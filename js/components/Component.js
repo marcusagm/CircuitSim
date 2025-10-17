@@ -1,6 +1,7 @@
 import Shape from "../shapes/Shape.js";
 import Terminal from "./Terminal.js";
 import HandleBox from "./HandleBox.js";
+import Canvas from "../core/Canvas.js";
 
 /**
  * Classe Component - Representa um componente eletrônico com terminais, rotação, flip e SVG customizado.
@@ -55,42 +56,56 @@ class Component extends Shape {
         return terminal;
     }
 
-    draw(ctx) {
-        ctx.save();
-        ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+    /**
+     *
+     * @param {Canvas} canvas
+     */
+    draw(canvas) {
+        canvas.save();
+        canvas.translate(this.x + this.width / 2, this.y + this.height / 2);
         if (this.rotation !== 0) {
-            ctx.rotate((this.rotation * Math.PI) / 180);
+            canvas.rotate((this.rotation * Math.PI) / 180);
         }
         if (this.flipH) {
-            ctx.scale(-1, 1);
+            canvas.scale(-1, 1);
         }
         if (this.flipV) {
-            ctx.scale(1, -1);
+            canvas.scale(1, -1);
         }
-        ctx.translate(-(this.x + this.width / 2), -(this.y + this.height / 2));
+        canvas.translate(
+            -(this.x + this.width / 2),
+            -(this.y + this.height / 2)
+        );
 
         if (this.loaded) {
-            ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+            canvas.drawImage(
+                this.image,
+                this.x,
+                this.y,
+                this.width,
+                this.height
+            );
         } else if (!this.svgContent) {
             // Desenha um retângulo placeholder se não houver SVG e ainda não carregou
-            ctx.strokeStyle = this.color;
-            ctx.lineWidth = this.lineWidth;
-            ctx.strokeRect(this.x, this.y, this.width, this.height);
-            ctx.fillStyle = "#f0f0f0";
-            ctx.fillRect(this.x, this.y, this.width, this.height);
-            ctx.fillStyle = "#000000";
-            ctx.fillText("Component", this.x + 5, this.y + this.height / 2);
+            canvas
+                .setStrokeColor(this.color)
+                .setStrokeWidth(this.lineWidth)
+                .setFillColor("#f0f0f0")
+                .rectangle(this.x, this.y, this.width, this.height)
+                .fill()
+                .setFillColor("#000000")
+                .fillText("Component", this.x + 5, this.y + this.height / 2);
         }
 
-        ctx.restore();
+        canvas.restore();
 
         // Desenha os terminais (sem transformações de rotação/flip do componente)
         this.terminals.forEach((terminal) => {
-            terminal.draw(ctx);
+            terminal.draw(canvas);
         });
 
         if (this.isSelected) {
-            this.drawSelectionHandles(ctx);
+            this.drawSelectionHandles(canvas);
         }
     }
 
@@ -122,8 +137,19 @@ class Component extends Shape {
         this.flipV = !this.flipV;
     }
 
-    drawSelectionHandles(ctx) {
-        new HandleBox(this.x, this.y, this.width, this.height, this, false).draw(ctx);
+    /**
+     *
+     * @param {Canvas} canvas
+     */
+    drawSelectionHandles(canvas) {
+        new HandleBox(
+            this.x,
+            this.y,
+            this.width,
+            this.height,
+            this,
+            false
+        ).draw(canvas);
     }
 }
 

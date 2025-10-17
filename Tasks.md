@@ -160,6 +160,8 @@
 
  - [x] Utilizar sistema de Handle componentizado
  - [x] Utilizar renderização incrmental no canvas usando requestAnimationFrame
+ - [ ] Separar as responsábilidades do canvas
+ - [ ] Utilizar apenas os métodos de desenho do canvas.
  - [ ] Completar a classe canvas e verificar arquitetura e documentação
  - [ ] Utilizar electron
  - [ ] Sistema de atualização

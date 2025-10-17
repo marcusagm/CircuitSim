@@ -45,6 +45,7 @@ class Canvas {
         me.scale(me.pixelRatio, me.pixelRatio);
         me.translate(0.5, 0.5);
         me.enableAntialiasing(me.antialiasing);
+        me.save();
     }
 
     set width(value) {
@@ -97,13 +98,13 @@ class Canvas {
 
     afterClear() {
         let me = this;
-        me.afterClearCallbacks.forEach(callback => callback());
+        me.afterClearCallbacks.forEach((callback) => callback());
         return me;
     }
 
     beforeClear() {
         let me = this;
-        me.beforeClearCallbacks.forEach(callback => callback());
+        me.beforeClearCallbacks.forEach((callback) => callback());
         return me;
     }
 
@@ -130,6 +131,30 @@ class Canvas {
     enableAntialiasing(enabled) {
         let me = this;
         me.context.imageSmoothingEnabled = enabled;
+        return me;
+    }
+
+    save() {
+        let me = this;
+        me.context.save();
+        return me;
+    }
+
+    restore() {
+        let me = this;
+        me.context.restore();
+        return me;
+    }
+
+    beginPath() {
+        let me = this;
+        me.context.beginPath();
+        return me;
+    }
+
+    closePath() {
+        let me = this;
+        me.context.closePath();
         return me;
     }
 
@@ -168,6 +193,12 @@ class Canvas {
      * @param {*} offset
      */
     setStrokeDash(offset) {
+        let me = this;
+        me.context.setLineDash(offset);
+        return me;
+    }
+
+    setStrokeDashOffset(offset) {
         let me = this;
         me.context.lineDashOffset = offset;
         return me;
@@ -273,6 +304,18 @@ class Canvas {
         return me;
     }
 
+    setTextRendering(textRendering) {
+        let me = this;
+        me.context.textRendering = textRendering;
+        return me;
+    }
+
+    setWordSpacing(wordSpacing) {
+        let me = this;
+        me.context.wordSpacing = wordSpacing;
+        return me;
+    }
+
     /**
      *
      * @param {*} alpha
@@ -326,7 +369,12 @@ class Canvas {
      */
     getImage() {
         let me = this;
-        return me.context.getImageData(0, 0, me.element.width, me.element.height);
+        return me.context.getImageData(
+            0,
+            0,
+            me.element.width,
+            me.element.height
+        );
     }
 
     /**
@@ -335,9 +383,9 @@ class Canvas {
      * @param {*} x
      * @param {*} y
      */
-    putImage(image, x, y) {
+    drawImage(image, x, y, width, height) {
         let me = this;
-        me.context.putImageData(image, x, y);
+        me.context.drawImage(image, x, y, width, height);
         return me;
     }
 
@@ -350,10 +398,22 @@ class Canvas {
      */
     line(x1, y1, x2, y2) {
         let me = this;
-        me.context.beginPath();
+        me.beginPath();
         me.context.moveTo(Math.round(x1), Math.round(y1));
         me.context.lineTo(Math.round(x2), Math.round(y2));
-        me.context.closePath();
+        me.closePath();
+        return me;
+    }
+
+    moveTo(x, y) {
+        let me = this;
+        me.context.moveTo(Math.round(x), Math.round(y));
+        return me;
+    }
+
+    lineTo(x, y) {
+        let me = this;
+        me.context.lineTo(Math.round(x), Math.round(y));
         return me;
     }
 
@@ -363,11 +423,11 @@ class Canvas {
      * @param {*} y
      * @param {*} radius
      */
-    cicle(x, y, radius) {
+    circle(x, y, radius) {
         let me = this;
-        me.context.beginPath();
+        me.beginPath();
         me.context.arc(x, y, radius, 0, Math.PI * 2, false);
-        me.context.closePath();
+        me.closePath();
         return me;
     }
 
@@ -385,7 +445,7 @@ class Canvas {
             centerX = x1 + radiusX,
             centerY = y1 + radiusY;
 
-        me.context.beginPath();
+        me.beginPath();
         me.context.ellipse(
             centerX,
             centerY,
@@ -395,7 +455,7 @@ class Canvas {
             Math.PI * 2,
             false
         );
-        me.context.closePath();
+        me.closePath();
         return me;
     }
 
@@ -409,9 +469,9 @@ class Canvas {
     rectangle(x, y, width, height) {
         let me = this;
 
-        me.context.beginPath();
+        me.beginPath();
         me.context.rect(x, y, width, height);
-        me.context.closePath();
+        me.closePath();
         return me;
     }
 
@@ -435,12 +495,12 @@ class Canvas {
             angle += (Math.PI * 2) / sides;
         }
 
-        me.context.beginPath();
+        me.beginPath();
         me.context.moveTo(coordinates[0].x, coordinates[0].y);
         for (let index = 1; index < sides; index++) {
             me.context.lineTo(coordinates[index].x, coordinates[index].y);
         }
-        me.context.closePath();
+        me.closePath();
         return me;
     }
 
@@ -468,12 +528,49 @@ class Canvas {
             angle += (Math.PI * 2) / points;
         }
 
-        me.context.beginPath();
+        me.beginPath();
         me.context.moveTo(coordinates[0].x, coordinates[0].y);
         for (let index = 1; index < totalPoints; index++) {
             me.context.lineTo(coordinates[index].x, coordinates[index].y);
         }
-        me.context.closePath();
+        me.closePath();
+        return me;
+    }
+
+    bezierCurveTo(
+        anchor1x,
+        anchor1y,
+        anchor2x,
+        anchor2y,
+        anchor3x,
+        anchor3y,
+        anchor4x,
+        anchor4y
+    ) {
+        let me = this;
+        me.context.moveTo(anchor1x, anchor1y);
+        me.context.bezierCurveTo(
+            anchor2x,
+            anchor2y,
+            anchor3x,
+            anchor3y,
+            anchor4x,
+            anchor4y
+        );
+        return me;
+    }
+
+    quadraticCurveTo(
+        anchor1x,
+        anchor1y,
+        anchor2x,
+        anchor2y,
+        anchor3x,
+        anchor3y
+    ) {
+        let me = this;
+        me.context.moveTo(anchor1x, anchor1y);
+        me.context.quadraticCurveTo(anchor2x, anchor2y, anchor3x, anchor3y);
         return me;
     }
 
@@ -484,6 +581,17 @@ class Canvas {
         let me = this;
         me.context.fill();
         return me;
+    }
+
+    fillText(text, x, y, maxWidth = undefined) {
+        let me = this;
+        me.context.fillText(text, x, y, maxWidth);
+        return me;
+    }
+
+    measureText(text) {
+        let me = this;
+        return me.context.measureText(text);
     }
 
     /**

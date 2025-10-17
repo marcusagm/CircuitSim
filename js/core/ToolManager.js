@@ -21,8 +21,8 @@
  * @class ToolManager
  * @classdesc Manages drawing tools, delegates mouse events, and coordinates canvas redraws.
  */
-import Canvas from './Canvas.js';
-import DrawingManager from './DrawingManager.js';
+import Canvas from "./Canvas.js";
+import DrawingManager from "./DrawingManager.js";
 
 class ToolManager {
     /**

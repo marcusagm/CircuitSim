@@ -1,5 +1,6 @@
 import Shape from "./Shape.js";
 import HandleBox from "../components/HandleBox.js";
+import Canvas from "../core/Canvas.js";
 
 class TextBox extends Shape {
     constructor(
@@ -17,20 +18,35 @@ class TextBox extends Shape {
         this.color = color;
         this.width = 0; // Será calculado na renderização
         this.height = fontSize; // Altura inicial baseada no tamanho da fonte
+        this.textBaseline = "top";
+        this.textAlign = "left";
+        this.textRendering = "auto";
+        this.wordSpacing = "0px";
+        this.direction = "ltr";
     }
 
-    draw(context) {
-        context.font = `${this.fontSize}px ${this.fontFamily}`;
-        context.fillStyle = this.color;
-        context.textBaseline = "top"; // Alinha o texto ao topo da caixa
-        context.fillText(this.text, this.x, this.y);
+    /**
+     *
+     * @param {Canvas} canvas
+     */
+    draw(canvas) {
+        canvas
+            .setFont(this.fontSize + "px " + this.fontFamily)
+            .setFillColor(this.color)
+            .setTextBaseline(this.textBaseline)
+            .setTextAlign(this.textAlign)
+            .setDirection(this.direction)
+            .setTextRendering(this.textRendering)
+            .setWordSpacing(this.wordSpacing)
+            .fillText(this.text, this.x, this.y)
+            .restore();
 
         // Calcula a largura do texto para a caixa delimitadora
-        const metrics = context.measureText(this.text);
+        const metrics = canvas.measureText(this.text);
         this.width = metrics.width;
 
         if (this.isSelected) {
-            this.drawSelectionHandles(context);
+            this.drawSelectionHandles(canvas);
         }
     }
 
@@ -58,7 +74,11 @@ class TextBox extends Shape {
         if (newProps.y !== undefined) this.y = newProps.y;
     }
 
-    drawSelectionHandles(context) {
+    /**
+     *
+     * @param {Canvas} canvas
+     */
+    drawSelectionHandles(canvas) {
         // Desenha a borda da caixa de seleção
         new HandleBox(
             this.x,
@@ -67,7 +87,7 @@ class TextBox extends Shape {
             this.height,
             this,
             false
-        ).draw(context);
+        ).draw(canvas);
     }
 }
 

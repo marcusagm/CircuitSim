@@ -1,7 +1,6 @@
 class Tool {
     constructor(canvas, drawingManager) {
         this.canvas = canvas;
-        this.ctx = canvas.ctx;
         this.drawingManager = drawingManager;
         this.isDrawing = false;
         this.startX = 0;

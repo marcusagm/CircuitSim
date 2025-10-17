@@ -1,34 +1,49 @@
 import Shape from "./Shape.js";
 import Handle from "../components/Handle.js";
+import Canvas from "../core/Canvas.js";
 
 class Freehand extends Shape {
     constructor() {
         super(0, 0); // Posição inicial não é relevante para linha livre, será ajustada pelos pontos
         this.points = [];
-        this.lineWidth = 2;
+
+        this.isSelected = false; // Indica se a linha está selecionada para edição
+
+        this.color = "#000000"; // Cor da linha
+        this.lineWidth = 1; // Espessura da linha
+        this.lineDash = []; // Padrão de tracejado
+        this.lineDashOffset = 0; // Deslocamento do tracejado
+        this.lineCap = "butt"; // Estilo da extremidade da linha: 'butt', 'round', 'square'
+        this.lineJoin = "miter"; // Estilo da junção da linha: 'bevel', 'round', 'miter'
     }
 
     addPoint(x, y) {
         this.points.push({ x, y });
     }
 
-    draw(ctx) {
+    /**
+     * Desenha a linha livre no contexto do canvas.
+     * @param {Canvas} canvas - O objeto canvas onde a linha será desenhada.
+     */
+    draw(canvas) {
         if (this.points.length < 2) return;
 
-        ctx.beginPath();
-        ctx.strokeStyle = this.color;
-        ctx.lineWidth = this.lineWidth;
-        ctx.lineJoin = "round";
-        ctx.lineCap = "round";
+        canvas
+            .setStrokeColor(this.color)
+            .setStrokeWidth(this.lineWidth)
+            .setStrokeDash(this.lineDash)
+            .setStrokeDashOffset(this.lineDashOffset)
+            .setStrokeCap(this.lineCap)
+            .setStrokeJoin(this.lineJoin);
 
-        ctx.moveTo(this.points[0].x, this.points[0].y);
+        canvas.moveTo(this.points[0].x, this.points[0].y);
         for (let i = 1; i < this.points.length; i++) {
-            ctx.lineTo(this.points[i].x, this.points[i].y);
+            canvas.lineTo(this.points[i].x, this.points[i].y);
         }
-        ctx.stroke();
+        canvas.stroke().restore();
 
         if (this.isSelected) {
-            this.drawSelectionHandles(ctx);
+            this.drawSelectionHandles(canvas);
         }
     }
 
@@ -86,19 +101,25 @@ class Freehand extends Shape {
         if (newProps.points !== undefined) this.points = newProps.points; // Permite substituir todos os pontos
     }
 
-    drawSelectionHandles(ctx) {
+    /**
+     *
+     * @param {Canvas} canvas
+     */
+    drawSelectionHandles(canvas) {
         if (this.points.length === 0) return;
 
         // Desenha handles nos pontos inicial e final
         const firstPoint = this.points[0];
-        new Handle(firstPoint.x, firstPoint.y, Handle.TYPES.SQUARE).draw(ctx);
+        new Handle(firstPoint.x, firstPoint.y, Handle.TYPES.SQUARE).draw(
+            canvas
+        );
 
         const lastPoint = this.points[this.points.length - 1];
-        new Handle(lastPoint.x, lastPoint.y, Handle.TYPES.SQUARE).draw(ctx);
+        new Handle(lastPoint.x, lastPoint.y, Handle.TYPES.SQUARE).draw(canvas);
 
         // Opcional: desenha um handle em cada ponto (pode ser poluído visualmente)
         this.points.forEach((p) => {
-            new Handle(p.x, p.y, Handle.TYPES.DOT).draw(ctx);
+            new Handle(p.x, p.y, Handle.TYPES.DOT).draw(canvas);
         });
     }
 }
