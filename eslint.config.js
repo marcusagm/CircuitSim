@@ -84,7 +84,16 @@ export default defineConfig([
             // Encourage ES Modules (use `sourceType: module`)
 
             /* ----------------- Magic numbers, logging, todos ----------------- */
-            'no-magic-numbers': ['warn', { ignore: [0, 1], ignoreArrayIndexes: true }],
+            'no-magic-numbers': [
+                'warn',
+                {
+                    ignore: [0, 1, 2],
+                    ignoreArrayIndexes: true,
+                    ignoreDefaultValues: true,
+                    ignoreClassFieldInitialValues: true,
+                    detectObjects: false
+                }
+            ],
             'no-console': ['warn', { allow: ['warn', 'error'] }], // only warn/error allowed
             // Track TO-DO / FIX ME using core rule:
             'no-warning-comments': ['warn', { terms: ['todo', 'fixme'], location: 'anywhere' }],
