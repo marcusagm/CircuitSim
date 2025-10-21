@@ -1,6 +1,6 @@
 {
-    "name": "circuitsim",
-    "description": "O CircuitSim é um aplicativo para planejamento e simulação de circuitos eletrônicos OpenSource.",
+    "name": "WireToucan",
+    "description": "O WireToucan é um aplicativo para planejamento e simulação de circuitos eletrônicos OpenSource.",
     "version": "1.0.0",
     "type": "module",
     "main": "index.html",
@@ -15,12 +15,12 @@
     ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/marcusagm/CircuitSim.git"
+        "url": "git+https://github.com/marcusagm/WireToucan.git"
     },
     "bugs": {
-        "url": "https://github.com/marcusagm/CircuitSim/issues"
+        "url": "https://github.com/marcusagm/WireToucan/issues"
     },
-    "homepage": "https://github.com/marcusagm/CircuitSim#readme",
+    "homepage": "https://github.com/marcusagm/WireToucan#readme",
     "devDependencies": {
         "@eslint/js": "^9.38.0",
         "eslint": "^9.38.0",

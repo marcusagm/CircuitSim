@@ -1,18 +1,18 @@
-# CircuitSim
+# WireToucan
 
-![GitHub repo size](https://img.shields.io/github/repo-size/marcusagm/CircuitSim?style=flat-square)
-![GitHub language count](https://img.shields.io/github/languages/count/marcusagm/CircuitSim?style=flat-square)
-![GitHub forks](https://img.shields.io/github/forks/marcusagm/CircuitSim?style=flat-square)
-![Bitbucket open issues](https://img.shields.io/bitbucket/issues/marcusagm/CircuitSim?style=flat-square)
-![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/marcusagm/CircuitSim?style=flat-square)
-[![License](https://img.shields.io/github/license/marcusagm/CircuitSim?style=flat-square)](LICENSE)
+![GitHub repo size](https://img.shields.io/github/repo-size/marcusagm/WireToucan?style=flat-square)
+![GitHub language count](https://img.shields.io/github/languages/count/marcusagm/WireToucan?style=flat-square)
+![GitHub forks](https://img.shields.io/github/forks/marcusagm/WireToucan?style=flat-square)
+![Bitbucket open issues](https://img.shields.io/bitbucket/issues/marcusagm/WireToucan?style=flat-square)
+![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/marcusagm/WireToucan?style=flat-square)
+[![License](https://img.shields.io/github/license/marcusagm/WireToucan?style=flat-square)](LICENSE)
 
 > [!WARNING]
 > Este projeto ainda está em desenvolvimento em uma fase muito inicial.
 
-CircuitSim is an open-source application for designing and simulating electronic circuits. It is developed with simplicity and efficiency in mind, allowing students, engineers, and electronics enthusiasts to create and test circuits in an intuitive and accessible way.
+WireToucan is an open-source application for designing and simulating electronic circuits. It is developed with simplicity and efficiency in mind, allowing students, engineers, and electronics enthusiasts to create and test circuits in an intuitive and accessible way.
 
-![CircuitSim Screenshot](https://github.com/marcusagm/CircuitSim/raw/main/screenshot.png)
+![WireToucan Screenshot](https://github.com/marcusagm/WireToucan/raw/main/screenshot.png)
 
 ## Features
 
@@ -43,7 +43,7 @@ CircuitSim is an open-source application for designing and simulating electronic
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/marcusagm/CircuitSim.git
+    git clone https://github.com/marcusagm/WireToucan.git
     ```
 
 2. Open `index.html` in your browser to start the application.
