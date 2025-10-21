@@ -166,6 +166,7 @@
  - [ ] Completar a classe canvas e verificar arquitetura e documentação
  - [ ] Utilizar electron
  - [ ] Sistema de atualização
+ - [ ] Mostrar previsualizações de componentes quando estiverem sendo posicionadas, isto é, seleciono um componente para adicionar e enquanto estou movimentando o mouse sobre o canvas, deve aparecer um preview do componente com uma aparencia levemente diferenciada, como baixa opacidade ou cor diferente, para mostrar que é apenas uma previsualização.
 
 ### Atalhos
 
