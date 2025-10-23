@@ -1,4 +1,4 @@
-import Tool from "./Tool.js";
+import Tool from './Tool.js';
 
 class RotateFlipTool extends Tool {
     constructor(canvas, drawingManager) {
@@ -10,6 +10,7 @@ class RotateFlipTool extends Tool {
         // A ferramenta de rotação/inversão opera sobre os elementos selecionados.
         // Não há lógica de ativação/desativação complexa além de garantir que os elementos estejam selecionados.
     }
+    deactivate() {}
 
     onMouseDown(event) {
         // Esta ferramenta não usa arrastar, mas sim ações de clique para rotação/inversão.
@@ -26,21 +27,17 @@ class RotateFlipTool extends Tool {
         if (clickedElement) {
             if (!clickedElement.isSelected) {
                 // Desseleciona outros se não for Ctrl/Cmd
-                this.drawingManager.drawableElements.forEach((el) =>
-                    el.deselect()
-                );
+                this.drawingManager.drawableElements.forEach(el => el.deselect());
                 this.selectedElements = [];
                 clickedElement.select();
                 this.selectedElements.push(clickedElement);
             } else if (event.ctrlKey || event.metaKey) {
                 // Permite deselecionar com Ctrl/Cmd
                 clickedElement.deselect();
-                this.selectedElements = this.selectedElements.filter(
-                    (el) => el !== clickedElement
-                );
+                this.selectedElements = this.selectedElements.filter(el => el !== clickedElement);
             }
         } else {
-            this.drawingManager.drawableElements.forEach((el) => el.deselect());
+            this.drawingManager.drawableElements.forEach(el => el.deselect());
             this.selectedElements = [];
         }
         this.canvas.requestRender();
@@ -57,8 +54,8 @@ class RotateFlipTool extends Tool {
     // Métodos para serem chamados por botões da UI
     rotateSelected(angle) {
         this.drawingManager.drawableElements
-            .filter((el) => el.isSelected)
-            .forEach((el) => {
+            .filter(el => el.isSelected)
+            .forEach(el => {
                 if (el.rotate) {
                     el.rotate(angle);
                 }
@@ -68,8 +65,8 @@ class RotateFlipTool extends Tool {
 
     flipSelectedHorizontal() {
         this.drawingManager.drawableElements
-            .filter((el) => el.isSelected)
-            .forEach((el) => {
+            .filter(el => el.isSelected)
+            .forEach(el => {
                 if (el.flipHorizontal) {
                     el.flipHorizontal();
                 }
@@ -79,8 +76,8 @@ class RotateFlipTool extends Tool {
 
     flipSelectedVertical() {
         this.drawingManager.drawableElements
-            .filter((el) => el.isSelected)
-            .forEach((el) => {
+            .filter(el => el.isSelected)
+            .forEach(el => {
                 if (el.flipVertical) {
                     el.flipVertical();
                 }

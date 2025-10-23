@@ -11,8 +11,8 @@
  * drawingManager.drawAll(canvasContext);
  *
  */
-import Canvas from "../core/Canvas.js";
-import Grid from "../core/Grid.js";
+import Canvas from '../core/Canvas.js';
+import Grid from '../core/Grid.js';
 
 class DrawingManager {
     /**
@@ -57,7 +57,7 @@ class DrawingManager {
      */
     removeElement(drawableElement) {
         this.drawableElements = this.drawableElements.filter(
-            (existingElement) => existingElement !== drawableElement
+            existingElement => existingElement !== drawableElement
         );
         this.canvas.requestRender();
     }
@@ -67,7 +67,7 @@ class DrawingManager {
      * @returns {void}
      */
     drawAll() {
-        this.drawableElements.forEach((drawableElement) => {
+        this.drawableElements.forEach(drawableElement => {
             drawableElement.draw(this.canvas);
         });
     }
@@ -88,7 +88,7 @@ class DrawingManager {
             const drawableElement = this.drawableElements[elementIndex];
             if (
                 drawableElement.isHit &&
-                drawableElement.isHit(coordinateX, coordinateY)
+                drawableElement.isHit(this.canvas, coordinateX, coordinateY)
             ) {
                 return drawableElement;
             }

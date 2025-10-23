@@ -1,5 +1,5 @@
-import Tool from "./Tool.js";
-import ThreePointCurve from "../shapes/ThreePointCurve.js";
+import Tool from './Tool.js';
+import ThreePointCurve from '../shapes/ThreePointCurve.js';
 
 class ThreePointCurveTool extends Tool {
     constructor(canvas, drawingManager) {
@@ -17,6 +17,8 @@ class ThreePointCurveTool extends Tool {
         this.currentCurve = null;
     }
 
+    deactivate() {}
+
     onMouseDown(event) {
         const { x, y } = this.getMouseCoords(event);
 
@@ -30,13 +32,13 @@ class ThreePointCurveTool extends Tool {
         } else if (this.clickCount === 1) {
             // Segundo clique: ponto final
             this.p2 = { x, y };
-            this.currentCurve.x2 = x;
-            this.currentCurve.y2 = y;
+            this.currentCurve.endX = x;
+            this.currentCurve.endY = y;
             this.clickCount++;
         } else if (this.clickCount === 2) {
             // Terceiro clique: ponto de controle
-            this.currentCurve.cx = x;
-            this.currentCurve.cy = y;
+            this.currentCurve.controlX = x;
+            this.currentCurve.controlY = y;
             this.isDrawing = false;
             this.currentCurve = null;
             this.clickCount = 0;
@@ -50,15 +52,15 @@ class ThreePointCurveTool extends Tool {
 
         if (this.clickCount === 1) {
             // Desenhando o ponto final da curva
-            this.currentCurve.x2 = x;
-            this.currentCurve.y2 = y;
+            this.currentCurve.endX = x;
+            this.currentCurve.endY = y;
             // O ponto de controle segue o mouse para visualização
-            this.currentCurve.cx = x;
-            this.currentCurve.cy = y;
+            this.currentCurve.controlX = x;
+            this.currentCurve.controlY = y;
         } else if (this.clickCount === 2) {
             // Desenhando o ponto de controle da curva
-            this.currentCurve.cx = x;
-            this.currentCurve.cy = y;
+            this.currentCurve.controlX = x;
+            this.currentCurve.controlY = y;
         }
         this.canvas.requestRender();
     }

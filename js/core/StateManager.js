@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Manages the state history for multiple objects, allowing undo/redo operations and state restoration.
  * Each object is tracked by a unique identifier, and its states are stored in chronological order.
@@ -40,7 +42,7 @@ class StateManager {
         if (!this.objectStates.has(objectId)) {
             this.objectStates.set(objectId, {
                 states: [initialState],
-                currentIndex: 0,
+                currentIndex: 0
             });
         }
     }
@@ -63,10 +65,7 @@ class StateManager {
         }
         // Remove states ahead if not at the end
         if (objectData.currentIndex < objectData.states.length - 1) {
-            objectData.states = objectData.states.slice(
-                0,
-                objectData.currentIndex + 1
-            );
+            objectData.states = objectData.states.slice(0, objectData.currentIndex + 1);
         }
         objectData.states.push(newState);
         objectData.currentIndex = objectData.states.length - 1;

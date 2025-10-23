@@ -9,9 +9,9 @@
  * const wireTool = new WireTool(canvas, drawingManager);
  * toolManager.addTool('wire', wireTool);
  */
-import Tool from "./Tool.js";
-import Wire from "../components/Wire.js";
-import Terminal from "../components/Terminal.js";
+import Tool from './Tool.js';
+import Wire from '../components/Wire.js';
+import Terminal from '../components/Terminal.js';
 
 class WireTool extends Tool {
     /**
@@ -49,7 +49,7 @@ class WireTool extends Tool {
      */
     activate() {
         this.resetToolState();
-        document.addEventListener("keydown", this.onKeyDown.bind(this));
+        document.addEventListener('keydown', this.onKeyDown.bind(this));
     }
 
     /**
@@ -58,7 +58,7 @@ class WireTool extends Tool {
      */
     deactivate() {
         this.resetToolState();
-        document.removeEventListener("keydown", this.onKeyDown.bind(this));
+        document.removeEventListener('keydown', this.onKeyDown.bind(this));
     }
 
     /**
@@ -97,7 +97,7 @@ class WireTool extends Tool {
         for (const element of this.drawingManager.drawableElements) {
             if (element.terminals) {
                 for (const terminal of element.terminals) {
-                    if (terminal.isHit(coordinateX, coordinateY)) {
+                    if (terminal.isHit(menubar.canvas, coordinateX, coordinateY)) {
                         clickedTerminal = terminal;
                         break;
                     }
@@ -167,8 +167,8 @@ class WireTool extends Tool {
             this.currentWire.path.length > 0
                 ? this.currentWire.path[this.currentWire.path.length - 1]
                 : this.startTerminal
-                ? this.startTerminal.getAbsolutePosition()
-                : this.lastPoint;
+                  ? this.startTerminal.getAbsolutePosition()
+                  : this.lastPoint;
 
         let finalX = currentSnappedPoint.x;
         let finalY = currentSnappedPoint.y;
@@ -200,7 +200,7 @@ class WireTool extends Tool {
             // Update the last point of the path
             this.currentWire.path[this.currentWire.path.length - 1] = {
                 x: finalX,
-                y: finalY,
+                y: finalY
             };
         }
 
@@ -223,7 +223,7 @@ class WireTool extends Tool {
      * @returns {void}
      */
     onKeyDown(event) {
-        if (event.key === "Escape" && this.isDrawingWire) {
+        if (event.key === 'Escape' && this.isDrawingWire) {
             if (this.currentWire) {
                 this.drawingManager.removeElement(this.currentWire);
             }

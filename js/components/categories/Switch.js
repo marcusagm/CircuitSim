@@ -1,4 +1,4 @@
-import Component from "../Component.js";
+import Component from '../Component.js';
 
 class Switch extends Component {
     constructor(x, y, width = 50, height = 30) {
@@ -12,9 +12,10 @@ class Switch extends Component {
             </svg>
         `;
         super(x, y, width, height, svgContent);
-        this.name = "Switch";
-        this.addTerminal("in", 5, height / 2); // Terminal esquerdo
-        this.addTerminal("out", width - 5, height / 2); // Terminal direito
+        this.name = 'Switch';
+        this.terminalsFollowTransform = true;
+        this.addTerminal('in', 5, height / 2); // Terminal esquerdo
+        this.addTerminal('out', width - 5, height / 2); // Terminal direito
     }
 }
 

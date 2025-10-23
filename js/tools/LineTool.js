@@ -1,31 +1,28 @@
-import Tool from "./Tool.js";
-import Line from "../shapes/Line.js";
+import Tool from './Tool.js';
+import Line from '../shapes/Line.js';
 
 class LineTool extends Tool {
     constructor(canvas, drawingManager) {
         super(canvas, drawingManager);
         this.currentLine = null;
     }
+    deactivate() {}
+    activate() {}
 
     onMouseDown(event) {
         this.isDrawing = true;
         const { x, y } = this.getMouseCoords(event);
         this.startX = x;
         this.startY = y;
-        this.currentLine = new Line(
-            this.startX,
-            this.startY,
-            this.startX,
-            this.startY
-        );
+        this.currentLine = new Line(this.startX, this.startY, this.startX, this.startY);
         this.drawingManager.addElement(this.currentLine);
     }
 
     onMouseMove(event) {
         if (!this.isDrawing) return;
         const { x, y } = this.getMouseCoords(event);
-        this.currentLine.x2 = x;
-        this.currentLine.y2 = y;
+        this.currentLine.endX = x;
+        this.currentLine.endY = y;
         this.canvas.requestRender();
     }
 

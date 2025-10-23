@@ -9,8 +9,8 @@
  * const nodeEditTool = new NodeEditTool(canvas, drawingManager);
  * toolManager.addTool('nodeEdit', nodeEditTool);
  */
-import Tool from "./Tool.js";
-import Wire from "../components/Wire.js";
+import Tool from './Tool.js';
+import Wire from '../components/Wire.js';
 
 class NodeEditTool extends Tool {
     /**
@@ -82,15 +82,10 @@ class NodeEditTool extends Tool {
         // First, check if an intermediate node of an already selected wire was clicked
         if (this.selectedWire) {
             // Only points in this.selectedWire.path are draggable by this tool
-            for (
-                let nodeIndex = 0;
-                nodeIndex < this.selectedWire.path.length;
-                nodeIndex++
-            ) {
+            for (let nodeIndex = 0; nodeIndex < this.selectedWire.path.length; nodeIndex++) {
                 const pathNode = this.selectedWire.path[nodeIndex];
                 const distance = Math.sqrt(
-                    Math.pow(coordinateX - pathNode.x, 2) +
-                        Math.pow(coordinateY - pathNode.y, 2)
+                    Math.pow(coordinateX - pathNode.x, 2) + Math.pow(coordinateY - pathNode.y, 2)
                 );
 
                 if (distance < 10) {
@@ -106,10 +101,7 @@ class NodeEditTool extends Tool {
 
         // If no intermediate node was dragged, check if a new wire should be selected
         this.draggingNodePathIndex = -1; // Ensure no dragging is active
-        const clickedElement = this.drawingManager.findElementAt(
-            coordinateX,
-            coordinateY
-        );
+        const clickedElement = this.drawingManager.findElementAt(coordinateX, coordinateY);
 
         if (clickedElement instanceof Wire) {
             if (this.selectedWire !== clickedElement) {
@@ -144,8 +136,8 @@ class NodeEditTool extends Tool {
         const deltaY = coordinateY - this.dragStartY;
 
         // Calculate new node position without initial snapping
-        let newX = this.initialNodePosition.x + deltaX;
-        let newY = this.initialNodePosition.y + deltaY;
+        const newX = this.initialNodePosition.x + deltaX;
+        const newY = this.initialNodePosition.y + deltaY;
 
         // Apply snapping to the new position
         const snappedX =

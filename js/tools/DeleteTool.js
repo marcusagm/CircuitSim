@@ -1,9 +1,11 @@
-import Tool from "./Tool.js";
+import Tool from './Tool.js';
 
 class DeleteTool extends Tool {
     constructor(canvas, drawingManager) {
         super(canvas, drawingManager);
     }
+    deactivate() {}
+    activate() {}
 
     onMouseDown(event) {
         const { x, y } = this.getMouseCoords(event);
@@ -11,7 +13,7 @@ class DeleteTool extends Tool {
 
         if (clickedElement) {
             // Se o elemento clicado for um fio, remover as referências dos terminais
-            if (clickedElement.constructor.name === "Wire") {
+            if (clickedElement.constructor.name === 'Wire') {
                 if (clickedElement.startTerminal) {
                     clickedElement.startTerminal.removeWire(clickedElement);
                 }

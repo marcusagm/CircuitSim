@@ -11,7 +11,7 @@
  * const gridOverlay = new Grid(canvasElement, gridCellSize);
  * gridOverlay.draw();
  */
-import Canvas from "./Canvas.js";
+import Canvas from './Canvas.js';
 
 class Grid {
     /**
@@ -33,7 +33,7 @@ class Grid {
          * The color used to draw the grid lines.
          * @type {string}
          */
-        this.gridLineColor = "#bbeeeeff";
+        this.gridLineColor = '#bbeeeeff';
     }
 
     /**
@@ -44,11 +44,11 @@ class Grid {
      * @returns {void}
      */
     draw() {
-        this.canvas.context.beginPath();
-        this.canvas.context.strokeStyle = this.gridLineColor;
-        this.canvas.context.lineWidth = 0.5;
-        this.canvas.context.lineCap = "round";
-        this.canvas.context.setLineDash([0.25, this.gridCellSize / 2]);
+        this.canvas.beginPath();
+        this.canvas.setStrokeColor(this.gridLineColor);
+        this.canvas.setStrokeWidth(0.5);
+        this.canvas.setStrokeCap('round');
+        this.canvas.setStrokeDash([0.25, this.gridCellSize / 2]);
 
         // Draw vertical grid lines
         for (
@@ -56,8 +56,8 @@ class Grid {
             currentXPosition <= this.canvas.width;
             currentXPosition += this.gridCellSize
         ) {
-            this.canvas.context.moveTo(currentXPosition, 0);
-            this.canvas.context.lineTo(currentXPosition, this.canvas.height);
+            this.canvas.moveTo(currentXPosition, 0);
+            this.canvas.lineTo(currentXPosition, this.canvas.height);
         }
 
         // Draw horizontal grid lines
@@ -66,13 +66,13 @@ class Grid {
             currentYPosition <= this.canvas.height;
             currentYPosition += this.gridCellSize
         ) {
-            this.canvas.context.moveTo(0, currentYPosition);
-            this.canvas.context.lineTo(this.canvas.width, currentYPosition);
+            this.canvas.moveTo(0, currentYPosition);
+            this.canvas.lineTo(this.canvas.width, currentYPosition);
         }
 
-        this.canvas.context.stroke();
-        this.canvas.context.closePath();
-        this.canvas.context.setLineDash([]);
+        this.canvas.stroke();
+        this.canvas.closePath();
+        this.canvas.restore();
         this.canvas.requestRender();
     }
 }

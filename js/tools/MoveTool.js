@@ -1,4 +1,4 @@
-import Tool from "./Tool.js";
+import Tool from './Tool.js';
 
 class MoveTool extends Tool {
     constructor(canvas, drawingManager) {
@@ -26,8 +26,9 @@ class MoveTool extends Tool {
         const { x, y } = this.getMouseCoords(event);
 
         // Obter elementos selecionados do DrawingManager (que é a fonte da verdade para a seleção)
-        let currentlySelectedElements =
-            this.drawingManager.drawableElements.filter((el) => el.isSelected);
+        const currentlySelectedElements = this.drawingManager.drawableElements.filter(
+            el => el.isSelected
+        );
         const clickedElement = this.drawingManager.findElementAt(x, y);
 
         if (clickedElement) {
@@ -36,15 +37,13 @@ class MoveTool extends Tool {
                 this.elementsToMove = currentlySelectedElements;
             } else {
                 // Se o elemento clicado NÃO está selecionado, deseleciona tudo e seleciona apenas este
-                this.drawingManager.drawableElements.forEach((el) =>
-                    el.deselect()
-                );
+                this.drawingManager.drawableElements.forEach(el => el.deselect());
                 clickedElement.select();
                 this.elementsToMove = [clickedElement];
             }
         } else {
             // Clicou no vazio, deseleciona tudo
-            this.drawingManager.drawableElements.forEach((el) => el.deselect());
+            this.drawingManager.drawableElements.forEach(el => el.deselect());
             this.elementsToMove = [];
         }
 
@@ -63,7 +62,7 @@ class MoveTool extends Tool {
         const dx = x - this.dragStartX;
         const dy = y - this.dragStartY;
 
-        this.elementsToMove.forEach((el) => {
+        this.elementsToMove.forEach(el => {
             el.move(dx, dy);
         });
 

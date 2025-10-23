@@ -1,4 +1,6 @@
-import Component from "../Component.js";
+'use strict';
+
+import Component from '../Component.js';
 
 class Connector extends Component {
     constructor(x, y, width = 30, height = 30) {
@@ -14,9 +16,10 @@ class Connector extends Component {
             </svg>
         `;
         super(x, y, width, height, svgContent);
-        this.name = "Connector";
-        this.addTerminal("pin1", 0, height / 2);
-        this.addTerminal("pin2", width, height / 2);
+        this.name = 'Connector';
+        this.terminalsFollowTransform = true;
+        this.addTerminal('pin1', 0, height / 2);
+        this.addTerminal('pin2', width, height / 2);
     }
 }
 

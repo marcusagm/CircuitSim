@@ -1,7 +1,9 @@
-import Component from "../Component.js";
+'use strict';
+
+import Component from '../Component.js';
 
 class Active extends Component {
-    constructor(x, y, width = 50, height = 50) {
+    constructor(positionX, positionY, width = 50, height = 50) {
         // Exemplo de SVG para um transistor NPN simples (placeholder)
         const svgContent = `
             <svg width="${width}" height="${height}" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -11,11 +13,13 @@ class Active extends Component {
                 <text x="25" y="48" font-family="Arial" font-size="8" text-anchor="middle" fill="black">Q</text>
             </svg>
         `;
-        super(x, y, width, height, svgContent);
-        this.name = "Active Component";
-        this.addTerminal("collector", width / 2, 0); // Top
-        this.addTerminal("base", 0, height * 0.7); // Left
-        this.addTerminal("emitter", width / 2, height); // Bottom
+        super(positionX, positionY, width, height, svgContent);
+        this.name = 'Active Component';
+
+        this.terminalsFollowTransform = true;
+        this.addTerminal('collector', width / 2, 0); // Top
+        this.addTerminal('base', 0, height * 0.7); // Left
+        this.addTerminal('emitter', width / 2, height); // Bottom
     }
 }
 

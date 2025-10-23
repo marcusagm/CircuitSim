@@ -1,11 +1,13 @@
-import Tool from "./Tool.js";
-import Freehand from "../shapes/Freehand.js";
+import Tool from './Tool.js';
+import Freehand from '../shapes/Freehand.js';
 
 class FreehandTool extends Tool {
     constructor(canvas, drawingManager) {
         super(canvas, drawingManager);
         this.currentFreehand = null;
     }
+    deactivate() {}
+    activate() {}
 
     onMouseDown(event) {
         this.isDrawing = true;

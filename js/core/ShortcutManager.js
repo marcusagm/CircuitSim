@@ -20,27 +20,27 @@
  * manager.register('closeShortcut', [ShortcutManager.KEYS.CTRL, ShortcutManager.KEYS.W], () => { ... });
  * ```
  */
-class ShortcutManager {
+export default class ShortcutManager {
     /**
      * Special key constants for use in shortcut definitions.
      * Example: ShortcutManager.KEYS.CTRL
      * @type {Object<string, string>}
      */
     static KEYS = {
-        CTRL: "Control",
-        SHIFT: "Shift",
-        ALT: "Alt",
-        META: "Meta",
-        ENTER: "Enter",
-        ESC: "Escape",
-        SPACE: " ",
-        TAB: "Tab",
-        BACKSPACE: "Backspace",
-        DELETE: "Delete",
-        UP: "ArrowUp",
-        DOWN: "ArrowDown",
-        LEFT: "ArrowLeft",
-        RIGHT: "ArrowRight",
+        CTRL: 'Control',
+        SHIFT: 'Shift',
+        ALT: 'Alt',
+        META: 'Meta',
+        ENTER: 'Enter',
+        ESC: 'Escape',
+        SPACE: ' ',
+        TAB: 'Tab',
+        BACKSPACE: 'Backspace',
+        DELETE: 'Delete',
+        UP: 'ArrowUp',
+        DOWN: 'ArrowDown',
+        LEFT: 'ArrowLeft',
+        RIGHT: 'ArrowRight'
     };
 
     /**
@@ -67,14 +67,10 @@ class ShortcutManager {
      * @returns {void}
      */
     initializeEventListeners() {
+        this.targetElement.addEventListener('keydown', this.keyDownListener, true);
         this.targetElement.addEventListener(
-            "keydown",
-            this.keyDownListener,
-            true
-        );
-        this.targetElement.addEventListener(
-            "keyup",
-            (keyboardEvent) => {
+            'keyup',
+            keyboardEvent => {
                 this.currentlyPressedKeys.delete(keyboardEvent.key);
             },
             true
@@ -95,7 +91,7 @@ class ShortcutManager {
             ShortcutManager.KEYS.CTRL,
             ShortcutManager.KEYS.SHIFT,
             ShortcutManager.KEYS.ALT,
-            ShortcutManager.KEYS.META,
+            ShortcutManager.KEYS.META
         ];
         const sortedKeys = [...keyList].sort((firstKey, secondKey) => {
             const firstKeyIndex = modifierKeys.indexOf(firstKey);
@@ -106,7 +102,7 @@ class ShortcutManager {
             if (secondKeyIndex !== -1) return 1;
             return firstKey.localeCompare(secondKey);
         });
-        return sortedKeys.join("+");
+        return sortedKeys.join('+');
     }
 
     /**
@@ -122,12 +118,12 @@ class ShortcutManager {
      */
     register(shortcutKey, keyCombination, callbackFunction) {
         const shortcutString =
-            typeof keyCombination === "string"
+            typeof keyCombination === 'string'
                 ? keyCombination
                 : ShortcutManager.normalizeShortcut(keyCombination);
         this.shortcutRegistry.set(shortcutKey, {
             shortcutString,
-            callbackFunction,
+            callbackFunction
         });
     }
 
@@ -145,15 +141,14 @@ class ShortcutManager {
     updateShortcut(shortcutKey, newKeyCombination, newCallbackFunction) {
         if (!this.shortcutRegistry.has(shortcutKey)) return false;
         const shortcutString =
-            typeof newKeyCombination === "string"
+            typeof newKeyCombination === 'string'
                 ? newKeyCombination
                 : ShortcutManager.normalizeShortcut(newKeyCombination);
         const callbackFunction =
-            newCallbackFunction ||
-            this.shortcutRegistry.get(shortcutKey).callbackFunction;
+            newCallbackFunction || this.shortcutRegistry.get(shortcutKey).callbackFunction;
         this.shortcutRegistry.set(shortcutKey, {
             shortcutString,
-            callbackFunction,
+            callbackFunction
         });
         return true;
     }
@@ -196,7 +191,7 @@ class ShortcutManager {
             ([shortcutKey, { shortcutString, callbackFunction }]) => ({
                 shortcutKey,
                 shortcutString,
-                callbackFunction,
+                callbackFunction
             })
         );
     }
@@ -239,12 +234,11 @@ class ShortcutManager {
             pressedKeyList.push(keyboardEvent.key);
         }
 
-        const shortcutString =
-            ShortcutManager.normalizeShortcut(pressedKeyList);
+        const shortcutString = ShortcutManager.normalizeShortcut(pressedKeyList);
 
         for (const {
             shortcutString: registeredShortcutString,
-            callbackFunction,
+            callbackFunction
         } of this.shortcutRegistry.values()) {
             if (registeredShortcutString === shortcutString) {
                 keyboardEvent.preventDefault();
@@ -262,11 +256,7 @@ class ShortcutManager {
      * manager.destroy();
      */
     destroy() {
-        this.targetElement.removeEventListener(
-            "keydown",
-            this.keyDownListener,
-            true
-        );
+        this.targetElement.removeEventListener('keydown', this.keyDownListener, true);
         this.clear();
     }
 }

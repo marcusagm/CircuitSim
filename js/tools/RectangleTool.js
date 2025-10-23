@@ -1,11 +1,13 @@
-import Tool from "./Tool.js";
-import Rectangle from "../shapes/Rectangle.js";
+import Tool from './Tool.js';
+import Rectangle from '../shapes/Rectangle.js';
 
 class RectangleTool extends Tool {
     constructor(canvas, drawingManager) {
         super(canvas, drawingManager);
         this.currentRectangle = null;
     }
+    deactivate() {}
+    activate() {}
 
     onMouseDown(event) {
         this.isDrawing = true;
@@ -34,14 +36,9 @@ class RectangleTool extends Tool {
         }
         if (this.currentRectangle.height < 0) {
             this.currentRectangle.y += this.currentRectangle.height;
-            this.currentRectangle.height = Math.abs(
-                this.currentRectangle.height
-            );
+            this.currentRectangle.height = Math.abs(this.currentRectangle.height);
         }
-        if (
-            this.currentRectangle.width === 0 ||
-            this.currentRectangle.height === 0
-        ) {
+        if (this.currentRectangle.width === 0 || this.currentRectangle.height === 0) {
             this.drawingManager.removeElement(this.currentRectangle);
         }
         this.currentRectangle = null;

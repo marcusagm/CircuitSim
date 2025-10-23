@@ -1,7 +1,7 @@
-import Component from "../Component.js";
+import Component from '../Component.js';
 
 class Meter extends Component {
-    constructor(x, y, width = 50, height = 50) {
+    constructor(positionX, positionY, width = 50, height = 50) {
         // Exemplo de SVG para um medidor simples (placeholder)
         const svgContent = `
             <svg width="${width}" height="${height}" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -11,11 +11,12 @@ class Meter extends Component {
                 <text x="25" y="40" font-family="Arial" font-size="10" text-anchor="middle" fill="black">V</text>
             </svg>
         `;
-        super(x, y, width, height, svgContent);
-        this.name = "Meter";
+        super(positionX, positionY, width, height, svgContent);
+        this.name = 'Meter';
+        this.terminalsFollowTransform = true;
         // Adiciona terminais (exemplo: dois terminais para um voltímetro)
-        this.addTerminal("in", 0, height / 2); // Terminal esquerdo
-        this.addTerminal("out", width, height / 2); // Terminal direito
+        this.addTerminal('in', 0, height / 2); // Terminal esquerdo
+        this.addTerminal('out', width, height / 2); // Terminal direito
     }
 }
 

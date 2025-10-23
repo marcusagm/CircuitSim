@@ -1,10 +1,12 @@
-import Tool from "./Tool.js";
-import Point from "../shapes/Point.js";
+import Tool from './Tool.js';
+import Point from '../shapes/Point.js';
 
 class PointTool extends Tool {
     constructor(canvas, drawingManager) {
         super(canvas, drawingManager);
     }
+    deactivate() {}
+    activate() {}
 
     onMouseDown(event) {
         const { x, y } = this.getMouseCoords(event);

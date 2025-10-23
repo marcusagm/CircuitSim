@@ -1,5 +1,5 @@
-import Tool from "./Tool.js";
-import BezierCurve from "../shapes/BezierCurve.js";
+import Tool from './Tool.js';
+import BezierCurve from '../shapes/BezierCurve.js';
 
 class BezierCurveTool extends Tool {
     constructor(canvas, drawingManager) {
@@ -15,12 +15,12 @@ class BezierCurveTool extends Tool {
 
     activate() {
         this.reset();
-        document.addEventListener("keydown", this.boundKeyDown);
+        document.addEventListener('keydown', this.boundKeyDown);
     }
 
     deactivate() {
         this.reset();
-        document.removeEventListener("keydown", this.boundKeyDown);
+        document.removeEventListener('keydown', this.boundKeyDown);
     }
 
     reset() {
@@ -35,7 +35,7 @@ class BezierCurveTool extends Tool {
     }
 
     onKeyDown(event) {
-        if (event.key === "Escape" && this.isDrawing) {
+        if (event.key === 'Escape' && this.isDrawing) {
             this.reset();
         }
     }
@@ -78,22 +78,22 @@ class BezierCurveTool extends Tool {
         // Atualiza o ponto que está sendo desenhado
         if (this.clickCount === 1) {
             // Ponto de controle 1 e ponto final (para visualização)
-            this.currentCurve.cx1 = x;
-            this.currentCurve.cy1 = y;
-            this.currentCurve.cx2 = x; // Temporariamente
-            this.currentCurve.cy2 = y; // Temporariamente
-            this.currentCurve.x2 = x;
-            this.currentCurve.y2 = y;
+            this.currentCurve.control1X = x;
+            this.currentCurve.control1Y = y;
+            this.currentCurve.control2X = x; // Temporariamente
+            this.currentCurve.control2Y = y; // Temporariamente
+            this.currentCurve.endX = x;
+            this.currentCurve.endY = y;
         } else if (this.clickCount === 2) {
             // Ponto de controle 2 e ponto final (para visualização)
-            this.currentCurve.cx2 = x;
-            this.currentCurve.cy2 = y;
-            this.currentCurve.x2 = x;
-            this.currentCurve.y2 = y;
+            this.currentCurve.control2X = x;
+            this.currentCurve.control2Y = y;
+            this.currentCurve.endX = x;
+            this.currentCurve.endY = y;
         } else if (this.clickCount === 3) {
             // Ponto final
-            this.currentCurve.x2 = x;
-            this.currentCurve.y2 = y;
+            this.currentCurve.endX = x;
+            this.currentCurve.endY = y;
         }
         this.canvas.requestRender();
     }
@@ -105,34 +105,34 @@ class BezierCurveTool extends Tool {
     updateCurvePoints() {
         // Garante que temos pelo menos 4 pontos para uma curva Bezier completa
         if (this.points.length >= 4) {
-            this.currentCurve.x1 = this.points[0].x;
-            this.currentCurve.y1 = this.points[0].y;
-            this.currentCurve.cx1 = this.points[1].x;
-            this.currentCurve.cy1 = this.points[1].y;
-            this.currentCurve.cx2 = this.points[2].x;
-            this.currentCurve.cy2 = this.points[2].y;
-            this.currentCurve.x2 = this.points[3].x;
-            this.currentCurve.y2 = this.points[3].y;
+            this.currentCurve.startX = this.points[0].x;
+            this.currentCurve.startY = this.points[0].y;
+            this.currentCurve.control1X = this.points[1].x;
+            this.currentCurve.control1Y = this.points[1].y;
+            this.currentCurve.control2X = this.points[2].x;
+            this.currentCurve.control2Y = this.points[2].y;
+            this.currentCurve.endX = this.points[3].x;
+            this.currentCurve.endY = this.points[3].y;
         } else if (this.points.length === 3) {
             // Se tivermos 3 pontos, o último é o cp2 e o end point é o mesmo
-            this.currentCurve.x1 = this.points[0].x;
-            this.currentCurve.y1 = this.points[0].y;
-            this.currentCurve.cx1 = this.points[1].x;
-            this.currentCurve.cy1 = this.points[1].y;
-            this.currentCurve.cx2 = this.points[2].x;
-            this.currentCurve.cy2 = this.points[2].y;
-            this.currentCurve.x2 = this.points[2].x;
-            this.currentCurve.y2 = this.points[2].y;
+            this.currentCurve.startX = this.points[0].x;
+            this.currentCurve.startY = this.points[0].y;
+            this.currentCurve.control1X = this.points[1].x;
+            this.currentCurve.control1Y = this.points[1].y;
+            this.currentCurve.control2X = this.points[2].x;
+            this.currentCurve.control2Y = this.points[2].y;
+            this.currentCurve.endX = this.points[2].x;
+            this.currentCurve.endY = this.points[2].y;
         } else if (this.points.length === 2) {
             // Se tivermos 2 pontos, o segundo é o cp1 e o cp2 e end point são o mesmo
-            this.currentCurve.x1 = this.points[0].x;
-            this.currentCurve.y1 = this.points[0].y;
-            this.currentCurve.cx1 = this.points[1].x;
-            this.currentCurve.cy1 = this.points[1].y;
-            this.currentCurve.cx2 = this.points[1].x;
-            this.currentCurve.cy2 = this.points[1].y;
-            this.currentCurve.x2 = this.points[1].x;
-            this.currentCurve.y2 = this.points[1].y;
+            this.currentCurve.startX = this.points[0].x;
+            this.currentCurve.startY = this.points[0].y;
+            this.currentCurve.control1X = this.points[1].x;
+            this.currentCurve.control1Y = this.points[1].y;
+            this.currentCurve.control2X = this.points[1].x;
+            this.currentCurve.control2Y = this.points[1].y;
+            this.currentCurve.endX = this.points[1].x;
+            this.currentCurve.endY = this.points[1].y;
         }
     }
 }

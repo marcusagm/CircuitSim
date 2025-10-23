@@ -1,4 +1,4 @@
-import Tool from "./Tool.js";
+import Tool from './Tool.js';
 
 class ComponentTool extends Tool {
     constructor(canvas, drawingManager, componentClass, componentName) {
@@ -6,6 +6,8 @@ class ComponentTool extends Tool {
         this.componentClass = componentClass;
         this.componentName = componentName;
     }
+    deactivate() {}
+    activate() {}
 
     onMouseDown(event) {
         const { x, y } = this.getMouseCoords(event);

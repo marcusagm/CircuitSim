@@ -1,11 +1,13 @@
-import Tool from "./Tool.js";
-import Circle from "../shapes/Circle.js";
+import Tool from './Tool.js';
+import Circle from '../shapes/Circle.js';
 
 class CircleTool extends Tool {
     constructor(canvas, drawingManager) {
         super(canvas, drawingManager);
         this.currentCircle = null;
     }
+    deactivate() {}
+    activate() {}
 
     onMouseDown(event) {
         this.isDrawing = true;
@@ -19,9 +21,7 @@ class CircleTool extends Tool {
     onMouseMove(event) {
         if (!this.isDrawing) return;
         const { x, y } = this.getMouseCoords(event);
-        const radius = Math.sqrt(
-            Math.pow(x - this.startX, 2) + Math.pow(y - this.startY, 2)
-        );
+        const radius = Math.sqrt(Math.pow(x - this.startX, 2) + Math.pow(y - this.startY, 2));
         this.currentCircle.radius = radius;
         this.canvas.requestRender();
     }
