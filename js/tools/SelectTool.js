@@ -16,13 +16,14 @@ class SelectTool extends Tool {
 
     // Este método agora deseleciona todos os elementos no drawingManager
     deselectAll() {
-        this.drawingManager.drawableElements.forEach(el => el.deselect());
+        this.drawingManager.elements.forEach(el => el.deselect());
         this.canvas.requestRender();
     }
 
     onMouseDown(event) {
         const { x, y } = this.getMouseCoords(event);
         const clickedElement = this.drawingManager.findElementAt(x, y);
+        console.log(clickedElement);
 
         if (event.ctrlKey || event.metaKey) {
             // Ctrl/Cmd para seleção múltipla

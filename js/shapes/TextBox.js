@@ -4,8 +4,6 @@
  *
  * Extends the base Shape class to provide specific drawing and interaction logic for text boxes.
  */
-// eslint-disable-next-line no-unused-vars
-import Canvas from '../core/Canvas.js';
 import Shape from './Shape.js';
 import HandleBox from '../components/HandleBox.js';
 
@@ -171,7 +169,7 @@ export default class TextBox extends Shape {
     /**
      * Draws the text box on the given canvas context.
      *
-     * @param {Canvas} canvas - The canvas instance to draw on.
+     * @param {import('../core/Canvas.js').default} canvas - Canvas abstraction used by the project.
      * @returns {void}
      */
     draw(canvas) {
@@ -236,7 +234,7 @@ export default class TextBox extends Shape {
      * Find the largest prefix length (characters) of inputString that fits into maxWidth (pixels).
      * Uses binary search and reads width from canvas.measureText(...).width
      *
-     * @param {Canvas} canvas - Canvas rendering context.
+     * @param {import('../core/Canvas.js').default} canvas - Canvas abstraction used by the project.
      * @param {string} inputString - Input string to test.
      * @param {number} maxWidth - Maximum width in pixels.
      * @returns {number} Number of characters from start of inputString that fit (0 if none).
@@ -265,7 +263,7 @@ export default class TextBox extends Shape {
      * Return an approximation string of spaces whose rendered width is approximately targetWidth.
      * This uses repeated ' ' characters measured via canvasContext.measureText.
      *
-     * @param {Canvas} canvas - Canvas rendering context.
+     * @param {import('../core/Canvas.js').default} canvas - Canvas abstraction used by the project.
      * @param {number} targetWidth - Target width in pixels.
      * @returns {string} A string containing repeated spaces.
      */
@@ -280,7 +278,7 @@ export default class TextBox extends Shape {
      * Expects lineTokens array which alternates words and space tokens (e.g. ['word','  ','word', ...]).
      * Returns a single string with additional spaces approximated to fill availableWidth.
      *
-     * @param {Canvas} canvas - Canvas rendering context.
+     * @param {import('../core/Canvas.js').default} canvas - Canvas abstraction used by the project.
      * @param {string[]} lineTokens - Tokens (words and space tokens) that compose the line.
      * @param {number} availableWidth - Pixel width available for the text (indent already accounted).
      * @returns {string} Justified line string.
@@ -329,7 +327,7 @@ export default class TextBox extends Shape {
      * Align a single line (left / right / center).
      * This method returns a new string where leading spaces are added to approximate the alignment.
      *
-     * @param {Canvas} canvas - Canvas rendering context.
+     * @param {import('../core/Canvas.js').default} canvas - Canvas abstraction used by the project.
      * @param {string} lineText - The line text (without indent).
      * @param {number} availableWidth - Width available for the text in pixels.
      * @returns {string} Aligned line string (leading spaces possible).
@@ -359,7 +357,7 @@ export default class TextBox extends Shape {
     /**
      * Calculate maximum width (in pixels) among provided lines.
      *
-     * @param {Canvas} canvas - Canvas rendering context.
+     * @param {import('../core/Canvas.js').default} canvas - Canvas abstraction used by the project.
      * @param {string[]} lines - Array of line strings.
      * @returns {number} Maximum width in pixels.
      */
@@ -385,7 +383,7 @@ export default class TextBox extends Shape {
 
     /**
      * Measure width of a space token.
-     * @param {Canvas} canvas
+     * @param {import('../core/Canvas.js').default} canvas - Canvas abstraction used by the project.
      * @param {string} token
      * @returns {number}
      */
@@ -395,7 +393,7 @@ export default class TextBox extends Shape {
 
     /**
      * Measure width of a word token.
-     * @param {Canvas} canvas
+     * @param {import('../core/Canvas.js').default} canvas - Canvas abstraction used by the project.
      * @param {string} token
      * @returns {number}
      */
@@ -406,7 +404,7 @@ export default class TextBox extends Shape {
     /**
      * Try to append a space token to the current line.
      * Returns true if token was consumed (appended or skipped), false if it should remain for next line.
-     * @param {Canvas} canvas
+     * @param {import('../core/Canvas.js').default} canvas - Canvas abstraction used by the project.
      * @param {string} token
      * @param {Array<string>} lineTokens
      * @param {number} lineWidth
@@ -441,7 +439,7 @@ export default class TextBox extends Shape {
      * If consumed = true and partRemaining is non-null: the original token was split and partRemaining is the leftover token.
      * If consumed = false: caller should finish current line and retry token on next line.
      *
-     * @param {Canvas} canvas
+     * @param {import('../core/Canvas.js').default} canvas - Canvas abstraction used by the project.
      * @param {string} token
      * @param {Array<string>} lineTokens
      * @param {number} lineWidth
@@ -488,7 +486,7 @@ export default class TextBox extends Shape {
 
     /**
      * Finalize a built line: apply alignment/justification (if finite width) and prefix indent spaces.
-     * @param {Canvas} canvas
+     * @param {import('../core/Canvas.js').default} canvas - Canvas abstraction used by the project.
      * @param {Array<string>} lineTokens
      * @param {boolean} isLastLineOfParagraph
      * @param {number} availableTextWidthForThisLine
@@ -521,7 +519,7 @@ export default class TextBox extends Shape {
 
     /**
      * Wrap a single paragraph into lines. Delegates branching to small helpers to keep complexity low.
-     * @param {Canvas} canvas
+     * @param {import('../core/Canvas.js').default} canvas - Canvas abstraction used by the project.
      * @param {string} paragraphText
      * @param {number} baseAvailableTextWidth
      * @param {boolean} explicitWidthWasProvided
@@ -624,7 +622,7 @@ export default class TextBox extends Shape {
      *
      * Public API: returns an object { lines: string[], textHeight: number, boxHeight: number }
      *
-     * @param {Canvas} canvas - Canvas rendering context (must have font set to me.fontSize + 'px ' + me.fontFamily).
+     * @param {import('../core/Canvas.js').default} canvas - Canvas abstraction used by the project.
      * @returns {{lines: string[], textHeight: number, boxHeight: number}} Wrapped lines and computed heights in pixels.
      */
     layoutLines(canvas) {
@@ -670,7 +668,7 @@ export default class TextBox extends Shape {
     /**
      * Checks if the given coordinates hit the text box.
      *
-     * @param {Canvas} canvas - Canvas rendering context.
+     * @param {import('../core/Canvas.js').default} canvas - Canvas abstraction used by the project.
      * @param {number} checkingXCoordinate - The X coordinate to check.
      * @param {number} checkingYCoordinate - The Y coordinate to check.
      * @returns {boolean} True if the coordinates hit the text box, false otherwise.
@@ -758,7 +756,7 @@ export default class TextBox extends Shape {
     /**
      * Draw selection handles
      *
-     * @param {Canvas} canvas - Canvas rendering context.
+     * @param {import('../core/Canvas.js').default} canvas - Canvas abstraction used by the project.
      */
     drawSelectionHandles(canvas) {
         const me = this;

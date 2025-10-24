@@ -11,7 +11,6 @@
  */
 import Tool from './Tool.js';
 import Wire from '../components/Wire.js';
-import Terminal from '../components/Terminal.js';
 
 class WireTool extends Tool {
     /**

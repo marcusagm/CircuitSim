@@ -1,4 +1,4 @@
-import Component from "../Component.js";
+import Component from '../Component.js';
 
 class Microcontroller extends Component {
     constructor(x, y, width = 80, height = 60) {
@@ -18,16 +18,17 @@ class Microcontroller extends Component {
             </svg>
         `;
         super(x, y, width, height, svgContent);
-        this.name = "Microcontroller";
+        this.name = 'Microcontroller';
+        this.terminalsFollowTransform = true;
         // Adiciona alguns terminais de exemplo
-        this.addTerminal("P0", 5, 15);
-        this.addTerminal("P1", 5, 25);
-        this.addTerminal("P2", 5, 35);
-        this.addTerminal("P3", 5, 45);
-        this.addTerminal("P4", width - 5, 15);
-        this.addTerminal("P5", width - 5, 25);
-        this.addTerminal("P6", width - 5, 35);
-        this.addTerminal("P7", width - 5, 45);
+        this.addTerminal('P0', 5, 15);
+        this.addTerminal('P1', 5, 25);
+        this.addTerminal('P2', 5, 35);
+        this.addTerminal('P3', 5, 45);
+        this.addTerminal('P4', width - 5, 15);
+        this.addTerminal('P5', width - 5, 25);
+        this.addTerminal('P6', width - 5, 35);
+        this.addTerminal('P7', width - 5, 45);
     }
 }
 

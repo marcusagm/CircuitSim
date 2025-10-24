@@ -1,4 +1,4 @@
-import Component from "../Component.js";
+import Component from '../Component.js';
 
 class Passive extends Component {
     constructor(x, y, width = 50, height = 20) {
@@ -11,9 +11,10 @@ class Passive extends Component {
             </svg>
         `;
         super(x, y, width, height, svgContent);
-        this.name = "Passive";
-        this.addTerminal("left", 0, height / 2);
-        this.addTerminal("right", width, height / 2);
+        this.name = 'Passive';
+        this.terminalsFollowTransform = true;
+        this.addTerminal('left', 0, height / 2);
+        this.addTerminal('right', width, height / 2);
     }
 }
 

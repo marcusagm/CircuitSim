@@ -1,4 +1,4 @@
-import Component from "../Component.js";
+import Component from '../Component.js';
 
 class LogicGate extends Component {
     constructor(x, y, width = 60, height = 40) {
@@ -14,10 +14,11 @@ class LogicGate extends Component {
             </svg>
         `;
         super(x, y, width, height, svgContent);
-        this.name = "Logic Gate";
-        this.addTerminal("in1", 0, height * 0.375);
-        this.addTerminal("in2", 0, height * 0.625);
-        this.addTerminal("out", width, height / 2);
+        this.name = 'Logic Gate';
+        this.terminalsFollowTransform = true;
+        this.addTerminal('in1', 0, height * 0.375);
+        this.addTerminal('in2', 0, height * 0.625);
+        this.addTerminal('out', width, height / 2);
     }
 }
 

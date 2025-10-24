@@ -13,7 +13,7 @@
  * manager.undoObjectState('obj1'); // Returns { value: 1 }
  * manager.redoObjectState('obj1'); // Returns { value: 2 }
  */
-class StateManager {
+export default class StateManager {
     /**
      * Constructs a new StateManager instance.
      * Initializes the internal Map to store object states.
@@ -217,5 +217,3 @@ class StateManager {
         return objectData.states[objectData.currentIndex];
     }
 }
-
-module.exports = StateManager;

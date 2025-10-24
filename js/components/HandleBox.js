@@ -121,7 +121,7 @@ export default class HandleBox {
         positionY,
         width,
         height,
-        parentComponent,
+        parentComponent = null,
         showCenterHandles = true,
         isDashed = true,
         borderSize = 1,

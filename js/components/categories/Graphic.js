@@ -1,4 +1,4 @@
-import Component from "../Component.js";
+import Component from '../Component.js';
 
 class Graphic extends Component {
     constructor(x, y, width = 60, height = 40) {
@@ -12,12 +12,13 @@ class Graphic extends Component {
             </svg>
         `;
         super(x, y, width, height, svgContent);
-        this.name = "Graphic Display";
+        this.name = 'Graphic Display';
+        this.terminalsFollowTransform = true;
         // Adiciona terminais de exemplo
-        this.addTerminal("data0", 0, height * 0.25);
-        this.addTerminal("data1", 0, height * 0.75);
-        this.addTerminal("vcc", width * 0.25, height);
-        this.addTerminal("gnd", width * 0.75, height);
+        this.addTerminal('data0', 0, height * 0.25);
+        this.addTerminal('data1', 0, height * 0.75);
+        this.addTerminal('vcc', width * 0.25, height);
+        this.addTerminal('gnd', width * 0.75, height);
     }
 }
 

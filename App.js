@@ -19,6 +19,10 @@ import SVGTool from './js/tools/SVGTool.js';
 
 // Importar ferramentas de componente
 import ComponentTool from './js/tools/ComponentTool.js';
+// Note: Specific component classes (Meter, Source, etc.) are no longer directly imported here
+// as they will be loaded via JSON definitions.
+
+// Importar ferramentas de componente
 import Meter from './js/components/categories/Meter.js';
 import Source from './js/components/categories/Source.js';
 import Switch from './js/components/categories/Switch.js';
@@ -72,20 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         drawingManager.drawAll(); // Desenha todos os elementos gerenciados
     });
 
-    // Adicionar ferramentas ao ToolManager
-    const selectTool = new SelectTool(canvas, drawingManager);
-    const moveTool = new MoveTool(canvas, drawingManager);
-    const rotateFlipTool = new RotateFlipTool(canvas, drawingManager);
-    const deleteTool = new DeleteTool(canvas, drawingManager);
-    const propertiesTool = new PropertiesTool(canvas, drawingManager);
-    const nodeEditTool = new NodeEditTool(canvas, drawingManager); // Instanciar a nova ferramenta
-
-    toolManager.addTool('select', selectTool);
-    toolManager.addTool('move', moveTool);
-    toolManager.addTool('rotateFlip', rotateFlipTool);
-    toolManager.addTool('delete', deleteTool);
-    toolManager.addTool('properties', propertiesTool);
-    toolManager.addTool('nodeEdit', nodeEditTool); // Adicionar a nova ferramenta
+    // Add drawing tools to ToolManager
     toolManager.addTool('line', new LineTool(canvas, drawingManager));
     toolManager.addTool('freehand', new FreehandTool(canvas, drawingManager));
     toolManager.addTool('point', new PointTool(canvas, drawingManager));
@@ -96,6 +87,15 @@ document.addEventListener('DOMContentLoaded', () => {
     toolManager.addTool('textBox', new TextBoxTool(canvas, drawingManager));
     toolManager.addTool('image', new ImageTool(canvas, drawingManager));
     toolManager.addTool('svg', new SVGTool(canvas, drawingManager));
+
+    // Add circuit-specific tools to ToolManager
+    toolManager.addTool('select', new SelectTool(canvas, drawingManager));
+    toolManager.addTool('move', new MoveTool(canvas, drawingManager));
+    toolManager.addTool('rotateFlip', new RotateFlipTool(canvas, drawingManager));
+    toolManager.addTool('delete', new DeleteTool(canvas, drawingManager));
+    toolManager.addTool('properties', new PropertiesTool(canvas, drawingManager));
+    toolManager.addTool('nodeEdit', new NodeEditTool(canvas, drawingManager));
+    toolManager.addTool('wire', new WireTool(canvas, drawingManager));
 
     // Adicionar ferramentas de componente
     toolManager.addTool('meter', new ComponentTool(canvas, drawingManager, Meter, 'Medidor'));
@@ -121,9 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
         'generalControl',
         new ComponentTool(canvas, drawingManager, GeneralControl, 'Controle Geral')
     );
-
-    // Adicionar ferramenta de fio
-    toolManager.addTool('wire', new WireTool(canvas, drawingManager));
 
     // Função para criar botões de ferramenta
     const createToolButton = (toolName, label, onClickAction = null) => {
@@ -158,6 +155,27 @@ document.addEventListener('DOMContentLoaded', () => {
     createToolButton('image', 'Adicionar Imagem');
     createToolButton('svg', 'Adicionar SVG');
 
+    // Dynamically load component definitions from JSON and create ComponentTools
+    // const componentDefinitions = [
+    //     './js/components/definitions/Resistor.json'
+    //     // Add more component JSON paths here as needed
+    // ];
+
+    // for (const definitionPath of componentDefinitions) {
+    //     try {
+    //         const response = await fetch(definitionPath);
+    //         if (!response.ok) {
+    //             throw new Error(`HTTP error! status: ${response.status}`);
+    //         }
+    //         const componentDef = await response.json();
+    //         const componentTool = new ComponentTool(canvas, drawingManager, componentDef);
+    //         toolManager.addTool(componentDef.name.toLowerCase(), componentTool);
+    //         createToolButton(componentDef.name.toLowerCase(), componentDef.name);
+    //     } catch (error) {
+    //         console.error(`Failed to load component definition from ${definitionPath}:`, error);
+    //     }
+    // }
+
     // Criar botões para as ferramentas de componente
     createToolButton('meter', 'Medidor');
     createToolButton('source', 'Fonte');
@@ -175,6 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
     createToolButton('wire', 'Fio');
 
     // Botões para rotação e inversão (operam sobre elementos selecionados)
+    const rotateFlipTool = new RotateFlipTool(canvas, drawingManager);
     const angle = 90;
     createToolButton('rotate', 'Rotacionar 90°', () => rotateFlipTool.rotateSelected(angle));
     createToolButton('flipH', 'Inverter H', () => rotateFlipTool.flipSelectedHorizontal());

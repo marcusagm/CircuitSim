@@ -1,4 +1,4 @@
-import Component from "../Component.js";
+import Component from '../Component.js';
 
 class Output extends Component {
     constructor(x, y, width = 40, height = 40) {
@@ -14,9 +14,10 @@ class Output extends Component {
             </svg>
         `;
         super(x, y, width, height, svgContent);
-        this.name = "Output";
-        this.addTerminal("anode", 0, height / 2);
-        this.addTerminal("cathode", width, height / 2);
+        this.name = 'Output';
+        this.terminalsFollowTransform = true;
+        this.addTerminal('anode', 0, height / 2);
+        this.addTerminal('cathode', width, height / 2);
     }
 }
 
