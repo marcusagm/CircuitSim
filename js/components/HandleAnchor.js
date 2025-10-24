@@ -32,6 +32,7 @@
 export default class HandleAnchor {
     /**
      * Internal X coordinate backing field (anchor center).
+     *
      * @type {number}
      * @private
      */
@@ -39,6 +40,7 @@ export default class HandleAnchor {
 
     /**
      * Internal Y coordinate backing field (anchor center).
+     *
      * @type {number}
      * @private
      */
@@ -46,6 +48,7 @@ export default class HandleAnchor {
 
     /**
      * Internal left direction X backing field.
+     *
      * @type {number}
      * @private
      */
@@ -60,6 +63,7 @@ export default class HandleAnchor {
 
     /**
      * Internal right direction X backing field.
+     *
      * @type {number}
      * @private
      */
@@ -67,6 +71,7 @@ export default class HandleAnchor {
 
     /**
      * Internal right direction Y backing field.
+     *
      * @type {number}
      * @private
      */
@@ -74,6 +79,7 @@ export default class HandleAnchor {
 
     /**
      * Internal size backing field (diameter).
+     *
      * @type {number}
      * @private
      */
@@ -81,6 +87,7 @@ export default class HandleAnchor {
 
     /**
      * Internal fillColor backing field.
+     *
      * @type {string}
      * @private
      */
@@ -88,6 +95,7 @@ export default class HandleAnchor {
 
     /**
      * Internal borderSize backing field.
+     *
      * @type {number}
      * @private
      */
@@ -95,6 +103,7 @@ export default class HandleAnchor {
 
     /**
      * Internal borderColor backing field.
+     *
      * @type {string}
      * @private
      */
@@ -102,6 +111,7 @@ export default class HandleAnchor {
 
     /**
      * Internal parentComponent backing field.
+     *
      * @type {object|null}
      * @private
      */
@@ -151,6 +161,7 @@ export default class HandleAnchor {
 
     /**
      * X getter.
+     *
      * @returns {number} Anchor center X coordinate.
      */
     get positionX() {
@@ -177,6 +188,7 @@ export default class HandleAnchor {
 
     /**
      * Y getter.
+     *
      * @returns {number} Anchor center Y coordinate.
      */
     get positionY() {
@@ -203,6 +215,7 @@ export default class HandleAnchor {
 
     /**
      * leftDirectionX getter.
+     *
      * @returns {number} Left control X coordinate.
      */
     get leftDirectionX() {
@@ -229,6 +242,7 @@ export default class HandleAnchor {
 
     /**
      * leftDirectionY getter.
+     *
      * @returns {number} Left control Y coordinate.
      */
     get leftDirectionY() {
@@ -255,6 +269,7 @@ export default class HandleAnchor {
 
     /**
      * rightDirectionX getter.
+     *
      * @returns {number} Right control X coordinate.
      */
     get rightDirectionX() {
@@ -281,6 +296,7 @@ export default class HandleAnchor {
 
     /**
      * rightDirectionY getter.
+     *
      * @returns {number} Right control Y coordinate.
      */
     get rightDirectionY() {
@@ -307,6 +323,7 @@ export default class HandleAnchor {
 
     /**
      * size getter.
+     *
      * @returns {number} Diameter in pixels.
      */
     get size() {
@@ -333,6 +350,7 @@ export default class HandleAnchor {
 
     /**
      * fillColor getter.
+     *
      * @returns {string} Fill CSS color.
      */
     get fillColor() {
@@ -358,6 +376,7 @@ export default class HandleAnchor {
 
     /**
      * borderSize getter.
+     *
      * @returns {number} Border thickness in pixels.
      */
     get borderSize() {
@@ -384,6 +403,7 @@ export default class HandleAnchor {
 
     /**
      * borderColor getter.
+     *
      * @returns {string} Border CSS color.
      */
     get borderColor() {
@@ -409,6 +429,7 @@ export default class HandleAnchor {
 
     /**
      * parentComponent getter.
+     *
      * @returns {object|null} Parent component reference.
      */
     get parentComponent() {

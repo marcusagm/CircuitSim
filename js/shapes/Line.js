@@ -38,6 +38,7 @@ import Handle from '../components/Handle.js';
 export default class Line extends Shape {
     /**
      * Internal starting X coordinate backing field
+     *
      * @type {number}
      * @private
      */
@@ -45,6 +46,7 @@ export default class Line extends Shape {
 
     /**
      * Internal starting Y coordinate backing field
+     *
      * @type {number}
      * @private
      */
@@ -52,6 +54,7 @@ export default class Line extends Shape {
 
     /**
      * Internal ending X coordinate backing field
+     *
      * @type {number}
      * @private
      */
@@ -59,6 +62,7 @@ export default class Line extends Shape {
 
     /**
      * Internal ending Y coordinate backing field
+     *
      * @type {number}
      * @private
      */
@@ -66,6 +70,7 @@ export default class Line extends Shape {
 
     /**
      * Internal color backing field
+     *
      * @type {string}
      * @private
      */
@@ -73,6 +78,7 @@ export default class Line extends Shape {
 
     /**
      * Internal line width backing field
+     *
      * @type {number}
      * @private
      */
@@ -80,6 +86,7 @@ export default class Line extends Shape {
 
     /**
      * Internal line dash backing field
+     *
      * @type {Array<number>}
      * @private
      */
@@ -87,6 +94,7 @@ export default class Line extends Shape {
 
     /**
      * Internal line dash offset backing field
+     *
      * @type {number}
      * @private
      */
@@ -94,6 +102,7 @@ export default class Line extends Shape {
 
     /**
      * Internal line cap backing field
+     *
      * @type {string}
      * @private
      */
@@ -101,6 +110,7 @@ export default class Line extends Shape {
 
     /**
      * Internal line join backing field
+     *
      * @type {string}
      * @private
      */
@@ -127,6 +137,7 @@ export default class Line extends Shape {
 
     /**
      * startX getter.
+     *
      * @returns {number} The starting X coordinate of the line.
      */
     get startX() {
@@ -153,6 +164,7 @@ export default class Line extends Shape {
 
     /**
      * startY getter.
+     *
      * @returns {number} The starting Y coordinate of the line.
      */
     get startY() {
@@ -179,6 +191,7 @@ export default class Line extends Shape {
 
     /**
      * endX getter.
+     *
      * @returns {number} The ending X coordinate of the line.
      */
     get endX() {
@@ -205,6 +218,7 @@ export default class Line extends Shape {
 
     /**
      * endY getter.
+     *
      * @returns {number} The ending Y coordinate of the line.
      */
     get endY() {
@@ -231,6 +245,7 @@ export default class Line extends Shape {
 
     /**
      * color getter.
+     *
      * @returns {string} The color of the line.
      */
     get color() {
@@ -256,6 +271,7 @@ export default class Line extends Shape {
 
     /**
      * lineWidth getter.
+     *
      * @returns {number} The thickness of the line.
      */
     get lineWidth() {
@@ -282,6 +298,7 @@ export default class Line extends Shape {
 
     /**
      * lineDash getter.
+     *
      * @returns {Array<number>} The dash pattern of the line.
      */
     get lineDash() {
@@ -307,6 +324,7 @@ export default class Line extends Shape {
 
     /**
      * lineDashOffset getter.
+     *
      * @returns {number} Offset for the dash pattern.
      */
     get lineDashOffset() {
@@ -333,6 +351,7 @@ export default class Line extends Shape {
 
     /**
      * lineCap getter.
+     *
      * @returns {string} The style of the line cap ('butt', 'round', 'square').
      */
     get lineCap() {
@@ -359,6 +378,7 @@ export default class Line extends Shape {
 
     /**
      * lineJoin getter.
+     *
      * @returns {string} The style of the line join ('miter', 'round', 'bevel').
      */
     get lineJoin() {

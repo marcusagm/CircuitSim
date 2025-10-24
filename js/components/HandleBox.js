@@ -30,6 +30,7 @@ import Handle from './Handle.js';
 export default class HandleBox {
     /**
      * Internal X backing field (top-left).
+     *
      * @type {number}
      * @private
      */
@@ -37,6 +38,7 @@ export default class HandleBox {
 
     /**
      * Internal Y backing field (top-left).
+     *
      * @type {number}
      * @private
      */
@@ -44,6 +46,7 @@ export default class HandleBox {
 
     /**
      * Internal width backing field.
+     *
      * @type {number}
      * @private
      */
@@ -51,6 +54,7 @@ export default class HandleBox {
 
     /**
      * Internal height backing field.
+     *
      * @type {number}
      * @private
      */
@@ -58,6 +62,7 @@ export default class HandleBox {
 
     /**
      * Internal parent component backing field.
+     *
      * @type {object|null}
      * @private
      */
@@ -65,6 +70,7 @@ export default class HandleBox {
 
     /**
      * Internal borderColor backing field.
+     *
      * @type {string}
      * @private
      */
@@ -72,6 +78,7 @@ export default class HandleBox {
 
     /**
      * Internal borderSize backing field.
+     *
      * @type {number}
      * @private
      */
@@ -79,6 +86,7 @@ export default class HandleBox {
 
     /**
      * Internal isDashed backing field.
+     *
      * @type {boolean}
      * @private
      */
@@ -86,6 +94,7 @@ export default class HandleBox {
 
     /**
      * Internal showCenterHandles backing field.
+     *
      * @type {boolean}
      * @private
      */
@@ -93,6 +102,7 @@ export default class HandleBox {
 
     /**
      * Supported handle types for convenience.
+     *
      * @type {{SQUARE:string,DOT:string,DIRECTIONAL:string,ANCHOR:string,CROSS:string}}
      */
     static TYPES = {
@@ -141,6 +151,7 @@ export default class HandleBox {
 
     /**
      * x getter.
+     *
      * @returns {number} Top-left X coordinate.
      */
     get positionX() {
@@ -167,6 +178,7 @@ export default class HandleBox {
 
     /**
      * y getter.
+     *
      * @returns {number} Top-left Y coordinate.
      */
     get positionY() {
@@ -193,6 +205,7 @@ export default class HandleBox {
 
     /**
      * width getter.
+     *
      * @returns {number} Width in pixels.
      */
     get width() {
@@ -219,6 +232,7 @@ export default class HandleBox {
 
     /**
      * height getter.
+     *
      * @returns {number} Height in pixels.
      */
     get height() {
@@ -245,6 +259,7 @@ export default class HandleBox {
 
     /**
      * parentComponent getter.
+     *
      * @returns {object|null} Parent component reference.
      */
     get parentComponent() {
@@ -270,6 +285,7 @@ export default class HandleBox {
 
     /**
      * borderColor getter.
+     *
      * @returns {string} Border CSS color.
      */
     get borderColor() {
@@ -295,6 +311,7 @@ export default class HandleBox {
 
     /**
      * borderSize getter.
+     *
      * @returns {number} Border thickness in pixels.
      */
     get borderSize() {
@@ -321,6 +338,7 @@ export default class HandleBox {
 
     /**
      * isDashed getter.
+     *
      * @returns {boolean} True when border is dashed.
      */
     get isDashed() {
@@ -340,6 +358,7 @@ export default class HandleBox {
 
     /**
      * showCenterHandles getter.
+     *
      * @returns {boolean} True when center handle is shown.
      */
     get showCenterHandles() {

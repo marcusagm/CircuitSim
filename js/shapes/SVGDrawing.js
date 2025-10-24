@@ -34,6 +34,7 @@ import HandleBox from '../components/HandleBox.js';
 export default class SVGDrawing extends Shape {
     /**
      * Internal svgContent backing field
+     *
      * @type {string}
      * @private
      */
@@ -41,6 +42,7 @@ export default class SVGDrawing extends Shape {
 
     /**
      * Internal width backing field
+     *
      * @type {number}
      * @private
      */
@@ -48,6 +50,7 @@ export default class SVGDrawing extends Shape {
 
     /**
      * Internal height backing field
+     *
      * @type {number}
      * @private
      */
@@ -55,6 +58,7 @@ export default class SVGDrawing extends Shape {
 
     /**
      * Internal image backing field (HTMLImageElement) or null
+     *
      * @type {HTMLImageElement|null}
      * @private
      */
@@ -62,6 +66,7 @@ export default class SVGDrawing extends Shape {
 
     /**
      * Internal loaded state backing field
+     *
      * @type {boolean}
      * @private
      */
@@ -69,6 +74,7 @@ export default class SVGDrawing extends Shape {
 
     /**
      * Optional external drawing manager (host may set).
+     *
      * @type {Object|undefined}
      * @private
      */
@@ -98,6 +104,7 @@ export default class SVGDrawing extends Shape {
 
     /**
      * svgContent getter.
+     *
      * @returns {string} The raw SVG text.
      */
     get svgContent() {
@@ -131,6 +138,7 @@ export default class SVGDrawing extends Shape {
 
     /**
      * width getter.
+     *
      * @returns {number} Render width in pixels.
      */
     get width() {
@@ -157,6 +165,7 @@ export default class SVGDrawing extends Shape {
 
     /**
      * height getter.
+     *
      * @returns {number} Render height in pixels.
      */
     get height() {
@@ -183,6 +192,7 @@ export default class SVGDrawing extends Shape {
 
     /**
      * image getter.
+     *
      * @returns {HTMLImageElement|null} Internal Image element or null.
      */
     get image() {
@@ -191,6 +201,7 @@ export default class SVGDrawing extends Shape {
 
     /**
      * loaded getter.
+     *
      * @returns {boolean} True if the internal image is loaded.
      */
     get loaded() {
@@ -199,6 +210,7 @@ export default class SVGDrawing extends Shape {
 
     /**
      * drawingManager getter.
+     *
      * @returns {Object|undefined} Optional drawing manager.
      */
     get drawingManager() {
@@ -207,6 +219,7 @@ export default class SVGDrawing extends Shape {
 
     /**
      * drawingManager setter.
+     *
      * @param {Object|undefined} value - Optional external drawing manager with canvas.requestRender().
      */
     set drawingManager(value) {

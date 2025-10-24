@@ -43,6 +43,7 @@
 export default class Shape {
     /**
      * Unique identifier for the shape.
+     *
      * @readonly
      * @type {string}
      */
@@ -51,6 +52,7 @@ export default class Shape {
     /**
      * X coordinate of the shape's position (usually in pixels).
      * Interpretation (e.g. center or top-left) must be defined by subclasses.
+     *
      * @type {number}
      * @protected
      */
@@ -58,6 +60,7 @@ export default class Shape {
 
     /**
      * Y coordinate of the shape's position (usually in pixels).
+     *
      * @type {number}
      * @protected
      */
@@ -65,6 +68,7 @@ export default class Shape {
 
     /**
      * Whether the shape is currently selected.
+     *
      * @type {boolean}
      * @protected
      */
@@ -72,6 +76,7 @@ export default class Shape {
 
     /**
      * Optional z-index for rendering order. Higher numbers draw on top.
+     *
      * @type {number}
      * @protected
      */
@@ -79,6 +84,7 @@ export default class Shape {
 
     /**
      * Margin to identify the hit area
+     *
      * @type {number}
      * @protected
      */
@@ -121,6 +127,7 @@ export default class Shape {
 
     /**
      * PositionX getter.
+     *
      * @returns {number}
      */
     get positionX() {
@@ -147,6 +154,7 @@ export default class Shape {
 
     /**
      * PositionY getter.
+     *
      * @returns {number}
      */
     get positionY() {
@@ -173,6 +181,7 @@ export default class Shape {
 
     /**
      * hitMargin getter.
+     *
      * @returns {number}
      */
     get hitMargin() {
@@ -199,6 +208,7 @@ export default class Shape {
 
     /**
      * ZIndex getter.
+     *
      * @returns {number}
      */
     get zIndex() {

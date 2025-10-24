@@ -53,6 +53,7 @@ class ToolManager {
         this.canvas.element.addEventListener('mousemove', this.handleMouseMoveEvent.bind(this));
         this.canvas.element.addEventListener('mouseup', this.handleMouseUpEvent.bind(this));
         this.canvas.element.addEventListener('mouseout', this.handleMouseUpEvent.bind(this)); // Handles mouse leaving the canvas
+        // this.canvas.element.addEventListener('contextmenu', this.handleContextMenuEvent.bind(this)); // Handles mouse leaving the canvas
     }
 
     /**
@@ -130,6 +131,24 @@ class ToolManager {
             this.canvas.requestRender();
         }
     }
+
+    /**
+     * Handles the context menu event on the canvas.
+     * Delegates the event to the active tool's `onContextMenu` method if implemented.
+     * Triggers a redraw of the canvas.
+     *
+     * @param {MouseEvent} mouseEvent - The mouse up event object.
+     * @returns {void}
+     */
+    // handleContextMenuEvent(mouseEvent) {
+    //     if (
+    //         this.activeToolInstance &&
+    //         typeof this.activeToolInstance.onContextMenu === 'function'
+    //     ) {
+    //         this.activeToolInstance.onContextMenu(mouseEvent);
+    //         this.canvas.requestRender();
+    //     }
+    // }
 }
 
 export default ToolManager;

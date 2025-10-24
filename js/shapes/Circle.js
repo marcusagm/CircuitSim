@@ -36,6 +36,7 @@ import Shape from './Shape.js';
 export default class Circle extends Shape {
     /**
      * Internal radius backing field
+     *
      * @type {number}
      * @private
      */
@@ -43,6 +44,7 @@ export default class Circle extends Shape {
 
     /**
      * Internal fill color backing field
+     *
      * @type {string}
      * @private
      */
@@ -50,6 +52,7 @@ export default class Circle extends Shape {
 
     /**
      * Internal stroke color backing field
+     *
      * @type {string}
      * @private
      */
@@ -57,6 +60,7 @@ export default class Circle extends Shape {
 
     /**
      * Internal line width backing field
+     *
      * @type {number}
      * @private
      */
@@ -64,6 +68,7 @@ export default class Circle extends Shape {
 
     /**
      * Internal line dash backing field
+     *
      * @type {Array<number>}
      * @private
      */
@@ -71,6 +76,7 @@ export default class Circle extends Shape {
 
     /**
      * Internal line dash offset backing field
+     *
      * @type {number}
      * @private
      */
@@ -99,6 +105,7 @@ export default class Circle extends Shape {
 
     /**
      * radius getter.
+     *
      * @returns {number} The visual radius of the circle in pixels.
      */
     get radius() {
@@ -125,6 +132,7 @@ export default class Circle extends Shape {
 
     /**
      * fillColor getter.
+     *
      * @returns {string} The fill color CSS string.
      */
     get fillColor() {
@@ -150,6 +158,7 @@ export default class Circle extends Shape {
 
     /**
      * color getter.
+     *
      * @returns {string} The stroke color CSS string.
      */
     get color() {
@@ -175,6 +184,7 @@ export default class Circle extends Shape {
 
     /**
      * lineWidth getter.
+     *
      * @returns {number} The stroke thickness in pixels.
      */
     get lineWidth() {
@@ -201,6 +211,7 @@ export default class Circle extends Shape {
 
     /**
      * lineDash getter.
+     *
      * @returns {Array<number>} The dash pattern array for the stroke.
      */
     get lineDash() {
@@ -226,6 +237,7 @@ export default class Circle extends Shape {
 
     /**
      * lineDashOffset getter.
+     *
      * @returns {number} The dash offset for the stroke.
      */
     get lineDashOffset() {

@@ -10,11 +10,7 @@ class MoveTool extends Tool {
     }
 
     activate() {
-        // A ferramenta de mover precisa saber quais elementos estão selecionados
-        // O ToolManager deve ter uma forma de passar essa informação ou a SelectTool deve gerenciar isso globalmente
-        // Por enquanto, vamos assumir que o drawingManager ou o ToolManager pode fornecer os elementos selecionados
-        // Para esta implementação, a MoveTool vai operar sobre os elementos que já estão selecionados.
-        // Em uma aplicação real, haveria uma forma mais robusta de compartilhar o estado de seleção.
+        // no-op
     }
 
     deactivate() {
@@ -26,9 +22,7 @@ class MoveTool extends Tool {
         const { x, y } = this.getMouseCoords(event);
 
         // Obter elementos selecionados do DrawingManager (que é a fonte da verdade para a seleção)
-        const currentlySelectedElements = this.drawingManager.drawableElements.filter(
-            el => el.isSelected
-        );
+        const currentlySelectedElements = this.drawingManager.getAllSelectedElements();
         const clickedElement = this.drawingManager.findElementAt(x, y);
 
         if (clickedElement) {
@@ -37,13 +31,13 @@ class MoveTool extends Tool {
                 this.elementsToMove = currentlySelectedElements;
             } else {
                 // Se o elemento clicado NÃO está selecionado, deseleciona tudo e seleciona apenas este
-                this.drawingManager.drawableElements.forEach(el => el.deselect());
+                this.drawingManager.elements.forEach(el => el.deselect());
                 clickedElement.select();
                 this.elementsToMove = [clickedElement];
             }
         } else {
             // Clicou no vazio, deseleciona tudo
-            this.drawingManager.drawableElements.forEach(el => el.deselect());
+            this.drawingManager.elements.forEach(el => el.deselect());
             this.elementsToMove = [];
         }
 

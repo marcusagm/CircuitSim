@@ -9,19 +9,19 @@
 
 - [x] Permitir alterar cor
 - [x] Permitir alterar espessura
-- [ ] Permitir tracejados
-- [ ] Deve permitir o desenho contínuo até que o desenho seja confirmado com o botão direito
+- [x] Permitir tracejados
+- [x] Deve permitir o desenho contínuo até que o desenho seja confirmado com o botão direito
 - [ ] Após confirmado, deve ser possivel editar cada posição das contas e conexões entre retas
 
 ### Linha Livre
 
 - [x] Permitir alterar cor
 - [x] Permitir alterar espessura
-- [ ] Permitir tracejados
+- [x] Permitir tracejados
 
 ### Ponto
 
-- [ ] Permitir alterar cor
+- [x] Permitir alterar cor
 - [ ] Permitir alterar tamanho
 
 ### Curva de 3 pontos
@@ -49,7 +49,7 @@
 
 - [x] Permitir alterar cor da borda e preenchimento
 - [x] Permitir alterar espessura da borda
-- [ ] Permitir borda tracejada
+- [x] Permitir borda tracejada
 - [ ] Deve permitir redimencionar
 - [ ] Deve permitir alterar a altura ou lagura transformando em uma elipse
 

@@ -46,6 +46,7 @@ import Handle from '../components/Handle.js';
 export default class BezierCurve extends Shape {
     /**
      * Internal start X backing field
+     *
      * @type {number}
      * @private
      */
@@ -53,6 +54,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * Internal start Y backing field
+     *
      * @type {number}
      * @private
      */
@@ -60,6 +62,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * Internal control1 X backing field
+     *
      * @type {number}
      * @private
      */
@@ -67,6 +70,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * Internal control1 Y backing field
+     *
      * @type {number}
      * @private
      */
@@ -74,6 +78,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * Internal control2 X backing field
+     *
      * @type {number}
      * @private
      */
@@ -81,6 +86,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * Internal control2 Y backing field
+     *
      * @type {number}
      * @private
      */
@@ -88,6 +94,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * Internal end X backing field
+     *
      * @type {number}
      * @private
      */
@@ -95,6 +102,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * Internal end Y backing field
+     *
      * @type {number}
      * @private
      */
@@ -102,6 +110,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * Internal color backing field
+     *
      * @type {string}
      * @private
      */
@@ -109,6 +118,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * Internal line width backing field
+     *
      * @type {number}
      * @private
      */
@@ -116,6 +126,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * Internal line dash backing field
+     *
      * @type {Array<number>}
      * @private
      */
@@ -123,6 +134,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * Internal line dash offset backing field
+     *
      * @type {number}
      * @private
      */
@@ -130,6 +142,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * Internal line cap backing field
+     *
      * @type {string}
      * @private
      */
@@ -137,6 +150,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * Internal line join backing field
+     *
      * @type {string}
      * @private
      */
@@ -144,6 +158,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * Internal hit sampling count for isHit() approximation
+     *
      * @type {number}
      * @private
      */
@@ -185,6 +200,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * startX getter.
+     *
      * @returns {number} The X coordinate of the start point.
      */
     get startX() {
@@ -210,6 +226,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * startY getter.
+     *
      * @returns {number} The Y coordinate of the start point.
      */
     get startY() {
@@ -235,6 +252,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * control1X getter.
+     *
      * @returns {number} The X coordinate of the first control point.
      */
     get control1X() {
@@ -260,6 +278,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * control1Y getter.
+     *
      * @returns {number} The Y coordinate of the first control point.
      */
     get control1Y() {
@@ -285,6 +304,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * control2X getter.
+     *
      * @returns {number} The X coordinate of the second control point.
      */
     get control2X() {
@@ -310,6 +330,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * control2Y getter.
+     *
      * @returns {number} The Y coordinate of the second control point.
      */
     get control2Y() {
@@ -335,6 +356,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * endX getter.
+     *
      * @returns {number} The X coordinate of the end point.
      */
     get endX() {
@@ -360,6 +382,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * endY getter.
+     *
      * @returns {number} The Y coordinate of the end point.
      */
     get endY() {
@@ -385,6 +408,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * color getter.
+     *
      * @returns {string} Stroke color CSS string.
      */
     get color() {
@@ -409,6 +433,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * lineWidth getter.
+     *
      * @returns {number} Stroke thickness in pixels.
      */
     get lineWidth() {
@@ -434,6 +459,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * lineDash getter.
+     *
      * @returns {Array<number>} Dash pattern array.
      */
     get lineDash() {
@@ -458,6 +484,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * lineDashOffset getter.
+     *
      * @returns {number} Dash offset.
      */
     get lineDashOffset() {
@@ -483,6 +510,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * lineCap getter.
+     *
      * @returns {string} Line cap style.
      */
     get lineCap() {
@@ -508,6 +536,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * lineJoin getter.
+     *
      * @returns {string} Line join style.
      */
     get lineJoin() {
@@ -533,6 +562,7 @@ export default class BezierCurve extends Shape {
 
     /**
      * hitSamples getter.
+     *
      * @returns {number} Number of samples used for hit-testing approximation.
      */
     get hitSamples() {
@@ -601,8 +631,8 @@ export default class BezierCurve extends Shape {
      */
     isHit(canvas, testX, testY) {
         const me = this;
-        const margin = Number(me.hitMargin) || 0;
-        const samples = Number(me.hitSamples) || 24;
+        const margin = me.hitMargin;
+        const samples = me.hitSamples;
 
         // quick bounding-box reject with margin
         const minX = Math.min(me.startX, me.control1X, me.control2X, me.endX) - margin;
@@ -722,22 +752,9 @@ export default class BezierCurve extends Shape {
      */
     drawSelectionHandles(canvas) {
         const me = this;
-        const handleSize = 8;
-        const handleColor = '#00ccff66';
-        const handleBorderColor = '#00ccffff';
-        const handleBorderSize = 2;
 
         // start handle
-        new Handle(
-            me.startX,
-            me.startY,
-            Handle.TYPES.SQUARE,
-            me,
-            handleSize,
-            handleColor,
-            handleBorderSize,
-            handleBorderColor
-        ).draw(canvas);
+        new Handle(me.startX, me.startY, Handle.TYPES.SQUARE).draw(canvas);
 
         // control anchors (draw directional anchors via HandleAnchor)
         new HandleAnchor(
@@ -746,12 +763,7 @@ export default class BezierCurve extends Shape {
             me.startX - me.control1X,
             me.startY - me.control1Y,
             me.control2X - me.control1X,
-            me.control2Y - me.control1Y,
-            me,
-            handleSize,
-            handleColor,
-            handleBorderSize,
-            handleBorderColor
+            me.control2Y - me.control1Y
         ).draw(canvas);
 
         new HandleAnchor(
@@ -760,25 +772,11 @@ export default class BezierCurve extends Shape {
             me.control1X - me.control2X,
             me.control1Y - me.control2Y,
             me.endX - me.control2X,
-            me.endY - me.control2Y,
-            me,
-            handleSize,
-            handleColor,
-            handleBorderSize,
-            handleBorderColor
+            me.endY - me.control2Y
         ).draw(canvas);
 
         // end handle
-        new Handle(
-            me.endX,
-            me.endY,
-            Handle.TYPES.SQUARE,
-            me,
-            handleSize,
-            handleColor,
-            handleBorderSize,
-            handleBorderColor
-        ).draw(canvas);
+        new Handle(me.endX, me.endY, Handle.TYPES.SQUARE).draw(canvas);
     }
 
     /**
@@ -835,8 +833,10 @@ export default class BezierCurve extends Shape {
      * @returns {BezierCurve} New BezierCurve instance.
      */
     static fromJSON(json) {
-        if (!json || typeof json !== 'object')
+        if (!json || typeof json !== 'object') {
             throw new TypeError('Invalid JSON for BezierCurve.fromJSON');
+        }
+
         const c = new BezierCurve(
             Number(json.startX) || 0,
             Number(json.startY) || 0,

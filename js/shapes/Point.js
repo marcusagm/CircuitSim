@@ -44,7 +44,14 @@ export default class Point extends Shape {
      * @type {string}
      * @private
      */
-    _color = '#000000';
+    _strokeColor = '#000000';
+
+    /**
+     * Internal fill color backing field
+     * @type {string}
+     * @private
+     */
+    _fillColor = 'transparent';
 
     /**
      * Creates an instance of Point.
@@ -96,7 +103,7 @@ export default class Point extends Shape {
      * @returns {string}
      */
     get color() {
-        return this._color;
+        return this._strokeColor;
     }
 
     /**
@@ -109,11 +116,11 @@ export default class Point extends Shape {
         const me = this;
         if (typeof value !== 'string') {
             console.warn(
-                `[Point] invalid color assignment (${value}). Color must be a string. Keeping previous value: ${me._color}`
+                `[Point] invalid color assignment (${value}). Color must be a string. Keeping previous value: ${me._strokeColor}`
             );
             return;
         }
-        me._color = value;
+        me._strokeColor = value;
     }
 
     /**

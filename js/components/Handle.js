@@ -30,6 +30,7 @@
 export default class Handle {
     /**
      * Supported handle types.
+     *
      * @type {{SQUARE:string,DOT:string,DIRECTIONAL:string,CROSS:string}}
      */
     static TYPES = {
@@ -41,6 +42,7 @@ export default class Handle {
 
     /**
      * Internal X coordinate backing field (center).
+     *
      * @type {number}
      * @private
      */
@@ -48,6 +50,7 @@ export default class Handle {
 
     /**
      * Internal Y coordinate backing field (center).
+     *
      * @type {number}
      * @private
      */
@@ -55,6 +58,7 @@ export default class Handle {
 
     /**
      * Internal type backing field.
+     *
      * @type {string}
      * @private
      */
@@ -62,6 +66,7 @@ export default class Handle {
 
     /**
      * Internal size backing field.
+     *
      * @type {number}
      * @private
      */
@@ -69,6 +74,7 @@ export default class Handle {
 
     /**
      * Internal fillColor backing field.
+     *
      * @type {string}
      * @private
      */
@@ -76,6 +82,7 @@ export default class Handle {
 
     /**
      * Internal borderColor backing field.
+     *
      * @type {string}
      * @private
      */
@@ -83,6 +90,7 @@ export default class Handle {
 
     /**
      * Internal borderSize backing field.
+     *
      * @type {number}
      * @private
      */
@@ -90,6 +98,7 @@ export default class Handle {
 
     /**
      * Internal parentComponent backing field.
+     *
      * @type {object|null}
      * @private
      */
@@ -131,6 +140,7 @@ export default class Handle {
 
     /**
      * X getter.
+     *
      * @returns {number} Center X coordinate.
      */
     get positionX() {
@@ -157,6 +167,7 @@ export default class Handle {
 
     /**
      * Y getter.
+     *
      * @returns {number} Center Y coordinate.
      */
     get positionY() {
@@ -183,6 +194,7 @@ export default class Handle {
 
     /**
      * type getter.
+     *
      * @returns {string} Handle type.
      */
     get type() {
@@ -208,6 +220,7 @@ export default class Handle {
 
     /**
      * size getter.
+     *
      * @returns {number} Size in pixels.
      */
     get size() {
@@ -234,6 +247,7 @@ export default class Handle {
 
     /**
      * fillColor getter.
+     *
      * @returns {string} Fill CSS color.
      */
     get fillColor() {
@@ -259,6 +273,7 @@ export default class Handle {
 
     /**
      * borderColor getter.
+     *
      * @returns {string} Border CSS color.
      */
     get borderColor() {
@@ -284,6 +299,7 @@ export default class Handle {
 
     /**
      * borderSize getter.
+     *
      * @returns {number} Border thickness in pixels.
      */
     get borderSize() {
@@ -310,6 +326,7 @@ export default class Handle {
 
     /**
      * parentComponent getter.
+     *
      * @returns {object|null} Parent component reference.
      */
     get parentComponent() {

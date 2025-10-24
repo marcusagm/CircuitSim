@@ -7,6 +7,7 @@ import ToolManager from './js/core/ToolManager.js';
 
 // Importar as ferramentas de desenho
 import LineTool from './js/tools/LineTool.js';
+import PolyLineTool from './js/tools/PolyLineTool.js';
 import FreehandTool from './js/tools/FreehandTool.js';
 import PointTool from './js/tools/PointTool.js';
 import RectangleTool from './js/tools/RectangleTool.js';
@@ -71,13 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas(); // Chama no carregamento inicial
 
-    canvas.afterRenderCallbacks.push(() => {
-        grid.draw();
-        drawingManager.drawAll(); // Desenha todos os elementos gerenciados
-    });
-
     // Add drawing tools to ToolManager
     toolManager.addTool('line', new LineTool(canvas, drawingManager));
+    toolManager.addTool('polyline', new PolyLineTool(canvas, drawingManager));
     toolManager.addTool('freehand', new FreehandTool(canvas, drawingManager));
     toolManager.addTool('point', new PointTool(canvas, drawingManager));
     toolManager.addTool('rectangle', new RectangleTool(canvas, drawingManager));
@@ -145,6 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
     createToolButton('select', 'Selecionar');
     createToolButton('move', 'Mover');
     createToolButton('line', 'Linha Reta');
+    createToolButton('polyline', 'Linha Reta Multi');
     createToolButton('freehand', 'Linha Livre');
     createToolButton('point', 'Ponto');
     createToolButton('threePointCurve', 'Curva 3 Pontos');

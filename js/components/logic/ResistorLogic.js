@@ -8,7 +8,9 @@
  * @param {import("../Component.js").default} component - The component instance.
  */
 export function init(component) {
-    console.log(`Resistor ${component.id || component.constructor.name} initialized with resistance: ${component.getParameter("resistance")}`);
+    console.log(
+        `Resistor ${component.id || component.constructor.name} initialized with resistance: ${component.getParameter('resistance')}`
+    );
     // Perform any initial setup for the resistor
 }
 
@@ -19,8 +21,10 @@ export function init(component) {
  * @param {*} parameterValue - The new value of the parameter.
  */
 export function onParameterChange(component, parameterName, parameterValue) {
-    console.log(`Resistor ${component.id || component.constructor.name}: Parameter ${parameterName} changed to ${parameterValue}`);
-    if (parameterName === "resistance") {
+    console.log(
+        `Resistor ${component.id || component.constructor.name}: Parameter ${parameterName} changed to ${parameterValue}`
+    );
+    if (parameterName === 'resistance') {
         // Example: Update internal simulation model based on new resistance
         console.log(`Resistor resistance updated to: ${parameterValue}`);
     }
@@ -32,6 +36,5 @@ export function onParameterChange(component, parameterName, parameterValue) {
  * @returns {string} The effective resistance value.
  */
 export function getEffectiveResistance(component) {
-    return component.getParameter("resistance");
+    return component.getParameter('resistance');
 }
-

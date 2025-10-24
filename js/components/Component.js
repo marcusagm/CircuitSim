@@ -44,6 +44,7 @@ import HandleBox from './HandleBox.js';
 export default class Component extends Shape {
     /**
      * Internal width backing field.
+     *
      * @type {number}
      * @private
      */
@@ -51,6 +52,7 @@ export default class Component extends Shape {
 
     /**
      * Internal height backing field.
+     *
      * @type {number}
      * @private
      */
@@ -58,6 +60,7 @@ export default class Component extends Shape {
 
     /**
      * Internal svgContent backing field.
+     *
      * @type {string}
      * @private
      */
@@ -65,6 +68,7 @@ export default class Component extends Shape {
 
     /**
      * Internal image backing field.
+     *
      * @type {HTMLImageElement|null}
      * @private
      */
@@ -72,6 +76,7 @@ export default class Component extends Shape {
 
     /**
      * Internal loaded state backing field.
+     *
      * @type {boolean}
      * @private
      */
@@ -79,6 +84,7 @@ export default class Component extends Shape {
 
     /**
      * Terminals array (Terminal instances).
+     *
      * @type {Array<Terminal>}
      * @private
      */
@@ -86,6 +92,7 @@ export default class Component extends Shape {
 
     /**
      * Rotation in degrees (clockwise).
+     *
      * @type {number}
      * @private
      */
@@ -93,6 +100,7 @@ export default class Component extends Shape {
 
     /**
      * Flip horizontally flag.
+     *
      * @type {boolean}
      * @private
      */
@@ -100,6 +108,7 @@ export default class Component extends Shape {
 
     /**
      * Flip vertically flag.
+     *
      * @type {boolean}
      * @private
      */
@@ -108,6 +117,7 @@ export default class Component extends Shape {
     /**
      * Whether terminals are drawn with the same transform as the component visual.
      * Defaults to false to preserve existing behavior.
+     *
      * @type {boolean}
      * @private
      */
@@ -115,6 +125,7 @@ export default class Component extends Shape {
 
     /**
      * Optional object URL used for the image created from svgContent.
+     *
      * @type {string|null}
      * @private
      */
@@ -122,6 +133,7 @@ export default class Component extends Shape {
 
     /**
      * Offscreen canvas used to cache transformed (rotated/flipped) image.
+     *
      * @type {HTMLCanvasElement|null}
      * @private
      */
@@ -129,6 +141,7 @@ export default class Component extends Shape {
 
     /**
      * Rotated bounding box width (CSS pixels) of the transformed image.
+     *
      * @type {number}
      * @private
      */
@@ -136,6 +149,7 @@ export default class Component extends Shape {
 
     /**
      * Rotated bounding box height (CSS pixels) of the transformed image.
+     *
      * @type {number}
      * @private
      */
@@ -143,6 +157,7 @@ export default class Component extends Shape {
 
     /**
      * Dirty flag indicating transformed cache must be refreshed.
+     *
      * @type {boolean}
      * @private
      */
@@ -173,6 +188,7 @@ export default class Component extends Shape {
 
     /**
      * width getter.
+     *
      * @returns {number} Width in pixels.
      */
     get width() {
@@ -200,6 +216,7 @@ export default class Component extends Shape {
 
     /**
      * height getter.
+     *
      * @returns {number} Height in pixels.
      */
     get height() {
@@ -227,6 +244,7 @@ export default class Component extends Shape {
 
     /**
      * svgContent getter.
+     *
      * @returns {string} SVG XML/text.
      */
     get svgContent() {
@@ -319,6 +337,7 @@ export default class Component extends Shape {
 
     /**
      * image getter.
+     *
      * @returns {HTMLImageElement|null} Internal image element or null.
      */
     get image() {
@@ -327,6 +346,7 @@ export default class Component extends Shape {
 
     /**
      * loaded getter.
+     *
      * @returns {boolean} True if internal image finished loading successfully.
      */
     get loaded() {
@@ -335,6 +355,7 @@ export default class Component extends Shape {
 
     /**
      * terminals getter.
+     *
      * @returns {Array<Terminal>} Terminals array.
      */
     get terminals() {
@@ -343,6 +364,7 @@ export default class Component extends Shape {
 
     /**
      * terminals setter.
+     *
      * @param {Array<Terminal>} value - New terminals array.
      * @returns {void}
      */
@@ -359,6 +381,7 @@ export default class Component extends Shape {
 
     /**
      * rotation getter.
+     *
      * @returns {number} Rotation in degrees.
      */
     get rotation() {
@@ -386,6 +409,7 @@ export default class Component extends Shape {
 
     /**
      * flipH getter.
+     *
      * @returns {boolean} Horizontal flip flag.
      */
     get flipH() {
@@ -406,6 +430,7 @@ export default class Component extends Shape {
 
     /**
      * flipV getter.
+     *
      * @returns {boolean} Vertical flip flag.
      */
     get flipV() {
@@ -426,6 +451,7 @@ export default class Component extends Shape {
 
     /**
      * Whether terminals should be drawn inside the component transform.
+     *
      * @returns {boolean}
      */
     get terminalsFollowTransform() {

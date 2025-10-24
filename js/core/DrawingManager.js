@@ -42,6 +42,10 @@ class DrawingManager {
          * @type {Array<object>}
          */
         this.availableComponentDefinitions = [];
+
+        this.canvas.afterRenderCallbacks.push(() => {
+            this.drawAll(); // Desenha todos os elementos gerenciados
+        });
     }
 
     /**
@@ -73,25 +77,21 @@ class DrawingManager {
      * @returns {void}
      */
     drawAll() {
-        this.elements.forEach(element => element.draw(this.canvas));
+        this.drawBackground();
+        this.drawElements();
+        this.drawOverlay();
+    }
 
-        // Draw selection rectangle if active
-        if (this.selectionRectangle) {
-            this.canvas
-                .setStrokeColor('rgba(0, 120, 215, 0.8)')
-                .setStrokeWidth(1)
-                .setLineDash([5, 5])
-                .setFillColor('rgba(0, 120, 215, 0.1)')
-                .rectangle(
-                    this.selectionRectangle.startX,
-                    this.selectionRectangle.startY,
-                    this.selectionRectangle.endX - this.selectionRectangle.startX,
-                    this.selectionRectangle.endY - this.selectionRectangle.startY
-                )
-                .fill()
-                .stroke();
-            this.canvas.setLineDash([]); // Reset line dash after drawing selection rectangle
-        }
+    drawBackground() {
+        this.grid.draw();
+    }
+
+    drawElements() {
+        this.elements.forEach(element => element.draw(this.canvas));
+    }
+
+    drawOverlay() {
+        this.drawSelectionRectangle();
     }
 
     /**
@@ -121,6 +121,10 @@ class DrawingManager {
         this.canvas.requestRender();
     }
 
+    getAllSelectedElements() {
+        return this.elements.filter(el => el.isSelected);
+    }
+
     /**
      * Sets the selection rectangle for area selection.
      * @param {number} startX - The starting X coordinate.
@@ -130,7 +134,11 @@ class DrawingManager {
      * @returns {void}
      */
     setSelectionRectangle(startX, startY, endX, endY) {
-        this.selectionRectangle = { startX, startY, endX, endY };
+        const rx = Math.min(startX, endX);
+        const ry = Math.min(startY, endY);
+        const rw = Math.abs(endX - startX);
+        const rh = Math.abs(endY - startY);
+        this.selectionRectangle = { x: rx, y: ry, width: rw, height: rh };
         this.canvas.requestRender();
     }
 
@@ -143,11 +151,30 @@ class DrawingManager {
         this.canvas.requestRender();
     }
 
+    drawSelectionRectangle() {
+        if (this.selectionRectangle) {
+            this.canvas
+                .setStrokeColor('rgba(0, 120, 215, 0.8)')
+                .setStrokeWidth(1)
+                // .setStrokeDash([5, 5])
+                .setFillColor('rgba(0, 120, 215, 0.1)')
+                .rectangle(
+                    this.selectionRectangle.x,
+                    this.selectionRectangle.y,
+                    this.selectionRectangle.width,
+                    this.selectionRectangle.height
+                )
+                .fill()
+                .stroke()
+                .restore();
+        }
+    }
+
     /**
      * Selects elements within the defined selection rectangle.
      * @returns {void}
      */
-    selectElementsInRectangle() {
+    selectElementsInRectangle(isIncremental = false) {
         if (!this.selectionRectangle) return;
 
         const rect = this.selectionRectangle;
@@ -157,17 +184,16 @@ class DrawingManager {
         const maxY = Math.max(rect.startY, rect.endY);
 
         this.elements.forEach(element => {
-            // Simplified hit test for now, can be improved for complex shapes
-            // This checks if the element's bounding box is fully contained within the selection rectangle
+            const boundingBox = element.getBoundingBox();
             if (
-                element.positionX >= minX &&
-                element.positionX + element.width <= maxX &&
-                element.positionY >= minY &&
-                element.positionY + element.height <= maxY
+                boundingBox.x < rect.x + rect.width &&
+                boundingBox.x + boundingBox.width > rect.x &&
+                boundingBox.y < rect.y + rect.height &&
+                boundingBox.y + boundingBox.height > rect.y
             ) {
-                element.select();
+                if (element.isSelected === false) element.select();
             } else {
-                element.deselect();
+                if (element.isSelected === true && isIncremental === false) element.deselect();
             }
         });
         this.clearSelectionRectangle();

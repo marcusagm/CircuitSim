@@ -1,5 +1,3 @@
-import Canvas from '../core/Canvas.js';
-
 /**
  * Description:
  *  Represents a connection terminal (anchor) for a Component. A Terminal has a small
@@ -32,6 +30,7 @@ import Canvas from '../core/Canvas.js';
 export default class Terminal {
     /**
      * Internal positionX backing field (relative to parent).
+     *
      * @type {number}
      * @private
      */
@@ -39,6 +38,7 @@ export default class Terminal {
 
     /**
      * Internal positionY backing field (relative to parent).
+     *
      * @type {number}
      * @private
      */
@@ -46,6 +46,7 @@ export default class Terminal {
 
     /**
      * Parent component reference.
+     *
      * @type {Object}
      * @private
      */
@@ -53,6 +54,7 @@ export default class Terminal {
 
     /**
      * Connected wires backing field.
+     *
      * @type {Array<any>}
      * @private
      */
@@ -60,6 +62,7 @@ export default class Terminal {
 
     /**
      * Internal radius backing field.
+     *
      * @type {number}
      * @private
      */
@@ -67,6 +70,7 @@ export default class Terminal {
 
     /**
      * Internal color backing field.
+     *
      * @type {string}
      * @private
      */
@@ -93,6 +97,7 @@ export default class Terminal {
 
     /**
      * positionX getter.
+     *
      * @returns {number} X coordinate relative to parent top-left.
      */
     get positionX() {
@@ -119,6 +124,7 @@ export default class Terminal {
 
     /**
      * positionY getter.
+     *
      * @returns {number} Y coordinate relative to parent top-left.
      */
     get positionY() {
@@ -145,6 +151,7 @@ export default class Terminal {
 
     /**
      * parentComponent getter.
+     *
      * @returns {Object} Parent component instance.
      */
     get parentComponent() {
@@ -164,6 +171,7 @@ export default class Terminal {
 
     /**
      * connectedWires getter.
+     *
      * @returns {Array<any>} Array of connected wires.
      */
     get connectedWires() {
@@ -172,6 +180,7 @@ export default class Terminal {
 
     /**
      * radius getter.
+     *
      * @returns {number} Visual / hit-test radius in pixels.
      */
     get radius() {
@@ -198,6 +207,7 @@ export default class Terminal {
 
     /**
      * color getter.
+     *
      * @returns {string} Fill color string.
      */
     get color() {

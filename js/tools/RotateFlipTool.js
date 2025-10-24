@@ -1,89 +1,217 @@
 import Tool from './Tool.js';
 
-class RotateFlipTool extends Tool {
+/**
+ * Description:
+ *  Tool that provides rotate and flip operations for selected elements.
+ *  The tool itself handles basic click selection but rotation/flip actions
+ *  are intended to be triggered by UI controls which call rotateSelected,
+ *  flipSelectedHorizontal, flipSelectedVertical.
+ *
+ * Properties summary:
+ *  - canvas {import('../core/Canvas.js').default} (inherited) : Canvas instance.
+ *  - drawingManager {import('../core/DrawingManager.js').default} (inherited) : Drawing manager.
+ *  - _selectedElements {Array<import('../shapes/Shape.js').default>} : Internal list of currently selected elements for this tool.
+ *
+ * Typical usage:
+ *   const tool = new RotateFlipTool(canvasInstance, drawingManager);
+ *   tool.activate();
+ *   // user clicks to select elements or UI buttons call:
+ *   tool.rotateSelected(90);
+ *   tool.flipSelectedHorizontal();
+ *
+ * Notes / Additional:
+ *  - Transformations (rotate/flip) should be implemented by shape/component classes
+ *    so that child elements (terminals, anchors) are updated mathematically (not via canvas transforms).
+ *  - Methods are intentionally kept small to respect cyclomatic complexity constraints.
+ */
+export default class RotateFlipTool extends Tool {
+    /**
+     * Internal selected elements backing field.
+     * @type {Array<import('../shapes/Shape.js').default>}
+     * @private
+     */
+    _selectedElements = [];
+
+    /**
+     * Creates an instance of RotateFlipTool.
+     *
+     * @param {import('../core/Canvas.js').default} canvas - Canvas instance.
+     * @param {import('../core/DrawingManager.js').default} drawingManager - Drawing manager instance.
+     */
     constructor(canvas, drawingManager) {
         super(canvas, drawingManager);
-        this.selectedElements = [];
+        const me = this;
+        me._selectedElements = [];
     }
 
+    /**
+     * selectedElements getter.
+     *
+     * @returns {Array<import('../shapes/Shape.js').default>} Currently selected elements tracked by the tool.
+     */
+    get selectedElements() {
+        return this._selectedElements;
+    }
+
+    /**
+     * selectedElements setter.
+     *
+     * @param {Array<import('../shapes/Shape.js').default>} value - New array of selected elements.
+     * @returns {void}
+     */
+    set selectedElements(value) {
+        const me = this;
+        if (!Array.isArray(value)) {
+            console.warn(
+                `[RotateFlipTool] invalid selectedElements assignment (${value}). Keeping previous value: ${JSON.stringify(
+                    me._selectedElements
+                )}`
+            );
+            return;
+        }
+        me._selectedElements = value;
+    }
+
+    /**
+     * Activate the tool.
+     *
+     * Subclasses may override to add activation behavior. This implementation is a no-op.
+     *
+     * @returns {void}
+     */
     activate() {
-        // A ferramenta de rotação/inversão opera sobre os elementos selecionados.
-        // Não há lógica de ativação/desativação complexa além de garantir que os elementos estejam selecionados.
+        // no-op activation; selection handled on click
     }
-    deactivate() {}
 
+    /**
+     * Deactivate the tool.
+     *
+     * Clears internal selection tracking.
+     *
+     * @returns {void}
+     */
+    deactivate() {
+        const me = this;
+        me.selectedElements = [];
+    }
+
+    /**
+     * Handle mouse down event to select/deselect elements.
+     *
+     * Left-click selects the clicked element (deselects others).
+     * Ctrl/Cmd + click toggles selection of the clicked element.
+     *
+     * @param {MouseEvent} event - The mouse down event.
+     * @returns {void}
+     */
     onMouseDown(event) {
-        // Esta ferramenta não usa arrastar, mas sim ações de clique para rotação/inversão.
-        // As ações serão disparadas por botões na UI, não diretamente no canvas.
-        // No entanto, para fins de demonstração, podemos adicionar um comportamento básico aqui.
-        // Por exemplo, um clique com o botão direito pode girar.
-        // Ou, mais realisticamente, esta ferramenta seria ativada e então o usuário clicaria em botões específicos na UI.
+        const me = this;
+        const coords = me.getMouseCoords(event);
+        const x = Number(coords.x) || 0;
+        const y = Number(coords.y) || 0;
 
-        // Para a implementação inicial, vamos apenas selecionar os elementos para que as ações de rotação/inversão
-        // possam ser chamadas externamente (e.g., por botões na barra de ferramentas).
-        const { x, y } = this.getMouseCoords(event);
-        const clickedElement = this.drawingManager.findElementAt(x, y);
+        const clickedElement = me.drawingManager.findElementAt(x, y);
+        const metaOrCtrl = event.ctrlKey === true || event.metaKey === true;
 
-        if (clickedElement) {
-            if (!clickedElement.isSelected) {
-                // Desseleciona outros se não for Ctrl/Cmd
-                this.drawingManager.drawableElements.forEach(el => el.deselect());
-                this.selectedElements = [];
-                clickedElement.select();
-                this.selectedElements.push(clickedElement);
-            } else if (event.ctrlKey || event.metaKey) {
-                // Permite deselecionar com Ctrl/Cmd
+        if (clickedElement === null) {
+            me.drawingManager.deselectAll();
+            me.selectedElements = [];
+            me.canvas.requestRender();
+            return;
+        }
+
+        if (metaOrCtrl) {
+            if (clickedElement.isSelected) {
                 clickedElement.deselect();
-                this.selectedElements = this.selectedElements.filter(el => el !== clickedElement);
+                me.selectedElements = me.selectedElements.filter(el => el !== clickedElement);
+            } else {
+                clickedElement.select();
+                me.selectedElements = me.selectedElements.concat([clickedElement]);
             }
         } else {
-            this.drawingManager.drawableElements.forEach(el => el.deselect());
-            this.selectedElements = [];
+            if (!clickedElement.isSelected) {
+                me.drawingManager.deselectAll();
+                clickedElement.select();
+                me.selectedElements = [clickedElement];
+            }
         }
-        this.canvas.requestRender();
+
+        me.canvas.requestRender();
     }
 
-    onMouseMove(event) {
-        // Não há arrastar para esta ferramenta
+    /**
+     * Handle mouse move event. This tool does not use dragging.
+     *
+     * @param {MouseEvent} event - The mouse move event.
+     * @returns {void}
+     */
+    onMouseMove(/* event */) {
+        // no-op: this tool does not support drag interactions
     }
 
-    onMouseUp(event) {
-        // Não há arrastar para esta ferramenta
+    /**
+     * Handle mouse up event. This tool does not use dragging.
+     *
+     * @param {MouseEvent} event - The mouse up event.
+     * @returns {void}
+     */
+    onMouseUp(/* event */) {
+        // no-op
     }
 
-    // Métodos para serem chamados por botões da UI
-    rotateSelected(angle) {
-        this.drawingManager.drawableElements
-            .filter(el => el.isSelected)
-            .forEach(el => {
-                if (el.rotate) {
-                    el.rotate(angle);
-                }
-            });
-        this.canvas.requestRender();
+    /**
+     * Rotate all selected elements by the given angle (degrees).
+     *
+     * Delegates to each element's rotate(angle) method.
+     *
+     * @param {number} angleDegrees - Angle in degrees to rotate selected elements.
+     * @returns {void}
+     */
+    rotateSelected(angleDegrees) {
+        const me = this;
+        const angle = Number(angleDegrees) || 0;
+
+        const targets = me.drawingManager.getAllSelectedElements();
+        targets.forEach(element => {
+            element.rotate(angle);
+        });
+
+        me.canvas.requestRender();
     }
 
+    /**
+     * Flip all selected elements horizontally.
+     *
+     * Delegates to each element's flipHorizontal() method.
+     *
+     * @returns {void}
+     */
     flipSelectedHorizontal() {
-        this.drawingManager.drawableElements
-            .filter(el => el.isSelected)
-            .forEach(el => {
-                if (el.flipHorizontal) {
-                    el.flipHorizontal();
-                }
-            });
-        this.canvas.requestRender();
+        const me = this;
+
+        const targets = me.drawingManager.getAllSelectedElements();
+        targets.forEach(element => {
+            element.flipHorizontal();
+        });
+
+        me.canvas.requestRender();
     }
 
+    /**
+     * Flip all selected elements vertically.
+     *
+     * Delegates to each element's flipVertical() method.
+     *
+     * @returns {void}
+     */
     flipSelectedVertical() {
-        this.drawingManager.drawableElements
-            .filter(el => el.isSelected)
-            .forEach(el => {
-                if (el.flipVertical) {
-                    el.flipVertical();
-                }
-            });
-        this.canvas.requestRender();
+        const me = this;
+
+        const targets = me.drawingManager.getAllSelectedElements();
+        targets.forEach(element => {
+            element.flipVertical();
+        });
+
+        me.canvas.requestRender();
     }
 }
-
-export default RotateFlipTool;

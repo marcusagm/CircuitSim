@@ -37,6 +37,7 @@ import Handle from '../components/Handle.js';
 export default class Freehand extends Shape {
     /**
      * Internal points backing field
+     *
      * @type {Array<{x:number,y:number}>}
      * @private
      */
@@ -44,6 +45,7 @@ export default class Freehand extends Shape {
 
     /**
      * Internal color backing field
+     *
      * @type {string}
      * @private
      */
@@ -51,6 +53,7 @@ export default class Freehand extends Shape {
 
     /**
      * Internal line width backing field
+     *
      * @type {number}
      * @private
      */
@@ -58,6 +61,7 @@ export default class Freehand extends Shape {
 
     /**
      * Internal line dash backing field
+     *
      * @type {Array<number>}
      * @private
      */
@@ -65,6 +69,7 @@ export default class Freehand extends Shape {
 
     /**
      * Internal line dash offset backing field
+     *
      * @type {number}
      * @private
      */
@@ -72,6 +77,7 @@ export default class Freehand extends Shape {
 
     /**
      * Internal line cap backing field
+     *
      * @type {string}
      * @private
      */
@@ -79,6 +85,7 @@ export default class Freehand extends Shape {
 
     /**
      * Internal line join backing field
+     *
      * @type {string}
      * @private
      */
@@ -104,6 +111,7 @@ export default class Freehand extends Shape {
 
     /**
      * points getter.
+     *
      * @returns {Array<{x:number,y:number}>} The ordered list of points composing the stroke.
      */
     get points() {
@@ -140,6 +148,7 @@ export default class Freehand extends Shape {
 
     /**
      * color getter.
+     *
      * @returns {string} Stroke color (CSS string).
      */
     get color() {
@@ -165,6 +174,7 @@ export default class Freehand extends Shape {
 
     /**
      * lineWidth getter.
+     *
      * @returns {number} Stroke thickness in pixels.
      */
     get lineWidth() {
@@ -191,6 +201,7 @@ export default class Freehand extends Shape {
 
     /**
      * lineDash getter.
+     *
      * @returns {Array<number>} Dash pattern array.
      */
     get lineDash() {
@@ -216,6 +227,7 @@ export default class Freehand extends Shape {
 
     /**
      * lineDashOffset getter.
+     *
      * @returns {number} Dash offset.
      */
     get lineDashOffset() {
@@ -242,6 +254,7 @@ export default class Freehand extends Shape {
 
     /**
      * lineCap getter.
+     *
      * @returns {string} Line cap style.
      */
     get lineCap() {
@@ -268,6 +281,7 @@ export default class Freehand extends Shape {
 
     /**
      * lineJoin getter.
+     *
      * @returns {string} Line join style.
      */
     get lineJoin() {

@@ -40,6 +40,7 @@ import HandleAnchor from '../components/HandleAnchor.js';
 export default class ThreePointCurve extends Shape {
     /**
      * Internal start X backing field
+     *
      * @type {number}
      * @private
      */
@@ -47,6 +48,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * Internal start Y backing field
+     *
      * @type {number}
      * @private
      */
@@ -54,6 +56,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * Internal control X backing field
+     *
      * @type {number}
      * @private
      */
@@ -61,6 +64,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * Internal control Y backing field
+     *
      * @type {number}
      * @private
      */
@@ -68,6 +72,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * Internal end X backing field
+     *
      * @type {number}
      * @private
      */
@@ -75,6 +80,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * Internal end Y backing field
+     *
      * @type {number}
      * @private
      */
@@ -82,6 +88,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * Internal color backing field
+     *
      * @type {string}
      * @private
      */
@@ -89,6 +96,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * Internal line width backing field
+     *
      * @type {number}
      * @private
      */
@@ -96,6 +104,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * Internal line dash backing field
+     *
      * @type {Array<number>}
      * @private
      */
@@ -103,6 +112,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * Internal line dash offset backing field
+     *
      * @type {number}
      * @private
      */
@@ -110,6 +120,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * Internal line cap backing field
+     *
      * @type {string}
      * @private
      */
@@ -117,6 +128,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * Internal line join backing field
+     *
      * @type {string}
      * @private
      */
@@ -153,6 +165,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * startX getter.
+     *
      * @returns {number} The start point X coordinate.
      */
     get startX() {
@@ -179,6 +192,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * startY getter.
+     *
      * @returns {number} The start point Y coordinate.
      */
     get startY() {
@@ -205,6 +219,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * controlX getter.
+     *
      * @returns {number} The control point X coordinate.
      */
     get controlX() {
@@ -231,6 +246,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * controlY getter.
+     *
      * @returns {number} The control point Y coordinate.
      */
     get controlY() {
@@ -257,6 +273,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * endX getter.
+     *
      * @returns {number} The end point X coordinate.
      */
     get endX() {
@@ -283,6 +300,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * endY getter.
+     *
      * @returns {number} The end point Y coordinate.
      */
     get endY() {
@@ -309,6 +327,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * color getter.
+     *
      * @returns {string} The stroke color.
      */
     get color() {
@@ -334,6 +353,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * lineWidth getter.
+     *
      * @returns {number} The stroke thickness in pixels.
      */
     get lineWidth() {
@@ -360,6 +380,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * lineDash getter.
+     *
      * @returns {Array<number>} The dash pattern array.
      */
     get lineDash() {
@@ -385,6 +406,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * lineDashOffset getter.
+     *
      * @returns {number} The dash offset.
      */
     get lineDashOffset() {
@@ -411,6 +433,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * lineCap getter.
+     *
      * @returns {string} The line cap style.
      */
     get lineCap() {
@@ -437,6 +460,7 @@ export default class ThreePointCurve extends Shape {
 
     /**
      * lineJoin getter.
+     *
      * @returns {string} The line join style.
      */
     get lineJoin() {

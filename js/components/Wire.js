@@ -36,6 +36,7 @@ import Handle from './Handle.js';
 export default class Wire extends Shape {
     /**
      * Internal start terminal backing field.
+     *
      * @type {Terminal|null}
      * @private
      */
@@ -43,6 +44,7 @@ export default class Wire extends Shape {
 
     /**
      * Internal end terminal backing field.
+     *
      * @type {Terminal|null}
      * @private
      */
@@ -50,6 +52,7 @@ export default class Wire extends Shape {
 
     /**
      * Internal path points backing field.
+     *
      * @type {Array<{x:number,y:number}>}
      * @private
      */
@@ -57,6 +60,7 @@ export default class Wire extends Shape {
 
     /**
      * Internal color backing field.
+     *
      * @type {string}
      * @private
      */
@@ -64,6 +68,7 @@ export default class Wire extends Shape {
 
     /**
      * Internal line width backing field.
+     *
      * @type {number}
      * @private
      */
@@ -71,6 +76,7 @@ export default class Wire extends Shape {
 
     /**
      * Internal line dash backing field.
+     *
      * @type {Array<number>}
      * @private
      */
@@ -78,6 +84,7 @@ export default class Wire extends Shape {
 
     /**
      * Internal isTemporary backing field.
+     *
      * @type {boolean}
      * @private
      */
@@ -103,6 +110,7 @@ export default class Wire extends Shape {
 
     /**
      * startTerminal getter.
+     *
      * @returns {Terminal|null} Start terminal reference.
      */
     get startTerminal() {
@@ -128,6 +136,7 @@ export default class Wire extends Shape {
 
     /**
      * endTerminal getter.
+     *
      * @returns {Terminal|null} End terminal reference.
      */
     get endTerminal() {
@@ -153,6 +162,7 @@ export default class Wire extends Shape {
 
     /**
      * path getter.
+     *
      * @returns {Array<{x:number,y:number}>} Array of intermediate path points.
      */
     get path() {
@@ -183,6 +193,7 @@ export default class Wire extends Shape {
 
     /**
      * color getter.
+     *
      * @returns {string} Stroke color.
      */
     get color() {
@@ -208,6 +219,7 @@ export default class Wire extends Shape {
 
     /**
      * lineWidth getter.
+     *
      * @returns {number} Line thickness in pixels.
      */
     get lineWidth() {
@@ -234,6 +246,7 @@ export default class Wire extends Shape {
 
     /**
      * lineDash getter.
+     *
      * @returns {Array<number>} Dash pattern.
      */
     get lineDash() {
@@ -261,6 +274,7 @@ export default class Wire extends Shape {
 
     /**
      * isTemporary getter.
+     *
      * @returns {boolean} True if wire is temporary.
      */
     get isTemporary() {

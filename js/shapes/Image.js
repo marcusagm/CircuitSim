@@ -32,6 +32,7 @@ import HandleBox from '../components/HandleBox.js';
 export default class ImageShape extends Shape {
     /**
      * Internal image URL backing field.
+     *
      * @type {string}
      * @private
      */
@@ -39,6 +40,7 @@ export default class ImageShape extends Shape {
 
     /**
      * Internal Image element backing field.
+     *
      * @type {HTMLImageElement|null}
      * @private
      */
@@ -46,6 +48,7 @@ export default class ImageShape extends Shape {
 
     /**
      * Internal width backing field.
+     *
      * @type {number}
      * @private
      */
@@ -53,6 +56,7 @@ export default class ImageShape extends Shape {
 
     /**
      * Internal height backing field.
+     *
      * @type {number}
      * @private
      */
@@ -60,6 +64,7 @@ export default class ImageShape extends Shape {
 
     /**
      * Internal loaded state backing field.
+     *
      * @type {boolean}
      * @private
      */
@@ -68,6 +73,7 @@ export default class ImageShape extends Shape {
     /**
      * Optional external drawing manager that can be used to request rendering.
      * This is not required; set by host if available.
+     *
      * @type {Object|undefined}
      * @private
      */
@@ -97,6 +103,7 @@ export default class ImageShape extends Shape {
 
     /**
      * imageUrl getter.
+     *
      * @returns {string} Image source URL.
      */
     get imageUrl() {
@@ -159,6 +166,7 @@ export default class ImageShape extends Shape {
 
     /**
      * image getter.
+     *
      * @returns {HTMLImageElement|null} Internal Image element or null if none.
      */
     get image() {
@@ -167,6 +175,7 @@ export default class ImageShape extends Shape {
 
     /**
      * width getter.
+     *
      * @returns {number} Render width in pixels.
      */
     get width() {
@@ -193,6 +202,7 @@ export default class ImageShape extends Shape {
 
     /**
      * height getter.
+     *
      * @returns {number} Render height in pixels.
      */
     get height() {
@@ -219,6 +229,7 @@ export default class ImageShape extends Shape {
 
     /**
      * loaded getter.
+     *
      * @returns {boolean} True if image finished loading successfully.
      */
     get loaded() {
@@ -227,6 +238,7 @@ export default class ImageShape extends Shape {
 
     /**
      * drawingManager getter.
+     *
      * @returns {Object|undefined} Optional external drawing manager.
      */
     get drawingManager() {
@@ -235,6 +247,7 @@ export default class ImageShape extends Shape {
 
     /**
      * drawingManager setter.
+     *
      * @param {Object|undefined} value - Optional manager with `.canvas.requestRender()` method.
      */
     set drawingManager(value) {

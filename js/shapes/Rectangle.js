@@ -36,6 +36,7 @@ import HandleBox from '../components/HandleBox.js';
 export default class Rectangle extends Shape {
     /**
      * Internal width backing field
+     *
      * @type {number}
      * @private
      */
@@ -43,6 +44,7 @@ export default class Rectangle extends Shape {
 
     /**
      * Internal height backing field
+     *
      * @type {number}
      * @private
      */
@@ -50,6 +52,7 @@ export default class Rectangle extends Shape {
 
     /**
      * Internal fill color backing field
+     *
      * @type {string}
      * @private
      */
@@ -57,6 +60,7 @@ export default class Rectangle extends Shape {
 
     /**
      * Internal stroke color backing field
+     *
      * @type {string}
      * @private
      */
@@ -64,6 +68,7 @@ export default class Rectangle extends Shape {
 
     /**
      * Internal line width backing field
+     *
      * @type {number}
      * @private
      */
@@ -71,6 +76,7 @@ export default class Rectangle extends Shape {
 
     /**
      * Internal line dash backing field
+     *
      * @type {Array<number>}
      * @private
      */
@@ -78,6 +84,7 @@ export default class Rectangle extends Shape {
 
     /**
      * Internal line dash offset backing field
+     *
      * @type {number}
      * @private
      */
@@ -108,6 +115,7 @@ export default class Rectangle extends Shape {
 
     /**
      * width getter.
+     *
      * @returns {number} The rectangle width in pixels.
      */
     get width() {
@@ -134,6 +142,7 @@ export default class Rectangle extends Shape {
 
     /**
      * height getter.
+     *
      * @returns {number} The rectangle height in pixels.
      */
     get height() {
@@ -160,6 +169,7 @@ export default class Rectangle extends Shape {
 
     /**
      * fillColor getter.
+     *
      * @returns {string} The fill color CSS string.
      */
     get fillColor() {
@@ -185,6 +195,7 @@ export default class Rectangle extends Shape {
 
     /**
      * color getter.
+     *
      * @returns {string} The stroke color CSS string.
      */
     get color() {
@@ -210,6 +221,7 @@ export default class Rectangle extends Shape {
 
     /**
      * lineWidth getter.
+     *
      * @returns {number} The stroke thickness in pixels.
      */
     get lineWidth() {
@@ -236,6 +248,7 @@ export default class Rectangle extends Shape {
 
     /**
      * lineDash getter.
+     *
      * @returns {Array<number>} The dash pattern for the stroke.
      */
     get lineDash() {
@@ -261,6 +274,7 @@ export default class Rectangle extends Shape {
 
     /**
      * lineDashOffset getter.
+     *
      * @returns {number} The dash offset for the stroke.
      */
     get lineDashOffset() {

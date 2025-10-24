@@ -10,60 +10,70 @@ import HandleBox from '../components/HandleBox.js';
 export default class TextBox extends Shape {
     /**
      * The text content of the box.
+     *
      * @type {string}
      */
     textContent = null;
 
     /**
      * The width of the text box. Can be explicitly set or dynamically calculated.
+     *
      * @type {number}
      */
     width = 0;
 
     /**
      * The height of the text box. Can be explicitly set or dynamically calculated.
+     *
      * @type {number}
      */
     height = 0;
 
     /**
      * Background color of the text box
+     *
      * @type {string}
      */
     fillColor = 'transparent';
 
     /**
      * Border color
+     *
      * @type {string}
      */
     strokeColor = '#000000';
 
     /**
      *  Border thickness
+     *
      * @type {string}
      */
     strokeWidth = 1;
 
     /**
      * Text color
+     *
      * @type {string}
      */
     textColor = '#000000';
 
     /**
      * Font size in pixels
+     *
      * @type {string}
      */
     fontSize = 16;
 
     /**
      * Font family
+     *
      * @type {string}
      */
     fontFamily = 'Arial';
 
     /**
      * Line height multiplier for text wrapping
+     *
      * @type {string}
      */
     lineHeight = 1.2;
@@ -71,78 +81,91 @@ export default class TextBox extends Shape {
     /**
      * The line dash pattern for the shape's stroke (e.g., [5, 5] for dashed line).
      * An empty array means a solid line.
+     *
      * @type {number[]}
      */
     lineDash = [];
 
     /**
      * Offset for the line dash pattern
+     *
      * @type {string}
      */
     lineDashOffset = 0;
 
     /**
      * Vertical alignment of text baseline (e.g. 'top').
+     *
      * @type {string}
      */
     textBaseline = 'top';
 
     /**
      * Horizontal alignment of text: 'left' | 'right' | 'center' | 'justify'
+     *
      * @type {string}
      */
     textAlign = 'left';
 
     /**
      * Text rendering hint
+     *
      * @type {string}
      */
     textRendering = 'auto';
 
     /**
      * Spacing between words (string accepted by your Canvas API, kept for compatibility)
+     *
      * @type {string}
      */
     wordSpacing = '0px';
 
     /**
      * If true, broken words will append hyphenChar when split across lines.
+     *
      * @type {boolean}
      */
     hyphenate = false;
 
     /**
      * Character used when hyphenating broken words.
+     *
      * @type {string}
      */
     hyphenChar = '-';
 
     /**
      * Text direction
+     *
      * @type {string}
      */
     direction = 'ltr';
 
     /**
      * Padding around text (in pixels)
+     *
      * @type {number}
      */
     padding = 10;
 
     /**
      * Indent in pixels for the first line of each paragraph.
+     *
      * @type {number}
      */
     firstLineIndent = 0;
 
     /**
      * Indent in pixels for subsequent lines of each paragraph.
+     *
      * @type {number}
      */
     restIndent = 0;
 
     /**
      * Internal cached lines produced by last layout.
+     *
      * @type {string[]}
      */
     _lines = [];
@@ -374,6 +397,7 @@ export default class TextBox extends Shape {
 
     /**
      * Return true if token is whitespace sequence.
+     *
      * @param {string} token
      * @returns {boolean}
      */
@@ -383,6 +407,7 @@ export default class TextBox extends Shape {
 
     /**
      * Measure width of a space token.
+     *
      * @param {import('../core/Canvas.js').default} canvas - Canvas abstraction used by the project.
      * @param {string} token
      * @returns {number}
@@ -393,6 +418,7 @@ export default class TextBox extends Shape {
 
     /**
      * Measure width of a word token.
+     *
      * @param {import('../core/Canvas.js').default} canvas - Canvas abstraction used by the project.
      * @param {string} token
      * @returns {number}
@@ -404,6 +430,7 @@ export default class TextBox extends Shape {
     /**
      * Try to append a space token to the current line.
      * Returns true if token was consumed (appended or skipped), false if it should remain for next line.
+     *
      * @param {import('../core/Canvas.js').default} canvas - Canvas abstraction used by the project.
      * @param {string} token
      * @param {Array<string>} lineTokens
@@ -486,6 +513,7 @@ export default class TextBox extends Shape {
 
     /**
      * Finalize a built line: apply alignment/justification (if finite width) and prefix indent spaces.
+     *
      * @param {import('../core/Canvas.js').default} canvas - Canvas abstraction used by the project.
      * @param {Array<string>} lineTokens
      * @param {boolean} isLastLineOfParagraph
@@ -519,6 +547,7 @@ export default class TextBox extends Shape {
 
     /**
      * Wrap a single paragraph into lines. Delegates branching to small helpers to keep complexity low.
+     *
      * @param {import('../core/Canvas.js').default} canvas - Canvas abstraction used by the project.
      * @param {string} paragraphText
      * @param {number} baseAvailableTextWidth
