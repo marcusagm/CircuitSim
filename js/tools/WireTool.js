@@ -93,7 +93,7 @@ class WireTool extends Tool {
         let clickedTerminal = null;
 
         // Search for a clicked terminal on any component
-        for (const element of this.drawingManager.drawableElements) {
+        for (const element of this.drawingManager.elements) {
             if (element.terminals) {
                 for (const terminal of element.terminals) {
                     if (terminal.isHit(menubar.canvas, coordinateX, coordinateY)) {

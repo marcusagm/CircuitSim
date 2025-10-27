@@ -55,7 +55,6 @@ class NodeEditTool extends Tool {
     activate() {
         this.selectedWire = null;
         this.draggingNodePathIndex = -1;
-        this.canvas.requestRender();
     }
 
     /**
@@ -68,7 +67,6 @@ class NodeEditTool extends Tool {
         }
         this.selectedWire = null;
         this.draggingNodePathIndex = -1;
-        this.canvas.requestRender();
     }
 
     /**
