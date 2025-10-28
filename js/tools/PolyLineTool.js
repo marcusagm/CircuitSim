@@ -43,13 +43,6 @@ export default class PolyLineTool extends Tool {
     _isDrawing = false;
 
     /**
-     * Internal bound contextmenu handler reference (so removeEventListener can use the same reference).
-     * @type {Function|null}
-     * @private
-     */
-    _onContextMenuBound = null;
-
-    /**
      * Creates an instance of PolyLineTool.
      *
      * @param {import('../core/Canvas.js').default} canvas - The canvas instance.
@@ -113,9 +106,7 @@ export default class PolyLineTool extends Tool {
      * @returns {void}
      */
     activate() {
-        const me = this;
-        me._onContextMenuBound = me.onContextMenu.bind(me);
-        document.addEventListener('contextmenu', me._onContextMenuBound);
+        // no-op
     }
 
     /**
@@ -127,10 +118,6 @@ export default class PolyLineTool extends Tool {
      */
     deactivate() {
         const me = this;
-        if (me._onContextMenuBound) {
-            document.removeEventListener('contextmenu', me._onContextMenuBound);
-            me._onContextMenuBound = null;
-        }
 
         if (me.isDrawing && me.currentLine) {
             // If polyline has fewer than 2 points, remove it; otherwise keep as-is.
@@ -174,10 +161,7 @@ export default class PolyLineTool extends Tool {
             if (me.isDrawing && me.currentLine) {
                 const points = Array.isArray(me.currentLine.points) ? me.currentLine.points : [];
                 if (points.length > 0) {
-                    const lastPoint = points[points.length - 1];
-                    if (lastPoint.x !== x || lastPoint.y !== y) {
-                        me.currentLine.updateLastPoint(x, y);
-                    }
+                    me._currentLine.removePoint(points.length - 1);
                 }
                 if (points.length < 2) {
                     me.drawingManager.removeElement(me.currentLine);

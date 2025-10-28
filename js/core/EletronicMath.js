@@ -16,7 +16,7 @@
  * // Calculate current using Ohm's Law
  * const current = ElectronicMath.calculateCurrentOhm(12, 220);
  */
-class ElectronicMath {
+export default class ElectronicMath {
     // Physical constants
     static SPEED_OF_LIGHT = 299_792_458; // m/s
     static PLANCK_CONSTANT = 6.626_070_15e-34; // J·s
@@ -436,5 +436,3 @@ class ElectronicMath {
         );
     }
 }
-
-export default ElectronicMath;

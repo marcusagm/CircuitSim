@@ -1,6 +1,6 @@
 import Tool from './Tool.js';
 
-class ComponentTool extends Tool {
+export default class ComponentTool extends Tool {
     constructor(canvas, drawingManager, componentClass, componentName) {
         super(canvas, drawingManager);
         this.componentClass = componentClass;
@@ -26,5 +26,3 @@ class ComponentTool extends Tool {
         // Não faz nada para a ferramenta de componente
     }
 }
-
-export default ComponentTool;

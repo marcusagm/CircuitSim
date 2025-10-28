@@ -95,7 +95,7 @@ export default defineConfig([
                     detectObjects: false
                 }
             ],
-            'no-console': ['warn', { allow: ['warn', 'error'] }], // only warn/error allowed
+            'no-console': ['warn', { allow: ['warn', 'error', 'info'] }], // only warn/error allowed
             // Track TO-DO / FIX ME using core rule:
             'no-warning-comments': ['warn', { terms: ['todo', 'fixme'], location: 'anywhere' }],
 

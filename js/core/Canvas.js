@@ -1,96 +1,135 @@
 /**
- * Canvas wrapper
+ * Description:
+ *  Canvas wrapper that provides an abstraction over the HTMLCanvas 2D context.
+ *  Centralizes all drawing operations so other classes do not access the raw context directly.
  *
- * Provides an abstraction over the HTML Canvas 2D context.
- * Keeps responsibility for all drawing centralized here so other classes
- * do not access the raw context directly.
+ * Properties summary:
+ *  - element {HTMLCanvasElement} : The HTML canvas element.
+ *  - context {CanvasRenderingContext2D} : The 2D rendering context of the canvas.
+ *  - width {number} : Logical width (CSS pixels) of the canvas.
+ *  - height {number} : Logical height (CSS pixels) of the canvas.
+ *  - pixelRatio {number} : Device pixel ratio used for high-DPI displays.
+ *  - needsRender {boolean} : Flag indicating whether a re-render is needed.
+ *  - isRendering {boolean} : Flag indicating if a render is currently in progress.
+ *
+ * Typical usage:
+ *   const canvas = new Canvas({ width: 800, height: 600, pixelRatio: 2 });
+ *   document.body.appendChild(canvas.element);
+ *   canvas.requestRender();
+ *
+ * Notes / Additional:
+ *  - This class exposes a fluent API for common drawing operations (setStrokeColor, beginPath, lineTo, stroke, etc).
+ *  - All drawing state push/pop is done via save()/restore() wrappers.
  */
 export default class Canvas {
     /**
-     * The HTML canvas element.
-     * @type {HTMLCanvasElement}
+     * Internal HTML canvas element backing field.
+     *
+     * @type {HTMLCanvasElement|null}
+     * @private
      */
     _element = null;
 
     /**
-     * The 2D rendering context of the canvas.
-     * @type {CanvasRenderingContext2D}
+     * Internal 2D rendering context backing field.
+     *
+     * @type {CanvasRenderingContext2D|null}
+     * @private
      */
     _context = null;
 
     /**
-     * The width of the canvas in CSS pixels.
+     * Internal width backing field (CSS pixels).
+     *
      * @type {number}
+     * @private
      */
     _width = 100;
 
     /**
-     * The height of the canvas in CSS pixels.
+     * Internal height backing field (CSS pixels).
+     *
      * @type {number}
+     * @private
      */
     _height = 100;
 
     /**
-     * The device pixel ratio, used for high-DPI displays.
+     * Internal device pixel ratio backing field.
+     *
      * @type {number}
+     * @private
      */
     _pixelRatio = 1;
 
     /**
-     * Flag indicating whether antialiasing is enabled.
+     * Internal antialiasing flag backing field.
+     *
      * @type {boolean}
+     * @private
      */
     _antialiasing = false;
 
     /**
-     * Image smoothing quality for the canvas
-     * @type {QUALITY}
+     * Internal image smoothing quality backing field.
+     *
+     * @type {string}
+     * @private
      */
     _imageSmoothingQuality = 'high';
 
     /**
-     * Flag indicating if a re-render is needed.
+     * Flag indicating whether a re-render is needed.
+     *
      * @type {boolean}
      */
     needsRender = false;
 
     /**
-     * Flag indicating if a render is currently in progress.
+     * Flag indicating whether a render loop is active.
+     *
      * @type {boolean}
      */
     isRendering = false;
 
     /**
-     * ID of active animation frame
-     * @type {number}
+     * ID of the active animation frame request.
+     *
+     * @type {number|null}
      */
     animationFrameId = null;
 
     /**
-     * Timestamp of the last render
+     * Timestamp of the last render.
+     *
      * @type {DOMHighResTimeStamp}
      */
     lastRenderTimestamp = 0;
 
     /**
+     * Optional scene or owner reference (user-managed).
      *
+     * @type {*|null}
      */
     scene = null;
 
     /**
-     * Array of callbacks to execute before render the canvas.
+     * Array of callbacks to execute before rendering the canvas.
+     *
      * @type {Function[]}
      */
     beforeRenderCallbacks = [];
 
     /**
-     * Array of callbacks to execute after render the canvas.
+     * Array of callbacks to execute after rendering the canvas.
+     *
      * @type {Function[]}
      */
     afterRenderCallbacks = [];
 
     /**
-     * Image smoothing quality for the canvas
+     * Image smoothing quality enum.
+     *
      * @static
      * @enum {string}
      */
@@ -103,10 +142,11 @@ export default class Canvas {
     /**
      * Creates an instance of Canvas.
      *
-     * @param {number} width - The initial width of the canvas.
-     * @param {number} height - The initial height of the canvas.
-     * @param {number} [pixelRatio=null] - The device pixel ratio.
-     * @param {boolean} [antialiasing=false] - Whether to enable antialiasing. Defaults to false.
+     * @param {Object} [options={}] - Options object.
+     * @param {number} [options.width=100] - Initial logical width (CSS pixels).
+     * @param {number} [options.height=100] - Initial logical height (CSS pixels).
+     * @param {number|null} [options.pixelRatio=null] - Device pixel ratio override. If null, window.devicePixelRatio is used.
+     * @param {boolean} [options.antialiasing=false] - Whether to enable image smoothing on the context.
      */
     // constructor(width, height, pixelRatio = null, antialiasing = false) {
     constructor(options = {}) {
@@ -133,35 +173,35 @@ export default class Canvas {
     /**
      * Returns the 2D rendering context of the canvas.
      *
-     * @returns {CanvasRenderingContext2D} The 2D rendering context.
+     * @returns {CanvasRenderingContext2D|null} The 2D rendering context.
      */
     get context() {
         return this._context;
     }
 
     /**
-     * Returns the HTML canvas element
+     * Returns the HTML canvas element.
      *
-     * @return {HTMLCanvasElement} HTML canvas element
+     * @returns {HTMLCanvasElement|null} The HTML canvas element.
      */
     get element() {
         return this._element;
     }
 
     /**
-     * Get the width of the canvas
+     * Returns the logical width (CSS pixels) of the canvas.
      *
-     * @returns {number}
+     * @returns {number} The canvas width in CSS pixels.
      */
     get width() {
         return this._width;
     }
 
     /**
-     * Sets the width of the canvas.
+     * Sets the logical width (CSS pixels) of the canvas and reconfigures the backing store.
      *
-     * @param {number} value - The new width.
-     * @returns {Canvas} The current Canvas instance.
+     * @param {number} value - The new width in CSS pixels.
+     * @returns {void}
      */
     set width(value) {
         const me = this;
@@ -171,19 +211,19 @@ export default class Canvas {
     }
 
     /**
-     * Get the height of the canvas
+     * Returns the logical height (CSS pixels) of the canvas.
      *
-     * @returns {number}
+     * @returns {number} The canvas height in CSS pixels.
      */
     get height() {
         return this._height;
     }
 
     /**
-     * Sets the height of the canvas.
+     * Sets the logical height (CSS pixels) of the canvas and reconfigures the backing store.
      *
-     * @param {number} value - The new height.
-     * @returns {Canvas} The current Canvas instance.
+     * @param {number} value - The new height in CSS pixels.
+     * @returns {void}
      */
     set height(value) {
         const me = this;
@@ -193,18 +233,19 @@ export default class Canvas {
     }
 
     /**
-     * Get the pixel ratio value
+     * Returns the device pixel ratio used by this canvas.
      *
-     * @returns {number}
+     * @returns {number} The device pixel ratio.
      */
     get pixelRatio() {
         return this._pixelRatio;
     }
 
     /**
-     * Sets the pixel ratio
+     * Sets the device pixel ratio and reconfigures the backing store.
      *
-     * @param {number} value
+     * @param {number} value - The new device pixel ratio (must be > 0).
+     * @returns {void}
      */
     set pixelRatio(value) {
         const me = this;
@@ -222,7 +263,7 @@ export default class Canvas {
     _setupCanvas() {
         const me = this;
 
-        // Fix blurry lines in canvas renderin
+        // Fix blurry lines in canvas rendering
         const blurryFix = 0.5;
 
         // Give the canvas pixel dimensions of their CSS
@@ -248,7 +289,7 @@ export default class Canvas {
     }
 
     /**
-     * Requests a re-render of the canvas. Uses requestAnimationFrame for efficiency.
+     * Requests a re-render of the canvas using requestAnimationFrame for efficiency.
      *
      * @returns {Canvas} The current Canvas instance.
      */
@@ -260,6 +301,11 @@ export default class Canvas {
         return me;
     }
 
+    /**
+     * Starts the render loop by requesting an animation frame.
+     *
+     * @returns {Canvas} The current Canvas instance.
+     */
     startRender() {
         const me = this;
 
@@ -267,10 +313,14 @@ export default class Canvas {
 
         me.isRendering = true;
         me.animationFrameId = requestAnimationFrame(me.render);
-        // me.animationFrameId = requestAnimationFrame(me.frame.bind(me));
         return me;
     }
 
+    /**
+     * Stops the render loop and cancels any pending animation frame.
+     *
+     * @returns {Canvas} The current Canvas instance.
+     */
     stopRender() {
         const me = this;
 
@@ -282,17 +332,19 @@ export default class Canvas {
         return me;
     }
 
+    /**
+     * Frame handler that can be used when driving the loop manually.
+     *
+     * @param {DOMHighResTimeStamp} timestamp - The current high-resolution timestamp.
+     * @returns {Canvas} The current Canvas instance.
+     */
     frame(timestamp) {
         const me = this;
-        // const delayFromLastTimestamp = timestamp - me.lastRenderTimestamp;
 
         me.lastTimestamp = timestamp;
         if (me.needsRender) {
             me.render();
         }
-        // if (me.scene && me.scene.updateIfNeeded(delayFromLastTimestamp)) {
-        //     me.render();
-        // }
         if (me.isRendering) {
             me.animationFrameId = requestAnimationFrame(me.frame.bind(me));
         }
@@ -301,7 +353,7 @@ export default class Canvas {
     }
 
     /**
-     * The main draw method that clears the canvas and executes drawing callbacks.
+     * Main render method: clears the canvas and executes before/after callbacks.
      *
      * @returns {Canvas} The current Canvas instance.
      */
@@ -324,7 +376,7 @@ export default class Canvas {
     }
 
     /**
-     * Executes callbacks registered to run before clearing the canvas.
+     * Executes callbacks registered to run before the render cycle.
      *
      * @returns {Canvas} The current Canvas instance.
      */
@@ -335,7 +387,7 @@ export default class Canvas {
     }
 
     /**
-     * Executes callbacks registered to run after clearing the canvas.
+     * Executes callbacks registered to run after the render cycle.
      *
      * @returns {Canvas} The current Canvas instance.
      */
@@ -346,7 +398,7 @@ export default class Canvas {
     }
 
     /**
-     * Adds a callback function to be executed before the canvas is rendered.
+     * Adds a callback to be executed before each render.
      *
      * @param {Function} callback - The function to add.
      * @returns {Canvas} The current Canvas instance.
@@ -360,7 +412,7 @@ export default class Canvas {
     }
 
     /**
-     * Adds a callback function to be executed after the canvas is rendered.
+     * Adds a callback to be executed after each render.
      *
      * @param {Function} callback - The function to add.
      * @returns {Canvas} The current Canvas instance.
@@ -374,7 +426,7 @@ export default class Canvas {
     }
 
     /**
-     * Remove references and listeners if applicable
+     * Dispose the canvas wrapper by removing DOM references and clearing context.
      *
      * @returns {void}
      */
@@ -384,12 +436,14 @@ export default class Canvas {
         if (me._element && me._element.parentNode) {
             me._element.parentNode.removeChild(me._element);
         }
+        me.beforeRenderCallbacks = [];
+        me.afterRenderCallbacks = [];
         me._context = null;
         me._element = null;
     }
 
     /**
-     * Reset transform and apply correct scaling once
+     * Reset transform and apply device pixel ratio scaling.
      *
      * @returns {Canvas} The current Canvas instance.
      */
@@ -408,9 +462,9 @@ export default class Canvas {
     }
 
     /**
-     * Enables or disables antialiasing for the canvas context.
+     * Enables or disables image smoothing (antialiasing) on the context.
      *
-     * @param {boolean} enabled - True to enable, false to disable.
+     * @param {boolean} enabled - True to enable smoothing, false to disable.
      * @returns {Canvas} The current Canvas instance.
      */
     enableAntialiasing(enabled) {
@@ -422,14 +476,15 @@ export default class Canvas {
     /**
      * Sets the image smoothing quality for the canvas context.
      *
-     * @param {QUALITY} quality - The quality setting (e.g., 'low', 'medium', 'high').
+     * @param {string} quality - The quality setting ('low', 'medium', 'high').
      * @returns {Canvas} The current Canvas instance.
+     * @throws {Error} When an invalid quality string is provided.
      */
     setQuality(quality) {
         const me = this;
 
         if (Object.values(Canvas.QUALITY).includes(quality.toLowerCase()) === false) {
-            throw new Error("The value: '" + quality + "'is invalid.");
+            throw new Error("The value: '" + quality + "' is invalid.");
         }
 
         try {
@@ -465,255 +520,34 @@ export default class Canvas {
     }
 
     /**
-     * Begins a new path by emptying the list of sub-paths.
+     * Fills the current path.
      *
      * @returns {Canvas} The current Canvas instance.
      */
-    beginPath() {
+    fill() {
         const me = this;
-        me.context.beginPath();
+        me.context.fill();
         return me;
     }
 
     /**
-     * Closes the current path by connecting the last point to the first point.
+     * Strokes the current path.
      *
      * @returns {Canvas} The current Canvas instance.
      */
-    closePath() {
+    stroke() {
         const me = this;
-        me.context.closePath();
+        me.context.stroke();
         return me;
-    }
-
-    /**
-     * Sets the line width for strokes.
-     *
-     * @param {number} width - The line width in pixels.
-     * @returns {Canvas} The current Canvas instance.
-     */
-    setStrokeWidth(width) {
-        const me = this;
-        me.context.lineWidth = width;
-        return me;
-    }
-
-    /**
-     * Sets the style of the line endings.
-     *
-     * @param {CanvasLineCap} capType - The line cap style ('butt', 'round', 'square').
-     * @returns {Canvas} The current Canvas instance.
-     */
-    setStrokeCap(capType) {
-        const me = this;
-        me.context.lineCap = capType;
-        return me;
-    }
-
-    /**
-     * Sets the line dash pattern for strokes.
-     *
-     * @param {number[]} segments - An array of numbers that specifies distances to alternately draw a line and a gap.
-     * @returns {Canvas} The current Canvas instance.
-     */
-    setStrokeDash(offset) {
-        const me = this;
-        me.context.setLineDash(offset);
-        return me;
-    }
-
-    /**
-     * Sets the line dash offset for strokes.
-     *
-     * @param {number} offset - The offset for the line dash pattern.
-     * @returns {Canvas} The current Canvas instance.
-     */
-    setStrokeDashOffset(offset) {
-        const me = this;
-        me.context.lineDashOffset = offset;
-        return me;
-    }
-
-    /**
-     * Sets the style of the line corners.
-     *
-     * @param {CanvasLineJoin} joinType - The line join style ('bevel', 'round', 'miter').
-     * @returns {Canvas} The current Canvas instance.
-     */
-    setStrokeJoin(joinType) {
-        const me = this;
-        me.context.lineJoin = joinType;
-        return me;
-    }
-
-    /**
-     * Sets the color or style to use for strokes.
-     *
-     * @param {string|CanvasGradient|CanvasPattern} color - The color or style.
-     * @returns {Canvas} The current Canvas instance.
-     */
-    setStrokeColor(color) {
-        const me = this;
-        me.context.strokeStyle = color;
-        return me;
-    }
-
-    /**
-     * Sets the maximum miter length for miter joins.
-     *
-     * @param {number} limit - The miter limit.
-     * @returns {Canvas} The current Canvas instance.
-     */
-    setMiterLimit(limit) {
-        const me = this;
-        me.context.miterLimit = limit;
-        return me;
-    }
-
-    /**
-     * Sets the color or style to use for fills.
-     *
-     * @param {string|CanvasGradient|CanvasPattern} color - The color or style.
-     * @returns {Canvas} The current Canvas instance.
-     */
-    setFillColor(color) {
-        const me = this;
-        me.context.fillStyle = color;
-        return me;
-    }
-
-    /**
-     * Sets the global composite operation type.
-     *
-     * @param {GlobalCompositeOperation} type - The composite operation type.
-     * @returns {Canvas} The current Canvas instance.
-     */
-    setCompositionType(type) {
-        const me = this;
-        me.context.globalCompositeOperation = type;
-        return me;
-    }
-
-    /**
-     * Sets the filter property for the canvas context.
-     *
-     * @param {string} filter - The filter string (e.g., 'blur(5px)').
-     * @returns {Canvas} The current Canvas instance.
-     */
-    setFilter(filter) {
-        const me = this;
-        me.context.filter = filter;
-        return me;
-    }
-
-    /**
-     * Sets the text direction for the canvas context.
-     *
-     * @param {CanvasDirection} direction - The text direction ('ltr', 'rtl', 'inherit').
-     * @returns {Canvas} The current Canvas instance.
-     */
-    setDirection(direction) {
-        const me = this;
-        me.context.direction = direction;
-        return me;
-    }
-
-    /**
-     * Sets the font property for the canvas context.
-     *
-     * @param {string} font - The font string (e.g., '10px sans-serif').
-     * @returns {Canvas} The current Canvas instance.
-     */
-    setFont(font) {
-        const me = this;
-        me.context.font = font;
-        return me;
-    }
-
-    /**
-     * Sets the text alignment for the canvas context.
-     *
-     * @param {CanvasTextAlign} align - The text alignment ('start', 'end', 'left', 'right', 'center').
-     * @returns {Canvas} The current Canvas instance.
-     */
-    setTextAlign(align) {
-        const me = this;
-        me.context.textAlign = align;
-        return me;
-    }
-
-    /**
-     * Sets the text baseline for the canvas context.
-     *
-     * @param {CanvasTextBaseline} baseline - The text baseline ('top', 'hanging', 'middle', 'alphabetic', 'ideographic', 'bottom').
-     * @returns {Canvas} The current Canvas instance.
-     */
-    setTextBaseline(baseline) {
-        const me = this;
-        me.context.textBaseline = baseline;
-        return me;
-    }
-
-    /**
-     * Sets the text rendering hint for the canvas context.
-     *
-     * @param {string} textRendering - The text rendering hint.
-     * @returns {Canvas} The current Canvas instance.
-     */
-    setTextRendering(textRendering) {
-        const me = this;
-        me.context.textRendering = textRendering;
-        return me;
-    }
-
-    /**
-     * Sets the word spacing for the canvas context.
-     *
-     * @param {string} wordSpacing - The word spacing value.
-     * @returns {Canvas} The current Canvas instance.
-     */
-    setWordSpacing(wordSpacing) {
-        const me = this;
-        me.context.wordSpacing = wordSpacing;
-        return me;
-    }
-
-    /**
-     * Sets the global alpha (transparency) value for the canvas context.
-     *
-     * @param {number} alpha - The alpha value (0.0 to 1.0).
-     * @returns {Canvas} The current Canvas instance.
-     */
-    setGlobalAlpha(alpha) {
-        const me = this;
-        me.context.globalAlpha = alpha;
-        return me;
-    }
-
-    /**
-     * Sets shadow properties for the canvas context.
-     *
-     * @param {number} blur - The blur level.
-     * @param {string} color - The shadow color.
-     * @param {number} offsetX - The horizontal offset.
-     * @param {number} offsetY - The vertical offset.
-     * @returns {Canvas} The current Canvas instance.
-     */
-    setShadow(blur, color, offsetX = 0, offsetY = 0) {
-        this.context.shadowBlur = blur;
-        this.context.shadowColor = color;
-        this.context.shadowOffsetX = offsetX;
-        this.context.shadowOffsetY = offsetY;
-        return this;
     }
 
     /**
      * Clears a rectangular area of the canvas.
      *
-     * @param {number} x - The X coordinate of the top-left corner.
-     * @param {number} y - The Y coordinate of the top-left corner.
-     * @param {number} width - The width of the rectangle to clear.
-     * @param {number} height - The height of the rectangle to clear.
+     * @param {number} x - Top-left X coordinate.
+     * @param {number} y - Top-left Y coordinate.
+     * @param {number} width - Width of the cleared rectangle.
+     * @param {number} height - Height of the cleared rectangle.
      * @returns {Canvas} The current Canvas instance.
      */
     clear(x, y, width, height) {
@@ -723,7 +557,7 @@ export default class Canvas {
     }
 
     /**
-     * Clears the entire canvas.
+     * Clears the entire canvas drawing surface.
      *
      * @returns {Canvas} The current Canvas instance.
      */
@@ -734,40 +568,60 @@ export default class Canvas {
     }
 
     /**
-     * Returns an ImageData object representing the underlying pixel data of the
-     * area of the canvas denoted by the rectangle whose corners are (sx, sy)
-     * and (sx+sw, sy+sh).
+     * Begins a new path on the canvas context.
      *
-     * @returns {ImageData} The ImageData object.
-     */
-    getImageData() {
-        const me = this;
-        return me.context.getImageData(0, 0, me.element.width, me.element.height);
-    }
-
-    /**
-     * Draws an image onto the canvas.
-     *
-     * @param {CanvasImageSource} image - The image to draw.
-     * @param {number} x - The X coordinate of the destination rectangle.
-     * @param {number} y - The Y coordinate of the destination rectangle.
-     * @param {number} width - The width of the destination rectangle.
-     * @param {number} height - The height of the destination rectangle.
      * @returns {Canvas} The current Canvas instance.
      */
-    drawImage(image, x, y, width, height) {
+    beginPath() {
         const me = this;
-        me.context.drawImage(image, x, y, width, height);
+        me.context.beginPath();
         return me;
     }
 
     /**
-     * Draws a line between two points.
+     * Closes the current path on the canvas context.
      *
-     * @param {number} x1 - The X coordinate of the first point.
-     * @param {number} y1 - The Y coordinate of the first point.
-     * @param {number} x2 - The X coordinate of the second point.
-     * @param {number} y2 - The Y coordinate of the second point.
+     * @returns {Canvas} The current Canvas instance.
+     */
+    closePath() {
+        const me = this;
+        me.context.closePath();
+        return me;
+    }
+
+    /**
+     * Moves the current drawing position to the specified coordinates.
+     *
+     * @param {number} x - X coordinate.
+     * @param {number} y - Y coordinate.
+     * @returns {Canvas} The current Canvas instance.
+     */
+    moveTo(x, y) {
+        const me = this;
+        me.context.moveTo(Math.round(x), Math.round(y));
+        return me;
+    }
+
+    /**
+     * Adds a line from the current position to the specified coordinates.
+     *
+     * @param {number} x - X coordinate.
+     * @param {number} y - Y coordinate.
+     * @returns {Canvas} The current Canvas instance.
+     */
+    lineTo(x, y) {
+        const me = this;
+        me.context.lineTo(Math.round(x), Math.round(y));
+        return me;
+    }
+
+    /**
+     * Draws a straight line between two points.
+     *
+     * @param {number} x1 - X coordinate of the start point.
+     * @param {number} y1 - Y coordinate of the start point.
+     * @param {number} x2 - X coordinate of the end point.
+     * @param {number} y2 - Y coordinate of the end point.
      * @returns {Canvas} The current Canvas instance.
      */
     line(x1, y1, x2, y2) {
@@ -780,75 +634,11 @@ export default class Canvas {
     }
 
     /**
-     * Moves the starting point of a new sub-path to the specified coordinates.
+     * Draws a circle path.
      *
-     * @param {number} x - The X coordinate.
-     * @param {number} y - The Y coordinate.
-     * @returns {Canvas} The current Canvas instance.
-     */
-    moveTo(x, y) {
-        const me = this;
-        me.context.moveTo(Math.round(x), Math.round(y));
-        return me;
-    }
-
-    /**
-     * Adds a straight line to the current sub-path by connecting the sub-path's
-     * last point to the specified coordinates.
-     *
-     * @param {number} x - The X coordinate.
-     * @param {number} y - The Y coordinate.
-     * @returns {Canvas} The current Canvas instance.
-     */
-    lineTo(x, y) {
-        const me = this;
-        me.context.lineTo(Math.round(x), Math.round(y));
-        return me;
-    }
-
-    /**
-     * createLinearGradient function.
-     *
-     * @param {number} x0
-     * @param {number} y0
-     * @param {number} x1
-     * @param {number} y1
-     * @returns
-     */
-    createLinearGradient(x0, y0, x1, y1) {
-        return this.context.createLinearGradient(x0, y0, x1, y1);
-    }
-
-    /**
-     *
-     * @param {CanvasImageSource} image
-     * @param {string} repetition
-     * @returns
-     */
-    createPattern(image, repetition = null) {
-        return this.context.createPattern(image, repetition);
-    }
-
-    /**
-     *
-     * @param {number} x0
-     * @param {number} y0
-     * @param {number} r0
-     * @param {number} x1
-     * @param {number} y1
-     * @param {number} r1
-     * @returns
-     */
-    createRadialGradient(x0, y0, r0, x1, y1, r1) {
-        return this._context.createRadialGradient(x0, y0, r0, x1, y1, r1);
-    }
-
-    /**
-     * Draws a circle.
-     *
-     * @param {number} x - The X coordinate of the center of the circle.
-     * @param {number} y - The Y coordinate of the center of the circle.
-     * @param {number} radius - The radius of the circle.
+     * @param {number} x - Center X.
+     * @param {number} y - Center Y.
+     * @param {number} radius - Radius of the circle.
      * @returns {Canvas} The current Canvas instance.
      */
     circle(x, y, radius) {
@@ -860,12 +650,12 @@ export default class Canvas {
     }
 
     /**
-     * Draws an ellipse.
+     * Draws an ellipse path.
      *
-     * @param {number} x1 - The X coordinate of the top-left corner of the bounding box.
-     * @param {number} y1 - The Y coordinate of the top-left corner of the bounding box.
-     * @param {number} x2 - The X coordinate of the bottom-right corner of the bounding box.
-     * @param {number} y2 - The Y coordinate of the bottom-right corner of the bounding box.
+     * @param {number} x1 - Left/top X of bounding box.
+     * @param {number} y1 - Left/top Y of bounding box.
+     * @param {number} x2 - Right/bottom X of bounding box.
+     * @param {number} y2 - Right/bottom Y of bounding box.
      * @returns {Canvas} The current Canvas instance.
      */
     ellipse(x1, y1, x2, y2) {
@@ -882,12 +672,12 @@ export default class Canvas {
     }
 
     /**
-     * Draws a rectangle.
+     * Draws a rectangle path.
      *
-     * @param {number} x - The X coordinate of the top-left corner of the rectangle.
-     * @param {number} y - The Y coordinate of the top-left corner of the rectangle.
-     * @param {number} width - The width of the rectangle.
-     * @param {number} height - The height of the rectangle.
+     * @param {number} x - Top-left X.
+     * @param {number} y - Top-left Y.
+     * @param {number} width - Rectangle width.
+     * @param {number} height - Rectangle height.
      * @returns {Canvas} The current Canvas instance.
      */
     rectangle(x, y, width, height) {
@@ -900,13 +690,13 @@ export default class Canvas {
     }
 
     /**
-     * Draws a polygon.
+     * Draws a polygon path.
      *
-     * @param {number} centerX - The X coordinate of the center of the polygon.
-     * @param {number} centerY - The Y coordinate of the center of the polygon.
-     * @param {number} radius - The radius of the polygon.
-     * @param {number} sides - The number of sides of the polygon.
-     * @param {number} angle - The rotation angle of the polygon in radians.
+     * @param {number} centerX - Center X.
+     * @param {number} centerY - Center Y.
+     * @param {number} radius - Radius.
+     * @param {number} sides - Number of sides.
+     * @param {number} angle - Initial angle in radians.
      * @returns {Canvas} The current Canvas instance.
      */
     polygon(centerX, centerY, radius, sides, angle) {
@@ -931,14 +721,14 @@ export default class Canvas {
     }
 
     /**
-     * Draw a Star.
+     * Draws a star-shaped polygon path.
      *
-     * @param {int} centerX Point X of the center of the star
-     * @param {int} centerY Point Y of the center of the star
-     * @param {int} points The number of points on the exterior of the star
-     * @param {float} radiusOuter The radius of the inner points of the star
-     * @param {float} radiusInner The radius of the outer points of the star
-     * @param {float} angle The angle of the star
+     * @param {number} centerX - Center X.
+     * @param {number} centerY - Center Y.
+     * @param {number} points - Number of star points.
+     * @param {number} radiusOuter - Outer radius.
+     * @param {number} radiusInner - Inner radius.
+     * @param {number} angle - Starting angle in radians.
      * @returns {Canvas} The current Canvas instance.
      */
     star(centerX, centerY, points, radiusOuter, radiusInner, angle) {
@@ -967,15 +757,16 @@ export default class Canvas {
     }
 
     /**
+     * Adds a cubic Bezier curve to the current path.
      *
-     * @param {*} anchor1x
-     * @param {*} anchor1y
-     * @param {*} anchor2x
-     * @param {*} anchor2y
-     * @param {*} anchor3x
-     * @param {*} anchor3y
-     * @param {*} anchor4x
-     * @param {*} anchor4y
+     * @param {number} anchor1x - Start anchor X.
+     * @param {number} anchor1y - Start anchor Y.
+     * @param {number} anchor2x - First control X.
+     * @param {number} anchor2y - First control Y.
+     * @param {number} anchor3x - Second control X.
+     * @param {number} anchor3y - Second control Y.
+     * @param {number} anchor4x - End anchor X.
+     * @param {number} anchor4y - End anchor Y.
      * @returns {Canvas} The current Canvas instance.
      */
     bezierCurveTo(anchor1x, anchor1y, anchor2x, anchor2y, anchor3x, anchor3y, anchor4x, anchor4y) {
@@ -986,13 +777,14 @@ export default class Canvas {
     }
 
     /**
+     * Adds a quadratic curve to the current path.
      *
-     * @param {*} anchor1x
-     * @param {*} anchor1y
-     * @param {*} anchor2x
-     * @param {*} anchor2y
-     * @param {*} anchor3x
-     * @param {*} anchor3y
+     * @param {number} anchor1x - Start anchor X.
+     * @param {number} anchor1y - Start anchor Y.
+     * @param {number} anchor2x - Control point X.
+     * @param {number} anchor2y - Control point Y.
+     * @param {number} anchor3x - End anchor X.
+     * @param {number} anchor3y - End anchor Y.
      * @returns {Canvas} The current Canvas instance.
      */
     quadraticCurveTo(anchor1x, anchor1y, anchor2x, anchor2y, anchor3x, anchor3y) {
@@ -1003,12 +795,13 @@ export default class Canvas {
     }
 
     /**
+     * Tests whether a point is in the current path or provided Path2D.
      *
-     * @param {number} x
-     * @param {number} y
-     * @param {Path2D} path
-     * @param {CanvasFillRule} fillRule
-     * @returns
+     * @param {number} x - X coordinate to test.
+     * @param {number} y - Y coordinate to test.
+     * @param {Path2D|null} path - Optional Path2D to test against.
+     * @param {CanvasFillRule|undefined} fillRule - Optional fill rule.
+     * @returns {boolean} True if the point is inside the path.
      */
     isPointInPath(x, y, path = null, fillRule = undefined) {
         if (path) {
@@ -1018,22 +811,234 @@ export default class Canvas {
     }
 
     /**
+     * Sets the line width for strokes.
      *
+     * @param {number} width - The stroke width in pixels.
      * @returns {Canvas} The current Canvas instance.
      */
-    fill() {
+    setStrokeWidth(width) {
         const me = this;
-        me.context.fill();
+        me.context.lineWidth = width;
         return me;
     }
 
     /**
-     * Draw text at logical (CSS) coordinates.
-     * The canvas transform already maps logical -> device pixels.
-     * @param {string} text
-     * @param {number} x logical x (CSS px)
-     * @param {number} y logical y (CSS px)
-     * @param {object} [maxWidth=undefined] Max width of the text. Defaults to undefined
+     * Sets the line cap style.
+     *
+     * @param {CanvasLineCap} capType - The line cap style ('butt','round','square').
+     * @returns {Canvas} The current Canvas instance.
+     */
+    setStrokeCap(capType) {
+        const me = this;
+        me.context.lineCap = capType;
+        return me;
+    }
+
+    /**
+     * Sets the line join style.
+     *
+     * @param {CanvasLineJoin} joinType - The join style ('bevel','round','miter').
+     * @returns {Canvas} The current Canvas instance.
+     */
+    setStrokeJoin(joinType) {
+        const me = this;
+        me.context.lineJoin = joinType;
+        return me;
+    }
+
+    /**
+     * Sets the line dash pattern for strokes.
+     *
+     * @param {number[]} offset - Array of dash/gap lengths.
+     * @returns {Canvas} The current Canvas instance.
+     */
+    setStrokeDash(offset) {
+        const me = this;
+        me.context.setLineDash(offset);
+        return me;
+    }
+
+    /**
+     * Sets the dash offset for the current dash pattern.
+     *
+     * @param {number} offset - The dash offset.
+     * @returns {Canvas} The current Canvas instance.
+     */
+    setStrokeDashOffset(offset) {
+        const me = this;
+        me.context.lineDashOffset = offset;
+        return me;
+    }
+
+    /**
+     * Sets the stroke style.
+     *
+     * @param {string|CanvasGradient|CanvasPattern} color - Stroke style value.
+     * @returns {Canvas} The current Canvas instance.
+     */
+    setStrokeColor(color) {
+        const me = this;
+        me.context.strokeStyle = color;
+        return me;
+    }
+
+    /**
+     * Sets the miter limit for miter joins.
+     *
+     * @param {number} limit - The miter limit.
+     * @returns {Canvas} The current Canvas instance.
+     */
+    setMiterLimit(limit) {
+        const me = this;
+        me.context.miterLimit = limit;
+        return me;
+    }
+
+    /**
+     * Sets the fill style.
+     *
+     * @param {string|CanvasGradient|CanvasPattern} color - Fill style value.
+     * @returns {Canvas} The current Canvas instance.
+     */
+    setFillColor(color) {
+        const me = this;
+        me.context.fillStyle = color;
+        return me;
+    }
+
+    /**
+     * Sets the global composite operation.
+     *
+     * @param {GlobalCompositeOperation} type - Composite operation name.
+     * @returns {Canvas} The current Canvas instance.
+     */
+    setCompositionType(type) {
+        const me = this;
+        me.context.globalCompositeOperation = type;
+        return me;
+    }
+
+    /**
+     * Sets the canvas context filter string.
+     *
+     * @param {string} filter - CSS filter string (e.g., 'blur(2px)').
+     * @returns {Canvas} The current Canvas instance.
+     */
+    setFilter(filter) {
+        const me = this;
+        me.context.filter = filter;
+        return me;
+    }
+
+    /**
+     * Sets shadow properties for subsequent drawing operations.
+     *
+     * @param {number} blur - Shadow blur radius.
+     * @param {string} color - Shadow color.
+     * @param {number} offsetX - Horizontal offset.
+     * @param {number} offsetY - Vertical offset.
+     * @returns {Canvas} The current Canvas instance.
+     */
+    setShadow(blur, color, offsetX = 0, offsetY = 0) {
+        this.context.shadowBlur = blur;
+        this.context.shadowColor = color;
+        this.context.shadowOffsetX = offsetX;
+        this.context.shadowOffsetY = offsetY;
+        return this;
+    }
+
+    /**
+     * Sets the font for text drawing.
+     *
+     * @param {string} font - CSS font string (e.g., '12px sans-serif').
+     * @returns {Canvas} The current Canvas instance.
+     */
+    setFont(font) {
+        const me = this;
+        me.context.font = font;
+        return me;
+    }
+
+    /**
+     * Sets the text direction for the context.
+     *
+     * @param {CanvasDirection} direction - Text direction ('ltr','rtl','inherit').
+     * @returns {Canvas} The current Canvas instance.
+     */
+    setDirection(direction) {
+        const me = this;
+        me.context.direction = direction;
+        return me;
+    }
+
+    /**
+     * Sets the text alignment for the context.
+     *
+     * @param {CanvasTextAlign} align - Text alignment value.
+     * @returns {Canvas} The current Canvas instance.
+     */
+    setTextAlign(align) {
+        const me = this;
+        me.context.textAlign = align;
+        return me;
+    }
+
+    /**
+     * Sets the text baseline for the context.
+     *
+     * @param {CanvasTextBaseline} baseline - Text baseline value.
+     * @returns {Canvas} The current Canvas instance.
+     */
+    setTextBaseline(baseline) {
+        const me = this;
+        me.context.textBaseline = baseline;
+        return me;
+    }
+
+    /**
+     * Sets text rendering hint (non-standard property in some browsers).
+     *
+     * @param {string} textRendering - Rendering hint value.
+     * @returns {Canvas} The current Canvas instance.
+     */
+    setTextRendering(textRendering) {
+        const me = this;
+        me.context.textRendering = textRendering;
+        return me;
+    }
+
+    /**
+     * Sets word spacing (non-standard; may be ignored by browsers).
+     *
+     * @param {string} wordSpacing - Word spacing value.
+     * @returns {Canvas} The current Canvas instance.
+     */
+    setWordSpacing(wordSpacing) {
+        const me = this;
+        me.context.wordSpacing = wordSpacing;
+        return me;
+    }
+
+    /**
+     * Measures text using the canvas context.
+     *
+     * @param {string} text - Text to measure.
+     * @returns {TextMetrics|number} A TextMetrics object or 0 on failure.
+     */
+    measureText(text) {
+        const me = this;
+        const measurement = me.context.measureText(text);
+        return measurement || 0;
+    }
+
+    /**
+     * Draws filled text at logical (CSS) coordinates.
+     *
+     * @param {string} text - Text to draw.
+     * @param {number} x - Logical X coordinate (CSS px).
+     * @param {number} y - Logical Y coordinate (CSS px).
+     * @param {number|undefined} [maxWidth=undefined] - Optional max width.
+     * @returns {Canvas} The current Canvas instance.
      */
     fillText(text, x, y, maxWidth = undefined) {
         const me = this;
@@ -1046,12 +1051,13 @@ export default class Canvas {
     }
 
     /**
-     * Draw text at logical (CSS) coordinates.
-     * The canvas transform already maps logical -> device pixels.
-     * @param {string} text
-     * @param {number} x logical x (CSS px)
-     * @param {number} y logical y (CSS px)
-     * @param {object} [maxWidth=undefined] Max width of the text. Defaults to undefined
+     * Draws stroked text at logical (CSS) coordinates.
+     *
+     * @param {string} text - Text to draw.
+     * @param {number} x - Logical X coordinate (CSS px).
+     * @param {number} y - Logical Y coordinate (CSS px).
+     * @param {number|undefined} [maxWidth=undefined] - Optional max width.
+     * @returns {Canvas} The current Canvas instance.
      */
     strokeText(text, x, y, maxWidth = undefined) {
         const me = this;
@@ -1064,31 +1070,10 @@ export default class Canvas {
     }
 
     /**
-     * Measure text width using the provided canvas context. Wrapper so all measurements go through one method.
+     * Applies scaling to the current transform.
      *
-     * @param {string} text - The text to measure.
-     * @returns {number} Width in pixels.
-     */
-    measureText(text) {
-        const me = this;
-        const measurement = me.context.measureText(text);
-        return measurement || 0;
-    }
-
-    /**
-     *
-     * @returns {Canvas} The current Canvas instance.
-     */
-    stroke() {
-        const me = this;
-        me.context.stroke();
-        return me;
-    }
-
-    /**
-     *
-     * @param {*} x
-     * @param {*} y
+     * @param {number} x - Scale factor in X.
+     * @param {number} y - Scale factor in Y.
      * @returns {Canvas} The current Canvas instance.
      */
     scale(x, y) {
@@ -1098,9 +1083,10 @@ export default class Canvas {
     }
 
     /**
+     * Applies translation to the current transform.
      *
-     * @param {*} x
-     * @param {*} y
+     * @param {number} x - Translation in X.
+     * @param {number} y - Translation in Y.
      * @returns {Canvas} The current Canvas instance.
      */
     translate(x, y) {
@@ -1110,13 +1096,79 @@ export default class Canvas {
     }
 
     /**
+     * Rotates the current transform.
      *
-     * @param {*} angle
+     * @param {number} angle - Rotation angle in radians.
      * @returns {Canvas} The current Canvas instance.
      */
     rotate(angle) {
         const me = this;
         me.context.rotate(angle);
+        return me;
+    }
+
+    /**
+     * Creates a linear gradient object.
+     *
+     * @param {number} x0 - Start X.
+     * @param {number} y0 - Start Y.
+     * @param {number} x1 - End X.
+     * @param {number} y1 - End Y.
+     * @returns {CanvasGradient} The created linear gradient.
+     */
+    createLinearGradient(x0, y0, x1, y1) {
+        return this.context.createLinearGradient(x0, y0, x1, y1);
+    }
+
+    /**
+     * Creates a pattern from an image source.
+     *
+     * @param {CanvasImageSource} image - Image source.
+     * @param {string|null} repetition - Repetition option (e.g., 'repeat', 'repeat-x').
+     * @returns {CanvasPattern|null} The created pattern or null.
+     */
+    createPattern(image, repetition = null) {
+        return this.context.createPattern(image, repetition);
+    }
+
+    /**
+     * Creates a radial gradient.
+     *
+     * @param {number} x0 - Inner circle X.
+     * @param {number} y0 - Inner circle Y.
+     * @param {number} r0 - Inner radius.
+     * @param {number} x1 - Outer circle X.
+     * @param {number} y1 - Outer circle Y.
+     * @param {number} r1 - Outer radius.
+     * @returns {CanvasGradient} The created radial gradient.
+     */
+    createRadialGradient(x0, y0, r0, x1, y1, r1) {
+        return this._context.createRadialGradient(x0, y0, r0, x1, y1, r1);
+    }
+
+    /**
+     * Returns an ImageData object for the entire canvas backing store.
+     *
+     * @returns {ImageData} The ImageData object.
+     */
+    getImageData() {
+        const me = this;
+        return me.context.getImageData(0, 0, me.element.width, me.element.height);
+    }
+
+    /**
+     * Draws an image onto the canvas.
+     *
+     * @param {CanvasImageSource} image - Source image.
+     * @param {number} x - Destination X coordinate.
+     * @param {number} y - Destination Y coordinate.
+     * @param {number} width - Destination width.
+     * @param {number} height - Destination height.
+     * @returns {Canvas} The current Canvas instance.
+     */
+    drawImage(image, x, y, width, height) {
+        const me = this;
+        me.context.drawImage(image, x, y, width, height);
         return me;
     }
 }

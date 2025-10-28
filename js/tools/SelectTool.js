@@ -237,7 +237,8 @@ export default class SelectionTool extends Tool {
         }
 
         if (multiSelection === true && me.clickedElement.isSelected) {
-            me.clickedElement.deselect && me.clickedElement.deselect();
+            me.clickedElement.deselect();
+            me.canvas.requestRender();
             me.isDragging = false;
             return;
         }
@@ -246,7 +247,8 @@ export default class SelectionTool extends Tool {
             me.deselectAll();
         }
         if (me.clickedElement.isSelected === false) {
-            me.clickedElement.select && me.clickedElement.select();
+            me.clickedElement.select();
+            me.canvas.requestRender();
             me.selectedElements.push(me.clickedElement);
         }
 
@@ -276,16 +278,16 @@ export default class SelectionTool extends Tool {
 
         if (multiSelection === false && me.selectedElements && me.selectedElements.length > 0) {
             // move each element by delta (delegating to their move method)
-            me.selectedElements.forEach(el => {
-                if (typeof el.move === 'function') {
-                    el.move(dx, dy);
+            me.selectedElements.forEach(element => {
+                if (typeof element.move === 'function') {
+                    element.move(dx, dy);
                 }
             });
 
             // update start point for incremental moves
             me.startX = x;
             me.startY = y;
-            this.canvas.requestRender && this.canvas.requestRender();
+            me.canvas.requestRender();
             return;
         }
 
@@ -299,8 +301,7 @@ export default class SelectionTool extends Tool {
             me.dragRectangle.y = ry;
             me.dragRectangle.width = rw;
             me.dragRectangle.height = rh;
-            me.drawingManager.setSelectionRectangle &&
-                me.drawingManager.setSelectionRectangle(me.startX, me.startY, x, y);
+            me.drawingManager.setSelectionRectangle(me.startX, me.startY, x, y);
         }
     }
 
@@ -322,16 +323,13 @@ export default class SelectionTool extends Tool {
         if (multiSelection === false && me.selectedElements && me.selectedElements.length > 0) {
             me.selectedElements = [];
             me.isDragging = false;
-            me.drawingManager.clearSelectionRectangle &&
-                me.drawingManager.clearSelectionRectangle();
+            me.drawingManager.clearSelectionRectangle();
             return;
         }
 
         // If we had a dragRect, select elements inside it
         if (me.dragRectangle) {
-            if (typeof me.drawingManager.selectElementsInRectangle === 'function') {
-                me.drawingManager.selectElementsInRectangle(multiSelection);
-            }
+            me.drawingManager.selectElementsInRectangle(multiSelection);
             me.dragRectangle = null;
             me.isDragging = false;
             me.selectedElements = [];
@@ -366,9 +364,7 @@ export default class SelectionTool extends Tool {
      */
     deselectAll() {
         const me = this;
-        if (me.drawingManager && typeof me.drawingManager.deselectAll === 'function') {
-            me.drawingManager.deselectAll();
-        }
+        me.drawingManager.deselectAll();
         me.selectedElements = [];
     }
 }

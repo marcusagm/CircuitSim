@@ -201,7 +201,11 @@ document.addEventListener('DOMContentLoaded', () => {
     createToolButton('delete', 'Excluir');
 
     // Botão para a ferramenta de propriedades
-    createToolButton('properties', 'Editar Propriedades');
+    const propertiesTool = new PropertiesTool(canvas, drawingManager);
+    createToolButton('properties', 'Editar Propriedades', () =>
+        propertiesTool.editSelectedShapesProperties()
+    );
+    // createToolButton('properties', 'Editar Propriedades');
 
     // Botão para a ferramenta de edição de nós
     createToolButton('nodeEdit', 'Editar Nós do Fio');

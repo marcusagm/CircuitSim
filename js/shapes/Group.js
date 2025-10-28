@@ -540,6 +540,21 @@ export default class Group extends Shape {
     }
 
     /**
+     * Clones the group and all its child elements.
+     *
+     * @returns {Group} A new Group instance with cloned children.
+     */
+    clone() {
+        const clonedChildren = this.children.map(child => child.clone());
+        const newGroup = new Group(clonedChildren);
+        newGroup.x = this.x;
+        newGroup.y = this.y;
+        newGroup.width = this.width;
+        newGroup.height = this.height;
+        return newGroup;
+    }
+
+    /**
      * Serialize group and children to JSON.
      *
      * @returns {Object} JSON-serializable object representing the group.

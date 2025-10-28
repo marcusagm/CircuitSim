@@ -1,102 +1,248 @@
-/**
- * WireTool allows users to draw electrical wires on the canvas.
- * It supports connecting wires between component terminals or drawing free-floating wires with intermediate bend points.
- * Wires can be drawn with orthogonal or 45-degree segments.
- *
- * @example
- * // Example usage:
- * import WireTool from './tools/WireTool.js';
- * const wireTool = new WireTool(canvas, drawingManager);
- * toolManager.addTool('wire', wireTool);
- */
 import Tool from './Tool.js';
 import Wire from '../components/Wire.js';
 
-class WireTool extends Tool {
+/**
+ * Description:
+ *  Tool that allows the user to draw electrical wires on the canvas. It supports:
+ *   - Connecting wires to component terminals.
+ *   - Free-floating wires with intermediate bend points.
+ *   - Snapping to the drawing grid and creating orthogonal or 45° segments.
+ *
+ * Properties summary:
+ *  - currentWire {Wire|null} : Wire instance currently being drawn (temporary while drawing).
+ *  - startTerminal {Object|null} : Terminal where the wire started, if any.
+ *  - lastPoint {{x:number,y:number}|null} : Last registered point of the current drawing path.
+ *  - isDrawingWire {boolean} : Flag indicating whether a wire drawing operation is active.
+ *
+ * Typical usage:
+ *   const wireTool = new WireTool(canvas, drawingManager);
+ *   toolManager.addTool('wire', wireTool);
+ *
+ * Notes / Additional:
+ *  - Only one temporary wire exists while the user draws.
+ *  - Temporary wire is removed if drawing is cancelled (Escape).
+ *  - Positions are snapped to drawingManager.grid.gridCellSize.
+ */
+export default class WireTool extends Tool {
+    /**
+     * Internal currentWire backing field.
+     *
+     * @type {Wire|null}
+     * @private
+     */
+    _currentWire = null;
+
+    /**
+     * Internal startTerminal backing field.
+     *
+     * @type {Object|null}
+     * @private
+     */
+    _startTerminal = null;
+
+    /**
+     * Internal lastPoint backing field.
+     *
+     * @type {{x:number,y:number}|null}
+     * @private
+     */
+    _lastPoint = null;
+
+    /**
+     * Internal isDrawingWire backing field.
+     *
+     * @type {boolean}
+     * @private
+     */
+    _isDrawingWire = false;
+
     /**
      * Creates an instance of WireTool.
-     * @param {Canvas} canvas - The canvas instance.
-     * @param {DrawingManager} drawingManager - The drawing manager instance.
+     *
+     * @param {import('../core/Canvas.js').default} canvas - The canvas instance.
+     * @param {import('../core/DrawingManager.js').default} drawingManager - The drawing manager instance.
      */
     constructor(canvas, drawingManager) {
         super(canvas, drawingManager);
-        /**
-         * The wire currently being drawn.
-         * @type {Wire|null}
-         */
-        this.currentWire = null;
-        /**
-         * The starting terminal if the wire begins from one.
-         * @type {Terminal|null}
-         */
-        this.startTerminal = null;
-        /**
-         * The last point added to the wire's path during drawing.
-         * @type {{x: number, y: number}|null}
-         */
-        this.lastPoint = null;
-        /**
-         * Indicates if a wire drawing operation is currently active.
-         * @type {boolean}
-         */
-        this.isDrawingWire = false;
+        const me = this;
+        me.currentWire = null;
+        me.startTerminal = null;
+        me.lastPoint = null;
+        me.isDrawingWire = false;
     }
 
     /**
-     * Activates the WireTool, preparing it for drawing.
+     * currentWire getter.
+     *
+     * @returns {Wire|null} Wire currently being drawn or null.
+     */
+    get currentWire() {
+        return this._currentWire;
+    }
+
+    /**
+     * currentWire setter with validation.
+     *
+     * @param {Wire|null} value - Wire instance or null.
+     * @returns {void}
+     */
+    set currentWire(value) {
+        const me = this;
+        if (value !== null && !(value instanceof Wire)) {
+            console.warn(
+                `[WireTool] invalid currentWire assignment (${value}). Keeping previous value: ${me._currentWire}`
+            );
+            return;
+        }
+        me._currentWire = value;
+    }
+
+    /**
+     * startTerminal getter.
+     *
+     * @returns {Object|null} Start terminal instance or null.
+     */
+    get startTerminal() {
+        return this._startTerminal;
+    }
+
+    /**
+     * startTerminal setter.
+     *
+     * @param {Object|null} value - Terminal-like object or null.
+     * @returns {void}
+     */
+    set startTerminal(value) {
+        const me = this;
+        if (value !== null && typeof value !== 'object') {
+            console.warn(
+                `[WireTool] invalid startTerminal assignment (${value}). Keeping previous value: ${JSON.stringify(
+                    me._startTerminal
+                )}`
+            );
+            return;
+        }
+        me._startTerminal = value;
+    }
+
+    /**
+     * lastPoint getter.
+     *
+     * @returns {{x:number,y:number}|null} Last point or null.
+     */
+    get lastPoint() {
+        return this._lastPoint;
+    }
+
+    /**
+     * lastPoint setter with validation.
+     *
+     * @param {{x:number,y:number}|null} value - Object with numeric x and y or null.
+     * @returns {void}
+     */
+    set lastPoint(value) {
+        const me = this;
+        if (value !== null) {
+            if (
+                typeof value !== 'object' ||
+                Number.isNaN(Number(value.x)) ||
+                Number.isNaN(Number(value.y))
+            ) {
+                console.warn(
+                    `[WireTool] invalid lastPoint assignment (${JSON.stringify(
+                        value
+                    )}). Keeping previous value: ${JSON.stringify(me._lastPoint)}`
+                );
+                return;
+            }
+            me._lastPoint = { x: Number(value.x), y: Number(value.y) };
+            return;
+        }
+        me._lastPoint = null;
+    }
+
+    /**
+     * isDrawingWire getter.
+     *
+     * @returns {boolean} True if a drawing operation is active.
+     */
+    get isDrawingWire() {
+        return this._isDrawingWire;
+    }
+
+    /**
+     * isDrawingWire setter.
+     *
+     * @param {boolean} value - New flag value.
+     * @returns {void}
+     */
+    set isDrawingWire(value) {
+        this._isDrawingWire = Boolean(value);
+    }
+
+    /**
+     * Activates the tool and prepares it for drawing.
+     *
      * @returns {void}
      */
     activate() {
-        this.resetToolState();
-        document.addEventListener('keydown', this.onKeyDown.bind(this));
+        const me = this;
+        me.resetToolState();
     }
 
     /**
-     * Deactivates the WireTool, cleaning up any active drawing state.
+     * Deactivates the tool and clears any active state.
+     *
      * @returns {void}
      */
     deactivate() {
-        this.resetToolState();
-        document.removeEventListener('keydown', this.onKeyDown.bind(this));
+        const me = this;
+        me.resetToolState();
     }
 
     /**
-     * Resets the internal state of the tool, clearing any temporary wires or drawing flags.
+     * Resets internal state, removing any temporary wire and clearing flags.
+     *
      * @returns {void}
      */
     resetToolState() {
-        if (this.currentWire && this.currentWire.isTemporary) {
-            this.drawingManager.removeElement(this.currentWire);
+        const me = this;
+        if (me.currentWire && me.currentWire.isTemporary) {
+            me.drawingManager.removeElement(me.currentWire);
         }
-        this.currentWire = null;
-        this.startTerminal = null;
-        this.lastPoint = null;
-        this.isDrawingWire = false;
-        this.canvas.requestRender();
+        me.currentWire = null;
+        me.startTerminal = null;
+        me.lastPoint = null;
+        me.isDrawingWire = false;
+        me.canvas.requestRender();
     }
 
     /**
-     * Handles the mouse down event, initiating or continuing wire drawing.
-     * @param {MouseEvent} event - The mouse event.
+     * Handle mouse down: start or continue drawing the wire. Snaps to grid and connects to terminals.
+     *
+     * @param {MouseEvent} event - The mouse down event.
      * @returns {void}
      */
     onMouseDown(event) {
-        const { x: coordinateX, y: coordinateY } = this.getMouseCoords(event);
-        const snappedX =
-            Math.round(coordinateX / this.drawingManager.grid.gridCellSize) *
-            this.drawingManager.grid.gridCellSize;
-        const snappedY =
-            Math.round(coordinateY / this.drawingManager.grid.gridCellSize) *
-            this.drawingManager.grid.gridCellSize;
+        const me = this;
+        const { x: coordinateX, y: coordinateY } = me.getMouseCoords(event);
+
+        const cellSize =
+            me.drawingManager && me.drawingManager.grid && me.drawingManager.grid.gridCellSize
+                ? Number(me.drawingManager.grid.gridCellSize) || 1
+                : 1;
+
+        const snappedX = Math.round(coordinateX / cellSize) * cellSize;
+        const snappedY = Math.round(coordinateY / cellSize) * cellSize;
         const snappedPoint = { x: snappedX, y: snappedY };
 
         let clickedTerminal = null;
 
-        // Search for a clicked terminal on any component
-        for (const element of this.drawingManager.elements) {
+        // Detect clicked terminal by iterating components' terminals
+        for (const element of me.drawingManager.elements) {
             if (element.terminals) {
                 for (const terminal of element.terminals) {
-                    if (terminal.isHit(menubar.canvas, coordinateX, coordinateY)) {
+                    if (terminal.isHit(me.canvas, coordinateX, coordinateY)) {
                         clickedTerminal = terminal;
                         break;
                     }
@@ -105,69 +251,81 @@ class WireTool extends Tool {
             if (clickedTerminal) break;
         }
 
-        if (!this.isDrawingWire) {
-            // Attempting to start a new wire
+        if (!me.isDrawingWire) {
+            // Start a new wire
             if (clickedTerminal) {
-                this.startTerminal = clickedTerminal;
-                this.currentWire = new Wire(this.startTerminal);
-                this.currentWire.isTemporary = true;
-                this.drawingManager.addElement(this.currentWire);
-                this.startTerminal.addWire(this.currentWire);
-                this.lastPoint = this.startTerminal.getAbsolutePosition();
-                this.isDrawingWire = true;
+                me.startTerminal = clickedTerminal;
+                me.currentWire = new Wire(me.startTerminal);
+                me.currentWire.isTemporary = true;
+                me.drawingManager.addElement(me.currentWire);
+                // Register wire with terminal
+                if (typeof me.startTerminal.addWire === 'function') {
+                    me.startTerminal.addWire(me.currentWire);
+                }
+                me.lastPoint = me.startTerminal.getAbsolutePosition
+                    ? me.startTerminal.getAbsolutePosition(me.canvas)
+                    : null;
+                me.isDrawingWire = true;
             } else {
-                // Clicked on an empty spot, start a free-floating wire
-                this.currentWire = new Wire();
-                this.currentWire.isTemporary = true;
-                this.currentWire.addPoint(snappedPoint.x, snappedPoint.y);
-                this.drawingManager.addElement(this.currentWire);
-                this.lastPoint = snappedPoint;
-                this.isDrawingWire = true;
+                // Start free-floating wire
+                me.currentWire = new Wire();
+                me.currentWire.isTemporary = true;
+                me.currentWire.addPoint(snappedPoint.x, snappedPoint.y);
+                me.drawingManager.addElement(me.currentWire);
+                me.lastPoint = snappedPoint;
+                me.isDrawingWire = true;
             }
         } else {
-            // Continue drawing the wire or connect to a terminal
-            if (clickedTerminal && clickedTerminal !== this.startTerminal) {
-                // Connect to another terminal
-                this.currentWire.endTerminal = clickedTerminal;
-                clickedTerminal.addWire(this.currentWire);
-                this.currentWire.isTemporary = false;
-                this.currentWire = null;
-                this.startTerminal = null;
-                this.lastPoint = null;
-                this.isDrawingWire = false;
+            // Continue existing wire
+            if (clickedTerminal && clickedTerminal !== me.startTerminal) {
+                // Connect to clicked terminal
+                me.currentWire.endTerminal = clickedTerminal;
+                if (typeof clickedTerminal.addWire === 'function') {
+                    clickedTerminal.addWire(me.currentWire);
+                }
+                me.currentWire.isTemporary = false;
+                // finalize & reset state
+                me.resetToolState();
             } else {
-                // Add a bend point to the wire
-                this.currentWire.addPoint(snappedPoint.x, snappedPoint.y);
-                this.lastPoint = snappedPoint;
+                // Add bend point
+                me.currentWire.addPoint(snappedPoint.x, snappedPoint.y);
+                me.lastPoint = snappedPoint;
             }
         }
-        this.canvas.requestRender();
+
+        me.canvas.requestRender();
     }
 
     /**
-     * Handles the mouse move event, updating the temporary wire segment.
-     * @param {MouseEvent} event - The mouse event.
+     * Handle mouse move: update the temporary last segment so it stays orthogonal or 45° to the reference point.
+     *
+     * @param {MouseEvent} event - The mouse move event.
      * @returns {void}
      */
     onMouseMove(event) {
-        if (!this.isDrawingWire || !this.currentWire) return;
+        const me = this;
+        if (!me.isDrawingWire || !me.currentWire) return;
 
-        const { x: coordinateX, y: coordinateY } = this.getMouseCoords(event);
-        const snappedX =
-            Math.round(coordinateX / this.drawingManager.grid.gridCellSize) *
-            this.drawingManager.grid.gridCellSize;
-        const snappedY =
-            Math.round(coordinateY / this.drawingManager.grid.gridCellSize) *
-            this.drawingManager.grid.gridCellSize;
+        const { x: coordinateX, y: coordinateY } = me.getMouseCoords(event);
+
+        const cellSize =
+            me.drawingManager && me.drawingManager.grid && me.drawingManager.grid.gridCellSize
+                ? Number(me.drawingManager.grid.gridCellSize) || 1
+                : 1;
+
+        const snappedX = Math.round(coordinateX / cellSize) * cellSize;
+        const snappedY = Math.round(coordinateY / cellSize) * cellSize;
         const currentSnappedPoint = { x: snappedX, y: snappedY };
 
-        // If there are no points in the path, the initial point is the startTerminal or the first click
-        const referencePoint =
-            this.currentWire.path.length > 0
-                ? this.currentWire.path[this.currentWire.path.length - 1]
-                : this.startTerminal
-                  ? this.startTerminal.getAbsolutePosition()
-                  : this.lastPoint;
+        // Determine reference point for orthogonal/45° calculation
+        let referencePoint = null;
+        if (me.currentWire.path.length > 0) {
+            referencePoint = me.currentWire.path[me.currentWire.path.length - 1];
+        } else if (me.startTerminal && typeof me.startTerminal.getAbsolutePosition === 'function') {
+            referencePoint = me.startTerminal.getAbsolutePosition(me.canvas);
+        } else {
+            referencePoint = me.lastPoint || { x: 0, y: 0 };
+        }
 
         let finalX = currentSnappedPoint.x;
         let finalY = currentSnappedPoint.y;
@@ -175,60 +333,52 @@ class WireTool extends Tool {
         const deltaX = Math.abs(currentSnappedPoint.x - referencePoint.x);
         const deltaY = Math.abs(currentSnappedPoint.y - referencePoint.y);
 
-        // Logic to force orthogonal or 45 degrees
+        // Force orthogonal or 45°
         if (deltaX === deltaY) {
-            // 45 degrees
+            // 45° — keep both coordinates
             finalX = currentSnappedPoint.x;
             finalY = currentSnappedPoint.y;
         } else if (deltaX > deltaY) {
-            // Horizontal
+            // horizontal — snap Y to reference
             finalY = referencePoint.y;
         } else {
-            // Vertical
+            // vertical — snap X to reference
             finalX = referencePoint.x;
         }
 
-        // Add or update the last point of the path
-        if (this.currentWire.path.length === 0 && !this.startTerminal) {
-            // If the wire started from a free point and this is the first movement
-            this.currentWire.path.push({ x: finalX, y: finalY });
-        } else if (this.currentWire.path.length === 0 && this.startTerminal) {
-            // If the wire started from a terminal, the first point of the path is the mouse
-            this.currentWire.path.push({ x: finalX, y: finalY });
+        // Update or append the last point of the path
+        if (me.currentWire.path.length === 0) {
+            me.currentWire.path.push({ x: finalX, y: finalY });
         } else {
-            // Update the last point of the path
-            this.currentWire.path[this.currentWire.path.length - 1] = {
-                x: finalX,
-                y: finalY
-            };
+            me.currentWire.path[me.currentWire.path.length - 1] = { x: finalX, y: finalY };
         }
 
-        this.canvas.requestRender();
+        me.canvas.requestRender();
     }
 
     /**
-     * Handles the mouse up event. For WireTool, finalization is typically handled in onMouseDown or onKeyDown (ESC).
-     * @param {MouseEvent} event - The mouse event.
+     * Handle mouse up. No-op for this tool (finalization handled on mouse down or ESC).
+     *
+     * @param {MouseEvent} event - The mouse up event.
      * @returns {void}
      */
     onMouseUp(event) {
-        // The wire finalization logic is handled in onMouseDown (when clicking another terminal or a free point)
-        // No specific logic needed here for this tool.
+        // Intentionally empty
     }
 
     /**
-     * Handles key down events, specifically for 'Escape' to cancel wire drawing.
+     * Handle key down: cancel drawing on Escape.
+     *
      * @param {KeyboardEvent} event - The keyboard event.
      * @returns {void}
      */
     onKeyDown(event) {
-        if (event.key === 'Escape' && this.isDrawingWire) {
-            if (this.currentWire) {
-                this.drawingManager.removeElement(this.currentWire);
+        const me = this;
+        if (event.key === 'Escape' && me.isDrawingWire) {
+            if (me.currentWire) {
+                me.drawingManager.removeElement(me.currentWire);
             }
-            this.resetToolState();
+            me.resetToolState();
         }
     }
 }
-
-export default WireTool;

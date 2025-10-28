@@ -1,208 +1,262 @@
 import Tool from './Tool.js';
-import TextBox from '../shapes/TextBox.js';
+import Component from '../components/Component.js';
+import Line from '../shapes/Line.js';
+import Wire from '../components/Wire.js';
 import ImageShape from '../shapes/Image.js';
 import SVGDrawing from '../shapes/SVGDrawing.js';
-import Wire from '../components/Wire.js';
-import Component from '../components/Component.js';
+import TextBox from '../shapes/TextBox.js';
 import Point from '../shapes/Point.js';
-import Line from '../shapes/Line.js';
-import Freehand from '../shapes/Freehand.js';
-import ThreePointCurve from '../shapes/ThreePointCurve.js';
-import BezierCurve from '../shapes/BezierCurve.js';
-import Rectangle from '../shapes/Rectangle.js';
-import Circle from '../shapes/Circle.js';
 
 /**
  * Description:
- *  Tool to edit properties of selected elements on the canvas.
- *  Prompts the user for new values such as stroke color, fill color, text content,
- *  font size/family, image URL, SVG content, and component-specific parameters.
+ *  Tool for editing the properties of the currently selected shapes.
  *
  * Properties summary:
- *  - canvas {import("../core/Canvas.js").default} : Reference to the canvas.
- *  - drawingManager {import("../core/DrawingManager.js").default} : Reference to the drawing manager.
+ *  - canvas {import('../core/Canvas.js').default} : Canvas instance (inherited).
+ *  - drawingManager {import('../core/DrawingManager.js').default} : Drawing manager (inherited).
  *
  * Typical usage:
- *  const tool = new PropertiesTool(canvasInstance, drawingManager);
+ *   const tool = new PropertiesTool(canvas, drawingManager);
+ *   tool.activate(); // Opens property prompts for all selected shapes
  *
  * Notes / Additional:
- *  - All input values are validated before assignment.
- *  - All changes are applied via the element's `edit()` method.
- *  - Mouse move and mouse up events are no-op for this tool.
+ *  - This is a "command tool" that runs immediately when activated; it does not react to mouse moves.
+ *  - Edits are applied via each shape's public edit() to ensure setters/validation run.
  */
 export default class PropertiesTool extends Tool {
     /**
      * Creates an instance of PropertiesTool.
      *
-     * @param {import("../core/Canvas.js").default} canvas - Canvas instance.
-     * @param {import("../core/DrawingManager.js").default} drawingManager - Drawing manager instance.
+     * @param {import('../core/Canvas.js').default} canvas - The canvas instance.
+     * @param {import('../core/DrawingManager.js').default} drawingManager - The drawing manager instance.
      */
     constructor(canvas, drawingManager) {
         super(canvas, drawingManager);
     }
 
     /**
-     * Activates the tool.
-     * No operation required for this tool.
-     */
-    activate() {}
-
-    /**
-     * Deactivates the tool.
-     * No operation required for this tool.
-     */
-    deactivate() {}
-
-    /**
-     * Handles mouse down events and triggers property editing for the clicked element.
+     * Activate the tool by prompting property edits on all selected shapes.
      *
-     * @param {MouseEvent} event
+     * @returns {void}
+     */
+    activate() {
+        // This tool is usually activated programmatically (e.g., by a button click)
+        // rather than by setting it as the active tool for mouse events.
+        // It's a command tool.
+
+        this.editSelectedShapesProperties();
+    }
+
+    /**
+     * Deactivate the tool.
+     *
+     * @returns {void}
+     */
+    deactivate() {
+        // No action required for this command-style tool.
+    }
+
+    /**
+     * Open prompts to edit the properties of the selected shapes and apply edits via edit().
+     *
+     * @returns {void}
+     */
+    editSelectedShapesProperties() {
+        const me = this;
+        const selectedShapes = me.drawingManager.getAllSelectedElements();
+
+        if (!Array.isArray(selectedShapes) || selectedShapes.length === 0) {
+            console.warn('[PropertiesTool] No shapes selected for editing.');
+            return;
+        }
+
+        selectedShapes.forEach(shape => {
+            const propertiesToEdit = {};
+            const shapeName = shape.constructor.name;
+
+            // --- Common properties ---
+
+            // Stroke / color
+            if ('strokeColor' in shape) {
+                const newColor = prompt(
+                    `[${shapeName}] Edit stroke color (current: ${shape.strokeColor}):`,
+                    shape.strokeColor
+                );
+                if (newColor !== null) propertiesToEdit.strokeColor = newColor;
+            } else if ('color' in shape) {
+                const newColor = prompt(
+                    `[${shapeName}] Edit color (current: ${shape.color}):`,
+                    shape.color
+                );
+                if (newColor !== null) propertiesToEdit.color = newColor;
+            }
+
+            // Stroke / line width
+            if ('strokeWidth' in shape) {
+                const newWidth = prompt(
+                    `[${shapeName}] Edit stroke width (current: ${shape.strokeWidth}):`,
+                    shape.strokeWidth
+                );
+                if (newWidth !== null) {
+                    const widthVal = parseFloat(newWidth);
+                    if (!isNaN(widthVal)) propertiesToEdit.strokeWidth = widthVal;
+                }
+            } else if ('lineWidth' in shape) {
+                const newWidth = prompt(
+                    `[${shapeName}] Edit line width (current: ${shape.lineWidth}):`,
+                    shape.lineWidth
+                );
+                if (newWidth !== null) {
+                    const widthVal = parseFloat(newWidth);
+                    if (!isNaN(widthVal)) propertiesToEdit.lineWidth = widthVal;
+                }
+            }
+
+            // Fill color
+            if ('fillColor' in shape) {
+                const newFillColor = prompt(
+                    `[${shapeName}] Edit fill color (leave empty for none, current: ${shape.fillColor || ''}):`,
+                    shape.fillColor || ''
+                );
+                if (newFillColor !== null)
+                    propertiesToEdit.fillColor = newFillColor === '' ? null : newFillColor;
+            }
+
+            // Line dash pattern
+            if ('lineDash' in shape) {
+                const newLineDashStr = prompt(
+                    `[${shapeName}] Edit line dash pattern (e.g., 5,5 for dashed, leave empty for solid):`,
+                    Array.isArray(shape.lineDash) ? shape.lineDash.join(',') : ''
+                );
+                if (newLineDashStr !== null) {
+                    const newLineDash = newLineDashStr
+                        .split(',')
+                        .map(s => parseFloat(s.trim()))
+                        .filter(n => !Number.isNaN(n) && n > 0);
+                    propertiesToEdit.lineDash = newLineDash;
+                }
+            }
+
+            // --- Specific properties by shape type ---
+
+            if (shape instanceof Component) {
+                // Parameters (JSON)
+                if ('parameters' in shape) {
+                    const currentParams = JSON.stringify(shape.parameters, null, 2);
+                    const newParams = prompt(
+                        `[${shapeName}] Edit parameters (JSON):`,
+                        currentParams
+                    );
+                    if (newParams !== null) {
+                        try {
+                            propertiesToEdit.parameters = JSON.parse(newParams);
+                        } catch (e) {
+                            console.warn(`[${shapeName}] Invalid JSON for parameters.`);
+                        }
+                    }
+                }
+
+                // Rotation
+                const newRotation = prompt(
+                    `[${shapeName}] Edit rotation (degrees):`,
+                    shape.rotation
+                );
+                if (newRotation !== null) {
+                    const rotationVal = parseFloat(newRotation);
+                    if (!isNaN(rotationVal)) propertiesToEdit.rotation = rotationVal;
+                }
+
+                // Flip options
+                propertiesToEdit.flipHorizontal = confirm(
+                    `[${shapeName}] Flip horizontally? (current: ${shape.flipHorizontal})`
+                );
+                propertiesToEdit.flipVertical = confirm(
+                    `[${shapeName}] Flip vertically? (current: ${shape.flipVertical})`
+                );
+            } else if (shape instanceof TextBox) {
+                const newText = prompt(`[${shapeName}] Edit text:`, shape.text);
+                const newFontSize = prompt(`[${shapeName}] Edit font size:`, shape.fontSize);
+                const newFontFamily = prompt(`[${shapeName}] Edit font family:`, shape.fontFamily);
+                if (newText !== null) propertiesToEdit.text = newText;
+                if (newFontSize !== null) {
+                    const sizeVal = parseFloat(newFontSize);
+                    if (!isNaN(sizeVal)) propertiesToEdit.fontSize = sizeVal;
+                }
+                if (newFontFamily !== null) propertiesToEdit.fontFamily = newFontFamily;
+            } else if (shape instanceof ImageShape) {
+                const newImageUrl = prompt(`[${shapeName}] Edit image URL:`, shape.imageUrl);
+                if (newImageUrl !== null) propertiesToEdit.imageUrl = newImageUrl;
+            } else if (shape instanceof SVGDrawing) {
+                const newSvgContent = prompt(`[${shapeName}] Edit SVG content:`, shape.svgContent);
+                if (newSvgContent !== null) propertiesToEdit.svgContent = newSvgContent;
+            } else if (shape instanceof Point) {
+                const newRadius = prompt(`[${shapeName}] Edit point radius:`, shape.radius);
+                if (newRadius !== null) {
+                    const radiusVal = parseFloat(newRadius);
+                    if (!isNaN(radiusVal)) propertiesToEdit.radius = radiusVal;
+                }
+            }
+
+            // Apply edits through shape.edit() so setters validate/coerce
+            if (Object.keys(propertiesToEdit).length > 0) {
+                try {
+                    shape.edit(propertiesToEdit);
+                } catch (err) {
+                    console.error(`[PropertiesTool] Failed to apply edits to ${shapeName}:`, err);
+                }
+            }
+        });
+
+        me.canvas.requestRender();
+    }
+
+    /**
+     * Placeholder for mouse down event.
+     *
+     * @param {MouseEvent} event - The mouse event.
      * @returns {void}
      */
     onMouseDown(event) {
-        const me = this;
-        const { x, y } = me.getMouseCoords(event);
-        const clickedElement = me.drawingManager.findElementAt(x, y);
-
-        if (!clickedElement) return;
-
-        const newProperties = {};
-
-        // COMMON STROKE AND LINE PROPERTIES
-        if (clickedElement.strokeColor !== undefined) {
-            const newStrokeColor = prompt(
-                'New stroke color (e.g., #FF0000 or red):',
-                clickedElement.strokeColor
-            );
-            if (newStrokeColor !== null) newProperties.strokeColor = newStrokeColor;
-        }
-
-        if (clickedElement.color !== undefined) {
-            const newColor = prompt(
-                'New stroke color (e.g., #FF0000 or red):',
-                clickedElement.color
-            );
-            if (newColor !== null) newProperties.color = newColor;
-        }
-
-        if (clickedElement.lineWidth !== undefined) {
-            const newLineWidth = prompt('New line width:', clickedElement.lineWidth);
-            if (newLineWidth !== null) {
-                const parsedWidth = parseFloat(newLineWidth);
-                if (!isNaN(parsedWidth) && parsedWidth > 0) {
-                    newProperties.lineWidth = parsedWidth;
-                } else {
-                    console.warn(
-                        `[PropertiesTool] Invalid lineWidth value (${newLineWidth}). Skipping.`
-                    );
-                }
-            }
-        }
-
-        if (clickedElement.lineDash !== undefined) {
-            const newLineDashStr = prompt(
-                'New line dash pattern (comma-separated, e.g., 5,5 for dashed, empty for solid):',
-                clickedElement.lineDash.join(',')
-            );
-            if (newLineDashStr !== null) {
-                newProperties.lineDash = newLineDashStr
-                    .split(',')
-                    .map(s => parseFloat(s.trim()))
-                    .filter(n => !isNaN(n) && n >= 0);
-            }
-        }
-
-        // SHAPE-SPECIFIC PROPERTIES
-        if (clickedElement instanceof TextBox) {
-            const newTextContent = prompt('New text content:', clickedElement.textContent);
-            const newFontSize = prompt('New font size (e.g., 16px):', clickedElement.fontSize);
-            const newFontFamily = prompt(
-                'New font family (e.g., Arial):',
-                clickedElement.fontFamily
-            );
-            const newFillColor = prompt('New fill color:', clickedElement.fillColor);
-
-            if (newTextContent !== null) newProperties.textContent = newTextContent;
-            if (newFontSize !== null) newProperties.fontSize = newFontSize;
-            if (newFontFamily !== null) newProperties.fontFamily = newFontFamily;
-            if (newFillColor !== null) newProperties.fillColor = newFillColor;
-        } else if (clickedElement instanceof ImageShape) {
-            const newImageUrl = prompt('New image URL:', clickedElement.imageUrl);
-            if (newImageUrl !== null) newProperties.imageUrl = newImageUrl;
-        } else if (clickedElement instanceof SVGDrawing) {
-            const newSvgContent = prompt('New SVG content:', clickedElement.svgContent);
-            if (newSvgContent !== null) newProperties.svgContent = newSvgContent;
-        } else if (clickedElement instanceof Point) {
-            const newRadius = prompt('New point radius:', clickedElement.radius);
-            const newFillColor = prompt('New fill color:', clickedElement.fillColor);
-            if (newRadius !== null) {
-                const parsedRadius = parseFloat(newRadius);
-                if (!isNaN(parsedRadius) && parsedRadius > 0) {
-                    newProperties.radius = parsedRadius;
-                } else {
-                    console.warn(`[PropertiesTool] Invalid radius value (${newRadius}). Skipping.`);
-                }
-            }
-            if (newFillColor !== null) newProperties.fillColor = newFillColor;
-        } else if (clickedElement instanceof Rectangle || clickedElement instanceof Circle) {
-            const newFillColor = prompt('New fill color:', clickedElement.fillColor);
-            if (newFillColor !== null) newProperties.fillColor = newFillColor;
-        } else if (clickedElement instanceof Component) {
-            const newComponentName = prompt('New component name:', clickedElement.componentName);
-            const newComponentDescription = prompt(
-                'New component description:',
-                clickedElement.componentDescription
-            );
-            const newLogicScriptPath = prompt(
-                'New logic script path:',
-                clickedElement.logicScriptPath
-            );
-            const newParametersJson = prompt(
-                'Edit parameters (JSON format):',
-                JSON.stringify(clickedElement.parameters)
-            );
-
-            if (newComponentName !== null) newProperties.componentName = newComponentName;
-            if (newComponentDescription !== null)
-                newProperties.componentDescription = newComponentDescription;
-            if (newLogicScriptPath !== null) newProperties.logicScriptPath = newLogicScriptPath;
-
-            if (newParametersJson !== null) {
-                try {
-                    newProperties.parameters = JSON.parse(newParametersJson);
-                } catch (error) {
-                    alert('Invalid JSON for parameters. Please enter valid JSON.');
-                    console.error('[PropertiesTool] Invalid JSON for parameters:', error);
-                }
-            }
-        }
-
-        // APPLY COLLECTED PROPERTIES
-        if (Object.keys(newProperties).length > 0) {
-            clickedElement.edit(newProperties);
-            me.canvas.requestRender();
-        }
+        // Tool does not handle mouse events directly.
     }
 
     /**
-     * Handles mouse move events.
-     * No operation for this tool.
+     * Placeholder for mouse move event.
      *
-     * @param {MouseEvent} event
+     * @param {MouseEvent} event - The mouse event.
      * @returns {void}
      */
     onMouseMove(event) {
-        // No operation
+        // Tool does not handle mouse events directly.
     }
 
     /**
-     * Handles mouse up events.
-     * No operation for this tool.
+     * Placeholder for mouse up event.
      *
-     * @param {MouseEvent} event
+     * @param {MouseEvent} event - The mouse event.
      * @returns {void}
      */
     onMouseUp(event) {
-        // No operation
+        // Tool does not handle mouse events directly.
+    }
+
+    /**
+     * Placeholder for context menu (right-click) event.
+     *
+     * @param {MouseEvent} event - The mouse event.
+     * @returns {void}
+     */
+    onContextMenu(event) {
+        // Tool does not handle context menu directly.
+    }
+
+    /**
+     * Placeholder for key down event.
+     *
+     * @param {KeyboardEvent} event - The keyboard event.
+     * @returns {void}
+     */
+    onKeyDown(event) {
+        // Tool does not handle key events directly.
     }
 }

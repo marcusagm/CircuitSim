@@ -188,7 +188,7 @@ export default class Wire extends Shape {
             console.warn(`[Wire] invalid path points provided. Keeping previous value.`);
             return;
         }
-        me._path = value;
+        me._path = value.map(p => ({ x: Number(p.x), y: Number(p.y) }));
     }
 
     /**
@@ -269,7 +269,7 @@ export default class Wire extends Shape {
             );
             return;
         }
-        me._lineDash = value;
+        me._lineDash = value.slice();
     }
 
     /**
@@ -383,7 +383,11 @@ export default class Wire extends Shape {
         const allPoints = me.getAllPoints(canvas);
         if (allPoints.length < 2) return false;
 
-        const hitTolerance = (Number(me.lineWidth) || 0) / 2 + me.hitMargin;
+        const px = Number(coordinateX) || 0;
+        const py = Number(coordinateY) || 0;
+        const halfStroke = (Number(me.lineWidth) || 0) / 2;
+        const hitTolerance = halfStroke + Number(me.hitMargin || 0);
+        const hitToleranceSq = hitTolerance * hitTolerance;
 
         for (let segmentIndex = 0; segmentIndex < allPoints.length - 1; segmentIndex++) {
             const p1 = allPoints[segmentIndex];
@@ -393,14 +397,12 @@ export default class Wire extends Shape {
             const deltaY = p2.y - p1.y;
             const segmentLengthSquared = deltaX * deltaX + deltaY * deltaY;
             if (segmentLengthSquared === 0) {
-                const distSq = (coordinateX - p1.x) ** 2 + (coordinateY - p1.y) ** 2;
-                if (distSq <= hitTolerance * hitTolerance) return true;
+                const distSq = (px - p1.x) ** 2 + (py - p1.y) ** 2;
+                if (distSq <= hitToleranceSq) return true;
                 continue;
             }
 
-            const t =
-                ((coordinateX - p1.x) * deltaX + (coordinateY - p1.y) * deltaY) /
-                segmentLengthSquared;
+            const t = ((px - p1.x) * deltaX + (py - p1.y) * deltaY) / segmentLengthSquared;
 
             let closestX;
             let closestY;
@@ -415,8 +417,8 @@ export default class Wire extends Shape {
                 closestY = p1.y + t * deltaY;
             }
 
-            const distSq = (coordinateX - closestX) ** 2 + (coordinateY - closestY) ** 2;
-            if (distSq <= hitTolerance * hitTolerance) return true;
+            const distSq = (px - closestX) ** 2 + (py - closestY) ** 2;
+            if (distSq <= hitToleranceSq) return true;
         }
 
         return false;
@@ -482,6 +484,34 @@ export default class Wire extends Shape {
             const position = me.endTerminal.getAbsolutePosition(canvas);
             new Handle(position.x, position.y, Handle.TYPES.SQUARE, me).draw(canvas);
         }
+    }
+
+    /**
+     * Returns axis-aligned bounding box for the stroke (includes hitMargin).
+     *
+     * @returns {{x:number,y:number,width:number,height:number}} Bounding box of stroke.
+     */
+    getBoundingBox() {
+        const me = this;
+        if (me._path.length === 0) return { x: 0, y: 0, width: 0, height: 0 };
+
+        let minX = Infinity,
+            minY = Infinity,
+            maxX = -Infinity,
+            maxY = -Infinity;
+        for (const pt of me._path) {
+            if (pt.x < minX) minX = pt.x;
+            if (pt.y < minY) minY = pt.y;
+            if (pt.x > maxX) maxX = pt.x;
+            if (pt.y > maxY) maxY = pt.y;
+        }
+        const margin = Number(me.hitMargin) || 0;
+        return {
+            x: minX - margin,
+            y: minY - margin,
+            width: Math.max(0, maxX - minX) + margin * 2,
+            height: Math.max(0, maxY - minY) + margin * 2
+        };
     }
 
     /**

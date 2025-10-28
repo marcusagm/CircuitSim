@@ -232,6 +232,26 @@ export default class Point extends Shape {
     }
 
     /**
+     * Clones the point instance
+     *
+     * @returns {Point} A new poin instance.
+     */
+    clone() {
+        const me = this;
+
+        const clonedChildren = this.children.map(child => child.clone());
+        const newInstance = new Point(clonedChildren);
+
+        newInstance.strokeColor = me.strokeColor;
+        newInstance.fillColor = me.fillColor;
+        newInstance.positionX = me.positionX;
+        newInstance.positionY = me.positionY;
+        newInstance.radius = me.radius;
+
+        return newInstance;
+    }
+
+    /**
      * Extend base serialization with point-specific properties.
      *
      * @returns {Object} JSON-serializable object.

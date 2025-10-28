@@ -4,6 +4,7 @@
 
 - [ ] Permitir mesclagem de formas e linhas de desenho.
 - [ ] Ferramenta de snap na grid
+- [ ] Padronizar padrâmetros de definição de estilos de desenhos como lineWidth ou strokeWidth
 
 ### Linha Reta
 
@@ -11,7 +12,7 @@
 - [x] Permitir alterar espessura
 - [x] Permitir tracejados
 - [x] Deve permitir o desenho contínuo até que o desenho seja confirmado com o botão direito
-- [ ] Após confirmado, deve ser possivel editar cada posição das contas e conexões entre retas
+- [x] Após confirmado, deve ser possivel editar cada posição das contas e conexões entre retas
 
 ### Linha Livre
 
@@ -22,27 +23,27 @@
 ### Ponto
 
 - [x] Permitir alterar cor
-- [ ] Permitir alterar tamanho
+- [x] Permitir alterar tamanho
 
 ### Curva de 3 pontos
 
 - [x] Permitir alterar cor
 - [x] Permitir alterar espessura
-- [ ] Permitir tracejados
-- [ ] Deve permitir a edição da curva atravês de anoras que podem ser reposicionadas
+- [x] Permitir tracejados
+- [x] Deve permitir a edição da curva atravês de ancoras que podem ser reposicionadas
 
 ### Curva Bezier
 
 - [x] Permitir alterar cor
 - [x] Permitir alterar espessura
-- [ ] Permitir tracejados
-- [ ] Deve permitir a edição da curva atravês de anoras que podem ser reposicionadas, assim como definir a curva em cada ancora atravês de duas alças, uma para cada lado da ancora
+- [x] Permitir tracejados
+- [x] Deve permitir a edição da curva atravês de ancoras que podem ser reposicionadas
 
 ### Retângulo
 
 - [x] Permitir alterar cor da borda e preenchimento
 - [x] Permitir alterar espessura da borda
-- [ ] Permitir borda tracejada
+- [x] Permitir borda tracejada
 - [ ] Deve permitir redimencionar
 
 ### Círculo
@@ -66,19 +67,19 @@
 ### Adicionar imagem
 
 - [x] Permitir carregar URL
-- [ ] Permitir carregar do computador
+- [x] Permitir carregar do computador
 - [ ] Permitir redimencionar
 
 ### Adicionar SVG
 
 - [x] Permitir carregar URL
-- [ ] Permitir carregar do computador
+- [x] Permitir carregar do computador
 - [ ] Permitir redimencionar
 
 ## Ferramentas básicas
 
 - [x] Permitir seleção de um ou mais elementos
-- [ ] Permitir fazer seleção de elementos definindo uma area ao clicar e arrastar o mouse
+- [x] Permitir fazer seleção de elementos definindo uma area ao clicar e arrastar o mouse
 - [x] Permitir mover elementos selecionados
 - [x] Permitir rotacionar elementos
 - [x] Permitir inverter horizontalmente componentes selecionados
@@ -150,7 +151,7 @@
 - [ ] Completar a classe canvas e verificar arquitetura e documentação
 - [ ] Utilizar electron
 - [ ] Sistema de atualização
-- [ ] Mostrar previsualizações de componentes quando estiverem sendo posicionadas, isto é, seleciono um componente para adicionar e enquanto estou movimentando o mouse sobre o canvas, deve aparecer um preview do componente com uma aparencia levemente diferenciada, como baixa opacidade ou cor diferente, para mostrar que é apenas uma previsualização.
+- [ ] Mostrar pre-vizualizações de componentes quando estiverem sendo posicionadas, isto é, seleciono um componente para adicionar e enquanto estou movimentando o mouse sobre o canvas, deve aparecer um preview do componente com uma aparencia levemente diferenciada, como baixa opacidade ou cor diferente, para mostrar que é apenas uma previsualização.
 
 ### Atalhos
 

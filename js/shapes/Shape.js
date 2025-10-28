@@ -1,40 +1,27 @@
 /* eslint-disable no-unused-vars */
 /**
- * Base class representing a drawable and interactive shape on a canvas.
+ * Description:
+ *  Base class representing a drawable and interactive shape on a canvas.
  *
- * The Shape class provides common, minimal state and behavior shared by all
- * concrete shapes (for example Circle, Rectangle, Line). It stores identity
- * and basic geometry (position), selection state and rendering order, and
- * defines an API (abstract methods) that subclasses must implement to be
- * renderable and interactive within a canvas-based editor or renderer.
- *
- * Key responsibilities:
- *  - Hold identifying information (uniqueId).
- *  - Store canonical position (positionX, positionY) and optional zIndex.
- *  - Provide selection management (select/deselect).
- *  - Provide a safe default translation implementation (move).
- *  - Define abstract methods for drawing, hit-testing, editing, selection-handle
- *    drawing, bounding box calculation, and JSON serialization/deserialization.
+ * Properties summary:
+ *  - uniqueId {string} : Read-only unique identifier for the shape.
+ *  - _positionX {number} : Internal X coordinate backing field.
+ *  - _positionY {number} : Internal Y coordinate backing field.
+ *  - _isSelected {boolean} : Internal selection state backing field.
+ *  - _zIndex {number} : Internal z-index backing field used for render ordering.
+ *  - _hitMargin {number} : Internal extra tolerance (pixels) for hit-testing.
  *
  * Typical usage:
- *  1. Subclass Shape and implement the abstract methods:
- *     - draw(canvas)
- *     - isHit(canvas, x, y)
- *     - edit(newProperties)
- *     - drawSelectionHandles(canvas)
- *     - getBoundingBox()
- *     - static fromJSON(json)
+ *   class Circle extends Shape {
+ *     draw(canvas) { ... }
+ *     isHit(canvas, x, y) { ... }
+ *     edit(newProperties) { ... }
+ *     drawSelectionHandles(canvas) { ... }
+ *     getBoundingBox() { ... }
+ *     static fromJSON(json) { ... }
+ *   }
  *
- *  2. Instantiate the concrete shape and use on a canvas:
- *     const circle = new Circle(100, 80, 20); // Circle extends Shape
- *     circle.draw(canvasInstance);
- *     if (circle.isHit(canvasInstance, mouseX, mouseY)) circle.select();
- *
- *  3. Serialize/deserialize:
- *     const data = circle.toJSON();
- *     const restored = Circle.fromJSON(data);
- *
- * Notes:
+ * Notes / Additional:
  *  - positionX/positionY are numeric coordinates (by convention, in pixels).
  *  - uniqueId is generated automatically and intended to be treated as read-only.
  *
@@ -50,8 +37,7 @@ export default class Shape {
     uniqueId = null;
 
     /**
-     * X coordinate of the shape's position (usually in pixels).
-     * Interpretation (e.g. center or top-left) must be defined by subclasses.
+     * Internal positionX backing field.
      *
      * @type {number}
      * @protected
@@ -59,7 +45,7 @@ export default class Shape {
     _positionX = 0;
 
     /**
-     * Y coordinate of the shape's position (usually in pixels).
+     * Internal positionY backing field.
      *
      * @type {number}
      * @protected
@@ -67,7 +53,7 @@ export default class Shape {
     _positionY = 0;
 
     /**
-     * Whether the shape is currently selected.
+     * Internal selection state backing field.
      *
      * @type {boolean}
      * @protected
@@ -75,7 +61,7 @@ export default class Shape {
     _isSelected = false;
 
     /**
-     * Optional z-index for rendering order. Higher numbers draw on top.
+     * Internal z-index backing field.
      *
      * @type {number}
      * @protected
@@ -83,7 +69,7 @@ export default class Shape {
     _zIndex = 0;
 
     /**
-     * Margin to identify the hit area
+     * Internal hitMargin backing field (extra tolerance for hit-testing).
      *
      * @type {number}
      * @protected
@@ -121,68 +107,68 @@ export default class Shape {
 
         me.positionX = x;
         me.positionY = y;
-        me.isSelected = false;
+        me._isSelected = false;
         me.zIndex = 0;
     }
 
     /**
-     * PositionX getter.
+     * positionX getter.
      *
-     * @returns {number}
+     * @returns {number} Current X coordinate.
      */
     get positionX() {
         return this._positionX;
     }
 
     /**
-     * PositionX setter with validation.
-     * On invalid value, logs a warning and keeps previous value.
+     * positionX setter with validation.
      *
-     * @param {number} value
+     * @param {number} value - New X coordinate.
+     * @returns {void}
      */
     set positionX(value) {
         const me = this;
-        const positionX = Number(value);
-        if (Number.isNaN(positionX)) {
+        const coerced = Number(value);
+        if (Number.isNaN(coerced)) {
             console.warn(
-                `[Point] invalid positionX assignment (${value}). Keeping previous value: ${me._positionX}`
+                `[Shape] invalid positionX assignment (${value}). positionX must be a valid number. Keeping previous value: ${me._positionX}`
             );
             return;
         }
-        me._positionX = positionX;
+        me._positionX = coerced;
     }
 
     /**
-     * PositionY getter.
+     * positionY getter.
      *
-     * @returns {number}
+     * @returns {number} Current Y coordinate.
      */
     get positionY() {
         return this._positionY;
     }
 
     /**
-     * PositionY setter with validation.
-     * On invalid value, logs a warning and keeps previous value.
+     * positionY setter with validation.
      *
-     * @param {number} value
+     * @param {number} value - New Y coordinate.
+     * @returns {void}
      */
     set positionY(value) {
         const me = this;
-        const positionY = Number(value);
-        if (Number.isNaN(positionY)) {
+        const coerced = Number(value);
+        if (Number.isNaN(coerced)) {
             console.warn(
-                `[Point] invalid positionY assignment (${value}). Keeping previous value: ${me._positionY}`
+                `[Shape] invalid positionY assignment (${value}). positionY must be a valid number. Keeping previous value: ${me._positionY}`
             );
             return;
         }
-        me._positionY = positionY;
+        me._positionY = coerced;
     }
 
     /**
      * hitMargin getter.
      *
-     * @returns {number}
+     * @returns {number} Current hit margin in pixels.
      */
     get hitMargin() {
         return this._hitMargin;
@@ -190,47 +176,56 @@ export default class Shape {
 
     /**
      * hitMargin setter with validation.
-     * On invalid value, logs a warning and keeps previous value.
      *
-     * @param {number} value
+     * @param {number} value - New hit margin (non-negative number).
+     * @returns {void}
      */
     set hitMargin(value) {
         const me = this;
-        const hitMargin = Number(value);
-        if (Number.isNaN(hitMargin) || hitMargin < 0) {
+        const coerced = Number(value);
+        if (Number.isNaN(coerced) || coerced < 0) {
             console.warn(
-                `[Point] invalid padding assignment (${value}). Padding must be a non-negative number. Keeping previous value: ${me._hitMargin}`
+                `[Shape] invalid hitMargin assignment (${value}). hitMargin must be a non-negative number. Keeping previous value: ${me._hitMargin}`
             );
             return;
         }
-        me._hitMargin = hitMargin;
+        me._hitMargin = coerced;
     }
 
     /**
-     * ZIndex getter.
+     * zIndex getter.
      *
-     * @returns {number}
+     * @returns {number} Current z-index.
      */
     get zIndex() {
         return this._zIndex;
     }
 
     /**
-     * ZIndex setter with validation.
-     * On invalid value, logs a warning and keeps previous value.
+     * zIndex setter with validation.
      *
-     * @param {number} value
+     * @param {number} value - New z-index value.
+     * @returns {void}
      */
     set zIndex(value) {
         const me = this;
-        const zIndex = Number(value);
-        if (Number.isNaN(zIndex)) {
+        const coerced = Number(value);
+        if (Number.isNaN(coerced)) {
             console.warn(
-                `[Point] invalid zIndex assignment (${value}). Keeping previous value: ${me._zIndex}`
+                `[Shape] invalid zIndex assignment (${value}). zIndex must be a valid number. Keeping previous value: ${me._zIndex}`
             );
             return;
         }
-        me._zIndex = zIndex;
+        me._zIndex = coerced;
+    }
+
+    /**
+     * isSelected getter.
+     *
+     * @returns {boolean} True when the shape is selected.
+     */
+    get isSelected() {
+        return this._isSelected;
     }
 
     /**
@@ -269,7 +264,8 @@ export default class Shape {
      * @returns {void}
      */
     select() {
-        this.isSelected = true;
+        const me = this;
+        me._isSelected = true;
     }
 
     /**
@@ -278,22 +274,13 @@ export default class Shape {
      * @returns {void}
      */
     deselect() {
-        this.isSelected = false;
+        const me = this;
+        me._isSelected = false;
     }
 
     /**
-     * Returns if the shape is selected
-     *
-     * @returns {boolean}
-     */
-    isSelected() {
-        return this._isSelected;
-    }
-
-    /**
-     * Move the shape by a given delta. This implementation updates the shape's origin.
-     * Subclasses that maintain multiple control points (e.g., a Line) should override
-     * if they require different behavior.
+     * Move the shape by a given delta. This default implementation updates the shape's origin.
+     * Subclasses that maintain multiple control points (e.g., Line) should override if they require different behavior.
      *
      * This method is **not abstract** and provides a safe default implementation.
      *
@@ -305,13 +292,12 @@ export default class Shape {
         const me = this;
         const dx = Number(deltaX) || 0;
         const dy = Number(deltaY) || 0;
-        me.positionX += dx;
-        me.positionY += dy;
+        me.positionX = me.positionX + dx;
+        me.positionY = me.positionY + dy;
     }
 
     /**
-     * Edit (update) the shape's properties. Subclasses should override to support
-     * specific properties safely (validate ranges, types, etc).
+     * Edit (update) the shape's properties. Subclasses should override to support specific properties safely.
      *
      * @param {Object<string, any>} newProperties - Key/value map with properties to update.
      * @throws {Error} If not implemented by subclass.
@@ -342,12 +328,9 @@ export default class Shape {
      * Returns a minimal bounding box for the shape in the form { x, y, width, height }.
      * Subclasses should override to provide accurate box.
      *
-     * Default implementation throws to force subclass implementation for shapes that
-     * need bounding boxes for selection, collision, or layout.
-     *
      * @throws {Error} If not implemented by subclass.
-     * @returns {{x:number,y:number,width:number,height:number}}
      * @abstract
+     * @returns {{x:number,y:number,width:number,height:number}} Bounding box object.
      */
     getBoundingBox() {
         throw new Error("Method 'getBoundingBox()' must be implemented by subclasses of Shape.");
@@ -356,8 +339,6 @@ export default class Shape {
     /**
      * Return a serializable representation of the shape.
      * Subclasses should extend to include shape-specific properties.
-     *
-     * Default includes type, id, position and zIndex.
      *
      * @returns {Object} JSON-serializable object representing the shape.
      */
@@ -374,12 +355,12 @@ export default class Shape {
     }
 
     /**
-     * Restore shape state from JSON. Subclasses should override and call super if needed.
-     * Note: this is a helper to be implemented by concrete shapes; base throws by default.
+     * Restore shape state from JSON. Subclasses should implement this helper and may call super if needed.
      *
      * @param {Object} json - Object previously produced by toJSON.
      * @throws {Error} If not implemented by subclass (base).
      * @abstract
+     * @returns {Shape}
      */
     static fromJSON(json) {
         throw new Error(

@@ -114,7 +114,7 @@ export default class BezierCurve extends Shape {
      * @type {string}
      * @private
      */
-    _color = '#000000';
+    _strokeColor = '#000000';
 
     /**
      * Internal line width backing field
@@ -190,7 +190,7 @@ export default class BezierCurve extends Shape {
         me.endX = endX;
         me.endY = endY;
 
-        me.color = '#000000';
+        me.strokeColor = '#000000';
         me.lineWidth = 1;
         me.lineDash = [];
         me.lineDashOffset = 0;
@@ -411,8 +411,8 @@ export default class BezierCurve extends Shape {
      *
      * @returns {string} Stroke color CSS string.
      */
-    get color() {
-        return this._color;
+    get strokeColor() {
+        return this._strokeColor;
     }
 
     /**
@@ -420,15 +420,15 @@ export default class BezierCurve extends Shape {
      *
      * @param {string} value - New stroke color (CSS string).
      */
-    set color(value) {
+    set strokeColor(value) {
         const me = this;
         if (typeof value !== 'string') {
             console.warn(
-                `[BezierCurve] invalid color assignment (${value}). Keeping previous value: ${me._color}`
+                `[BezierCurve] invalid color assignment (${value}). Keeping previous value: ${me._strokeColor}`
             );
             return;
         }
-        me._color = value;
+        me._strokeColor = value;
     }
 
     /**
@@ -595,7 +595,7 @@ export default class BezierCurve extends Shape {
     draw(canvas) {
         const me = this;
         canvas
-            .setStrokeColor(me.color)
+            .setStrokeColor(me.strokeColor)
             .setStrokeWidth(me.lineWidth)
             .setStrokeDash(me.lineDash)
             .setStrokeDashOffset(me.lineDashOffset)
@@ -731,7 +731,7 @@ export default class BezierCurve extends Shape {
             'control2Y',
             'endX',
             'endY',
-            'color',
+            'strokeColor',
             'lineWidth',
             'lineDash',
             'lineDashOffset',
@@ -816,7 +816,7 @@ export default class BezierCurve extends Shape {
             control2Y: me.control2Y,
             endX: me.endX,
             endY: me.endY,
-            color: me.color,
+            color: me.strokeColor,
             lineWidth: me.lineWidth,
             lineDash: me.lineDash,
             lineDashOffset: me.lineDashOffset,

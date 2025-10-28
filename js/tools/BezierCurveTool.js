@@ -59,14 +59,6 @@ export default class BezierCurveTool extends Tool {
     _isDrawing = false;
 
     /**
-     * Internal boundKeyDown backing field.
-     *
-     * @type {Function|null}
-     * @private
-     */
-    _boundKeyDown = null;
-
-    /**
      * Creates an instance of BezierCurveTool.
      *
      * @param {import('../core/Canvas.js').default} canvas - The canvas instance.
@@ -79,7 +71,6 @@ export default class BezierCurveTool extends Tool {
         me._points = [];
         me._clickCount = 0;
         me._isDrawing = false;
-        me._boundKeyDown = me._onKeyDownInternal.bind(me);
     }
 
     /**
@@ -190,31 +181,21 @@ export default class BezierCurveTool extends Tool {
     /**
      * Activate the tool.
      *
-     * Registers keyboard listener for ESC cancellation and resets any prior state.
-     *
      * @returns {void}
      */
     activate() {
         const me = this;
         me.reset();
-        if (typeof document !== 'undefined' && me._boundKeyDown) {
-            document.addEventListener('keydown', me._boundKeyDown);
-        }
     }
 
     /**
      * Deactivate the tool.
-     *
-     * Removes keyboard listener and resets tool state.
      *
      * @returns {void}
      */
     deactivate() {
         const me = this;
         me.reset();
-        if (typeof document !== 'undefined' && me._boundKeyDown) {
-            document.removeEventListener('keydown', me._boundKeyDown);
-        }
     }
 
     /**
@@ -241,13 +222,13 @@ export default class BezierCurveTool extends Tool {
     }
 
     /**
-     * Internal keydown handler bound to the instance.
+     * Keydown handler bound to the instance.
      *
      * @param {KeyboardEvent} event - The keyboard event.
      * @returns {void}
      * @private
      */
-    _onKeyDownInternal(event) {
+    onKeyDown(event) {
         const me = this;
         if (event && event.key === 'Escape' && me._isDrawing) {
             me.reset();
