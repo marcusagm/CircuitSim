@@ -347,6 +347,7 @@ export default class Freehand extends Shape {
             .setStrokeJoin(me.lineJoin);
 
         // begin path using Canvas wrapper's moveTo/lineTo
+        canvas.beginPath();
         canvas.moveTo(me._points[0].x, me._points[0].y);
         for (let i = 1; i < me._points.length; i++) {
             const pt = me._points[i];
