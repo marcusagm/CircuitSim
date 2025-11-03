@@ -63,6 +63,7 @@
 - [ ] Deve permitir digitar o texto diretamente no canvas
 - [ ] A área da caixa de texto pode ser redimencionada
 - [ ] Deve permitir quebra de linha
+- [ ] Implementar getBoundingBox
 
 ### Adicionar imagem
 
