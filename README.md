@@ -3,8 +3,8 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/marcusagm/WireToucan?style=flat-square)
 ![GitHub language count](https://img.shields.io/github/languages/count/marcusagm/WireToucan?style=flat-square)
 ![GitHub forks](https://img.shields.io/github/forks/marcusagm/WireToucan?style=flat-square)
-![Bitbucket open issues](https://img.shields.io/bitbucket/issues/marcusagm/WireToucan?style=flat-square)
-![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/marcusagm/WireToucan?style=flat-square)
+![GitHub open issues](https://img.shields.io/github/issues/marcusagm/WireToucan?style=flat-square)
+![GitHub open pull requests](https://img.shields.io/github/pr-raw/marcusagm/WireToucan?style=flat-square)
 [![License](https://img.shields.io/github/license/marcusagm/WireToucan?style=flat-square)](LICENSE)
 
 > [!WARNING]
